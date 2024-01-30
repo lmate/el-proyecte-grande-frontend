@@ -1,0 +1,30 @@
+#root {
+  --accent: #5200A5;
+}
+
+body {
+  margin: 0px;
+}
+
+.Board {
+  height: 80vh;
+  width: 80vh;
+  border: 1px solid black;
+}
+
+.Board > .cell {
+  float: left;
+  width: calc(80vh / 8);
+  height: calc(80vh / 8);
+}
+
+.Board > .cell-black {
+  background-color: var(--accent);
+}
+
+.Board > .piece {
+  position: absolute;
+  width: calc(80vh / 8);
+  height: calc(80vh / 8);
+  pointer-events: none;
+}
