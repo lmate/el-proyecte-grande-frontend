@@ -12,7 +12,7 @@ import wB from '../assets/pieces/wB.svg'
 import wN from '../assets/pieces/wN.svg'
 import wP from '../assets/pieces/wP.svg'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 function Board() {
 
@@ -30,6 +30,11 @@ function Board() {
     ]
   );
 
+  useEffect(() => {
+    setBoard(convertFenToBoard('r1bk3r/p2pBpNp/n4n2/1p1NP2P/6P1/3P4/P1P1K3/q5b1'));
+  }, [])
+
+
   function handleCellClick(e) {
     const clickedCell = [parseInt(e.target.className.split(" ")[0].charAt(0)) - 1, parseInt(e.target.className.split(" ")[0].charAt(1)) - 1]
 
@@ -43,6 +48,58 @@ function Board() {
     } else if (board[clickedCell[0]][clickedCell[1]] !== '') {
       setSelectedCell(structuredClone(clickedCell));
     }
+  }
+
+  function convertFenToBoard(fen) {
+    // r1bk3r/p2pBpNp/n4n2/1p1NP2P/6P1/3P4/P1P1K3/q5b1
+
+    const convertedBoard = [
+      ['', '', '', '', '', '', '', ''],
+      ['', '', '', '', '', '', '', ''],
+      ['', '', '', '', '', '', '', ''],
+      ['', '', '', '', '', '', '', ''],
+      ['', '', '', '', '', '', '', ''],
+      ['', '', '', '', '', '', '', ''],
+      ['', '', '', '', '', '', '', ''],
+      ['', '', '', '', '', '', '', '']
+    ]
+
+    const pieceRepo = {
+      k: [bK, wK],
+      q: [bQ, wQ],
+      r: [bR, wR],
+      b: [bB, wB],
+      n: [bN, wN],
+      p: [bP, wP]
+    }
+
+    let newfen = '';
+    for (let i = 0; i < fen.length; i++) {
+      if (/^\d+$/.test(fen[i])) {
+        for (let j = 0; j < parseInt(fen[i]); j++) {
+          newfen += ' '
+        }
+      } else {
+        newfen += fen[i]
+      }
+    }
+    fen = newfen;
+
+    const fenRows = fen.split('/');
+
+    for (let i = 0; i < fenRows.length; i++) {
+      for (let j = 0; j < fenRows[i].length; j++) {
+        if (fenRows[i][j] !== ' ') {
+          if (fenRows[i][j] === fenRows[i][j].toUpperCase()) {
+            convertedBoard[i][j] = pieceRepo[fenRows[i][j].toLowerCase()][1];
+          } else {
+            convertedBoard[i][j] = pieceRepo[fenRows[i][j].toLowerCase()][0];
+          }
+        }
+      }
+    }
+
+    return convertedBoard
   }
 
   return (
