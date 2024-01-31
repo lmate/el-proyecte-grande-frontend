@@ -54,8 +54,9 @@ function Board({ newMoveByBoard, handlePlayerMove, newBoard }) {
 
     setMoveCount(moveCount + 1)
   }
-
+  
   async function playerMovePiece(from, to) {
+
     const boardBeforeMove = structuredClone(board)
 
     movePiece({
@@ -63,12 +64,8 @@ function Board({ newMoveByBoard, handlePlayerMove, newBoard }) {
       to: [to[0], to[1]]
     })
 
-    //TODO: signal to the server that a move has been made
-    console.log(`Player move: ${convertMoveToLichessMove(from, to)}`)
-    console.log(moveCount)
     let isMoveValid = await handlePlayerMove(convertMoveToLichessMove(from, to), moveCount + 1)
 
-    console.log(isMoveValid)
     if (!isMoveValid) {
       setBoard(boardBeforeMove)
       setMoveCount(moveCount)

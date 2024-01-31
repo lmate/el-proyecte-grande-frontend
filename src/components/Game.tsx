@@ -4,16 +4,20 @@ import Board from "../components/Board";
 function Game() {
 
   const [puzzle, setPuzzle] = useState(null)
+  const [diableClick, setDisableClick] = useState(false)
 
   const [newMoveByBoard, setNewMoveByBoard] = useState(null);
 
   async function handlePlayerMove(move, moveCount) {
+    setDisableClick(true)
+
     const response = await fetch(`/api/puzzle/valid/${puzzle.id}/${move}/${moveCount}`)
     const result = await response.text()
     console.log(result)
 
+    setDisableClick(false)
+
     if (!result) {
-      console.log('yesnull')
       return false
     }
 
@@ -34,6 +38,9 @@ function Game() {
   return (
     <div className="Game">
       <Board newMoveByBoard={newMoveByBoard} handlePlayerMove={handlePlayerMove} newBoard={puzzle && puzzle.table.split(' ')[0]}/>
+      {diableClick && (
+        <div className="disabler"></div>
+      )}
     </div>
   )
 }
