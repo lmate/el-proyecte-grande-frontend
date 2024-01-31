@@ -1,4 +1,4 @@
 interface MovementGenerator{
     getType() : string;
-    generateAvaibleMoves() : [];
+    generateAvaibleMoves(currentPos : number[]) : number[][];
 }

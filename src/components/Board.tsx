@@ -53,7 +53,7 @@ function Board() {
     } else if (board[clickedCell[0]][clickedCell[1]] !== '') {
       console.log(clickedCell);
       const bishop : BishopMovement = new BishopMovement();
-      console.log(bishop.forwardLeftMovements(clickedCell))
+      console.log(bishop.generateAvaibleMoves(clickedCell));
       setSelectedCell(structuredClone(clickedCell));
     }
   }
