@@ -14,8 +14,9 @@ import wB from '../assets/pieces/wB.svg'
 import wN from '../assets/pieces/wN.svg'
 import wP from '../assets/pieces/wP.svg'
 
-function Board() {
+function Board({ newMoveByBoard, handlePlayerMove, newBoard }) {
 
+  const [moveCount, setMoveCount] = useState(0)
   const [selectedCell, setSelectedCell] = useState(null)
   const [lastMovedFromCell, setLastMovedFromCell] = useState(null)
   const [lastMovedToCell, setLastMovedToCell] = useState(null)
@@ -33,8 +34,13 @@ function Board() {
   )
 
   useEffect(() => {
-    setBoard(convertFenToBoard('r1bk3r/p2pBpNp/n4n2/1p1NP2P/6P1/3P4/P1P1K3/q5b1'))
-  }, [])
+    newMoveByBoard && boardMovePiece(newMoveByBoard)
+  }, newMoveByBoard)
+
+  useEffect(() => {
+    newBoard && setBoard(convertFenToBoard(newBoard))
+  }, [newBoard])
+
 
   function movePiece(move) {
     const newBoard = structuredClone(board)
@@ -45,9 +51,13 @@ function Board() {
 
     setLastMovedFromCell([move.from[0], move.from[1]])
     setLastMovedToCell([move.to[0], move.to[1]])
+
+    setMoveCount(moveCount + 1)
   }
 
-  function playerMovePiece(from, to) {
+  async function playerMovePiece(from, to) {
+    const boardBeforeMove = structuredClone(board)
+
     movePiece({
       from: [from[0], from[1]],
       to: [to[0], to[1]]
@@ -55,6 +65,14 @@ function Board() {
 
     //TODO: signal to the server that a move has been made
     console.log(`Player move: ${convertMoveToLichessMove(from, to)}`)
+    console.log(moveCount)
+    let isMoveValid = await handlePlayerMove(convertMoveToLichessMove(from, to), moveCount + 1)
+
+    console.log(isMoveValid)
+    if (!isMoveValid) {
+      setBoard(boardBeforeMove)
+      setMoveCount(moveCount)
+    }
   }
 
   function boardMovePiece(lichessMove) {
@@ -135,7 +153,7 @@ function Board() {
   }
 
   return (
-    <div className="Board" onClick={handleCellClick} /*ONLY TESTING*/ onDoubleClick={() => boardMovePiece('f6g4')}>
+    <div className="Board" onClick={handleCellClick}>
 
       {lastMovedFromCell && lastMovedToCell && (
         <>
