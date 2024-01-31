@@ -5,6 +5,7 @@
 body {
   margin: 0px;
   background-color: #141414;
+  font-family: "Montserrat", sans-serif;
 }
 
 .logo {
@@ -46,6 +47,25 @@ body {
 
 .Board > .selected-piece {
   opacity: .5;
+}
+
+.Board > .legend {
+  position: absolute;
+  color: #9d9d9d;
+  font-weight: 700;
+}
+
+.Board > .legend-num {
+  margin-left: -5vh;
+  width: 2vh;
+  text-align: right;
+  padding-top: 3.5vh;
+}
+
+.Board > .legend-letter {
+  margin-top: calc(72vh + 2vh);
+  width: calc(72vh / 8);
+  text-align: center;
 }
 
 .Game {

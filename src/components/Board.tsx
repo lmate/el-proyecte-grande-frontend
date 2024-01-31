@@ -255,6 +255,19 @@ function Board({ newMoveByBoard, handlePlayerMove, newBoard }) {
       <div className="86 cell"></div>
       <div className="87 cell cell-black"></div>
       <div className="88 cell"></div>
+
+      {[8, 7, 6, 5, 4, 3, 2, 1].map((num, index) => {
+        return (
+          <p key={num} className='legend legend-num' style={{marginTop: `calc(${index} * (72vh / 8)`}}>{num}</p>
+        )
+      })}
+
+      {['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'].map((letter, index) => {
+        return (
+          <p key={letter} className='legend legend-letter' style={{marginLeft: `calc(${index} * (72vh / 8)`}}>{letter}</p>
+        )
+      })}
+
     </div>
   )
 }
