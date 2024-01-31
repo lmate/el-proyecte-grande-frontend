@@ -78,7 +78,7 @@ class BishpoMovement extends MovementGenerator{
         let xPos: number = currentPos[0];
         let yPos: number = currentPos[1];
         const avaibleMoves = [];
-        while(xPos > this.MAX_BOARD_SIZE && yPos < this.MAX_BOARD_SIZE){
+        while(xPos < this.MAX_BOARD_SIZE - 1 && yPos < this.MAX_BOARD_SIZE - 1){
             xPos++;
             yPos++;
             const newPositions: number[] = [xPos, yPos];
