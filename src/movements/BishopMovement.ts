@@ -1,8 +1,8 @@
 import MovementGenerator from "./MovementGenerator";
 
 class BishpoMovement extends MovementGenerator{
-    constructor(movementType: string){
-        super(movementType);
+    constructor(){
+        super('bishop');
     }
 
     getType() : string{

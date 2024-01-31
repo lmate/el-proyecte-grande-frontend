@@ -14,6 +14,7 @@ import wB from '../assets/pieces/wB.svg'
 import wN from '../assets/pieces/wN.svg'
 import wP from '../assets/pieces/wP.svg'
 import BishopMovement from '../movements/BishopMovement';
+import KingMovement from '../movements/KingMovement'
 
 function Board({ newMoveByBoard, handlePlayerMove, newBoard }) {
 
