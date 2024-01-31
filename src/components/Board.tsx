@@ -72,7 +72,7 @@ function Board({ newMoveByBoard, handlePlayerMove, newBoard }) {
 
     let isMoveValid = await handlePlayerMove(convertMoveToLichessMove(from, to), moveCount)
 
-    if (!isMoveValid) {
+    if (!isMoveValid){
       setBoard(boardBeforeMove)
       setMoveCount(moveCount)
     }
@@ -109,6 +109,8 @@ function Board({ newMoveByBoard, handlePlayerMove, newBoard }) {
 
       if (!isClickedCellHasWhitePiece(clickedCell) /* TODO: test if the move is legal */) {
         playerMovePiece(selectedCell, clickedCell)
+      } else {
+        setSelectedCell(clickedCell);
       }
 
     } else {
