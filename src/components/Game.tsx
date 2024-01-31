@@ -17,21 +17,25 @@ function Game() {
 
     setDisableClick(false)
 
-    if (!result) {
+    if (result === 'win') {
+      getRandomPuzzle()
+      return true
+    } else if (!result) {
       return false
-    }
+    } 
 
     setNewMoveByBoard(result)
     return true
   }
 
+  async function getRandomPuzzle() {
+    const response = await fetch('/api/puzzle')
+    const result = await response.json()
+    setPuzzle(result)
+    setTimeout(() => {setNewMoveByBoard(result.firstMove)}, 1000)
+  }
+
   useEffect(() => {
-    async function getRandomPuzzle() {
-      const response = await fetch('/api/puzzle')
-      const result = await response.json()
-      setPuzzle(result)
-      setTimeout(() => {setNewMoveByBoard(result.firstMove)}, 1000)
-    }
     getRandomPuzzle()
   }, [])
 
@@ -41,6 +45,8 @@ function Game() {
       {diableClick && (
         <div className="disabler"></div>
       )}
+
+      {/*<div className="start-ribbon">Click to start a puzzle!</div>*/}
     </div>
   )
 }

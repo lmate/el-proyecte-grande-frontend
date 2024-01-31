@@ -35,10 +35,16 @@ function Board({ newMoveByBoard, handlePlayerMove, newBoard }) {
 
   useEffect(() => {
     newMoveByBoard && boardMovePiece(newMoveByBoard)
-  }, newMoveByBoard)
+  }, [newMoveByBoard])
 
   useEffect(() => {
-    newBoard && setBoard(convertFenToBoard(newBoard))
+    if (newBoard) {
+      setBoard(convertFenToBoard(newBoard))
+      setMoveCount(0)
+      setSelectedCell(null)
+      setLastMovedFromCell(null)
+      setLastMovedToCell(null)
+    }
   }, [newBoard])
 
 
@@ -64,7 +70,7 @@ function Board({ newMoveByBoard, handlePlayerMove, newBoard }) {
       to: [to[0], to[1]]
     })
 
-    let isMoveValid = await handlePlayerMove(convertMoveToLichessMove(from, to), moveCount + 1)
+    let isMoveValid = await handlePlayerMove(convertMoveToLichessMove(from, to), moveCount)
 
     if (!isMoveValid) {
       setBoard(boardBeforeMove)
