@@ -1,10 +1,13 @@
-import { useEffect, useState } from "react";
-import Board from "../components/Board";
+import { useEffect, useState } from "react"
+import Board from "../components/Board"
+
+import checkIcon from '../assets/check-icon.svg'
 
 function Game() {
 
   const [puzzle, setPuzzle] = useState(null)
   const [diableClick, setDisableClick] = useState(false)
+  const [isShowCompleteIndicator, setIsShowCompleteIndicator] = useState(false);
 
   const [newMoveByBoard, setNewMoveByBoard] = useState(null);
 
@@ -19,6 +22,7 @@ function Game() {
 
     if (result === 'win') {
       getRandomPuzzle()
+      showCompleteIndicator()
       return true
     } else if (!result) {
       return false
@@ -39,6 +43,11 @@ function Game() {
     getRandomPuzzle()
   }, [])
 
+  function showCompleteIndicator() {
+    setIsShowCompleteIndicator(true)
+    setTimeout(() => setIsShowCompleteIndicator(false), 1500)
+  }
+
   return (
     <div className="Game">
       <Board newMoveByBoard={newMoveByBoard} handlePlayerMove={handlePlayerMove} newBoard={puzzle && puzzle.table.split(' ')[0]}/>
@@ -46,7 +55,7 @@ function Game() {
         <div className="disabler"></div>
       )}
 
-      {/*<div className="start-ribbon">Click to start a puzzle!</div>*/}
+      <div className="complete-indicator" style={{top: isShowCompleteIndicator ? '5vh' : '-26vh'}}><img src={checkIcon} /></div>
     </div>
   )
 }
