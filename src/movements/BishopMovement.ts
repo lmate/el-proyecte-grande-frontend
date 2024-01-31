@@ -1,7 +1,9 @@
-class BishpoMovement implements MovementGenerator{
-    private MAX_BOARD_SIZE : number = 8;
-    private MIN_BOARD_SIZE : number = 0;
-    private MOVEMENT_TYPE : string = 'bishop';
+import MovementGenerator from "./MovementGenerator";
+
+class BishpoMovement extends MovementGenerator{
+    constructor(movementType: string){
+        super(movementType);
+    }
 
     getType() : string{
         return this.MOVEMENT_TYPE;
