@@ -38,3 +38,15 @@ body {
 .Board > .selected-piece {
   opacity: .5;
 }
+
+.Game > .disabler {
+  width: 80vh;
+  height: 80vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.Game > .start-ribbon {
+  
+}

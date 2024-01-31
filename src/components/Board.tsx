@@ -35,10 +35,16 @@ function Board({ newMoveByBoard, handlePlayerMove, newBoard }) {
 
   useEffect(() => {
     newMoveByBoard && boardMovePiece(newMoveByBoard)
-  }, newMoveByBoard)
+  }, [newMoveByBoard])
 
   useEffect(() => {
-    newBoard && setBoard(convertFenToBoard(newBoard))
+    if (newBoard) {
+      setBoard(convertFenToBoard(newBoard))
+      setMoveCount(0)
+      setSelectedCell(null)
+      setLastMovedFromCell(null)
+      setLastMovedToCell(null)
+    }
   }, [newBoard])
 
 
@@ -54,8 +60,9 @@ function Board({ newMoveByBoard, handlePlayerMove, newBoard }) {
 
     setMoveCount(moveCount + 1)
   }
-
+  
   async function playerMovePiece(from, to) {
+
     const boardBeforeMove = structuredClone(board)
 
     movePiece({
@@ -63,12 +70,8 @@ function Board({ newMoveByBoard, handlePlayerMove, newBoard }) {
       to: [to[0], to[1]]
     })
 
-    //TODO: signal to the server that a move has been made
-    console.log(`Player move: ${convertMoveToLichessMove(from, to)}`)
-    console.log(moveCount)
-    let isMoveValid = await handlePlayerMove(convertMoveToLichessMove(from, to), moveCount + 1)
+    let isMoveValid = await handlePlayerMove(convertMoveToLichessMove(from, to), moveCount)
 
-    console.log(isMoveValid)
     if (!isMoveValid) {
       setBoard(boardBeforeMove)
       setMoveCount(moveCount)
