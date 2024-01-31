@@ -42,7 +42,6 @@ function Board() {
 
   function handleCellClick(e) {
     const clickedCell = [parseInt(e.target.className.split(" ")[0].charAt(0)) - 1, parseInt(e.target.className.split(" ")[0].charAt(1)) - 1]
-
     if (selectedCell) {
       const newBoard = structuredClone(board);
       newBoard[clickedCell[0]][clickedCell[1]] = newBoard[selectedCell[0]][selectedCell[1]]
@@ -51,6 +50,7 @@ function Board() {
       setBoard(newBoard);
 
     } else if (board[clickedCell[0]][clickedCell[1]] !== '') {
+      console.log(board[clickedCell[0]][clickedCell[1]]);
       setSelectedCell(structuredClone(clickedCell));
     }
   }
