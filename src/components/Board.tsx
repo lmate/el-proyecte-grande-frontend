@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react'
+
 import bK from '../assets/pieces/bK.svg'
 import bQ from '../assets/pieces/bQ.svg'
 import bR from '../assets/pieces/bR.svg'
@@ -12,11 +14,11 @@ import wB from '../assets/pieces/wB.svg'
 import wN from '../assets/pieces/wN.svg'
 import wP from '../assets/pieces/wP.svg'
 
-import { useEffect, useState } from 'react'
-
 function Board() {
 
-  const [selectedCell, setSelectedCell] = useState(null);
+  const [selectedCell, setSelectedCell] = useState(null)
+  const [lastMovedFromCell, setLastMovedFromCell] = useState(null)
+  const [lastMovedToCell, setLastMovedToCell] = useState(null)
   const [board, setBoard] = useState(
     [
       [bR, bN, bB, bQ, bK, bB, bN, bR],
@@ -26,44 +28,94 @@ function Board() {
       ['', '', '', '', '', '', '', ''],
       ['', '', '', '', '', '', '', ''],
       [wP, wP, wP, wP, wP, wP, wP, wP],
-      [wR, wN, wB, wQ, wK, wB, wN, wR],
+      [wR, wN, wB, wQ, wK, wB, wN, wR]
     ]
-  );
+  )
 
   useEffect(() => {
-    setBoard(convertFenToBoard('r1bk3r/p2pBpNp/n4n2/1p1NP2P/6P1/3P4/P1P1K3/q5b1'));
+    setBoard(convertFenToBoard('r1bk3r/p2pBpNp/n4n2/1p1NP2P/6P1/3P4/P1P1K3/q5b1'))
   }, [])
+
+  function movePiece(move) {
+    const newBoard = structuredClone(board)
+    newBoard[move.to[0]][move.to[1]] = newBoard[move.from[0]][move.from[1]]
+    newBoard[move.from[0]][move.from[1]] = ''
+    setSelectedCell(null)
+    setBoard(newBoard)
+
+    setLastMovedFromCell([move.from[0], move.from[1]])
+    setLastMovedToCell([move.to[0], move.to[1]])
+  }
+
+  function playerMovePiece(from, to) {
+    movePiece({
+      from: [from[0], from[1]],
+      to: [to[0], to[1]]
+    })
+
+    //TODO: signal to the server that a move has been made
+    console.log(`Player move: ${convertMoveToLichessMove(from, to)}`)
+  }
+
+  function boardMovePiece(lichessMove) {
+    console.log(`Board move: ${lichessMove}`)
+    movePiece(convertLichessMoveToMove(lichessMove))
+  }
+
+  function convertLichessMoveToMove(lichessMove) {
+    const letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
+    return {
+      from: [8 - parseInt(lichessMove[1]), letters.indexOf(lichessMove[0])],
+      to: [8 - parseInt(lichessMove[3]), letters.indexOf(lichessMove[2])]
+    }
+  }
+
+  function convertMoveToLichessMove(from, to) {
+    const letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
+    return letters[from[1]] + (8 - from[0]) + letters[to[1]] + (8 - to[0])
+  }
 
 
   function handleCellClick(e) {
     const clickedCell = [parseInt(e.target.className.split(" ")[0].charAt(0)) - 1, parseInt(e.target.className.split(" ")[0].charAt(1)) - 1]
 
     if (selectedCell) {
-      const newBoard = structuredClone(board);
-      newBoard[clickedCell[0]][clickedCell[1]] = newBoard[selectedCell[0]][selectedCell[1]]
-      newBoard[selectedCell[0]][selectedCell[1]] = '';
-      setSelectedCell(null);
-      setBoard(newBoard);
 
-    } else if (board[clickedCell[0]][clickedCell[1]] !== '') {
-      setSelectedCell(structuredClone(clickedCell));
+      if (clickedCell.join('') === selectedCell.join('')) {
+        setSelectedCell(null)
+        return
+      }
+
+      if (!isClickedCellHasWhitePiece(clickedCell) /* TODO: test if the move is legal */) {
+        playerMovePiece(selectedCell, clickedCell)
+      }
+
+    } else {
+      if (isClickedCellHasWhitePiece(clickedCell)) {
+        setSelectedCell(structuredClone(clickedCell))
+      }
     }
+  }
+
+  function isClickedCellHasWhitePiece(clickedCell) {
+    if (board[clickedCell[0]][clickedCell[1]].toString().split('/').at(-1).split('.')[0].charAt(0) === 'w') {
+      return true
+    }
+    return false
+  }
+
+  function replaceNumbersWithSpacesInFen(fen) {
+    let result = ''
+    for (const char of fen.split('')) {
+      result += /^\d+$/.test(char) ? ' '.repeat(parseInt(char)) : char
+    }
+    return result
   }
 
   function convertFenToBoard(fen) {
     // r1bk3r/p2pBpNp/n4n2/1p1NP2P/6P1/3P4/P1P1K3/q5b1
-
-    const convertedBoard = [
-      ['', '', '', '', '', '', '', ''],
-      ['', '', '', '', '', '', '', ''],
-      ['', '', '', '', '', '', '', ''],
-      ['', '', '', '', '', '', '', ''],
-      ['', '', '', '', '', '', '', ''],
-      ['', '', '', '', '', '', '', ''],
-      ['', '', '', '', '', '', '', ''],
-      ['', '', '', '', '', '', '', '']
-    ]
-
+    fen = replaceNumbersWithSpacesInFen(fen)
+    const result = []
     const pieceRepo = {
       k: [bK, wK],
       q: [bQ, wQ],
@@ -73,50 +125,38 @@ function Board() {
       p: [bP, wP]
     }
 
-    let newfen = '';
-    for (let i = 0; i < fen.length; i++) {
-      if (/^\d+$/.test(fen[i])) {
-        for (let j = 0; j < parseInt(fen[i]); j++) {
-          newfen += ' '
-        }
-      } else {
-        newfen += fen[i]
+    for (const row of fen.split('/')) {
+      result.push([])
+      for (const char of row.split('')) {
+        result.at(-1).push(char === ' ' ? '' : [pieceRepo[char.toLowerCase()][char === char.toUpperCase() ? 1 : 0]])
       }
     }
-    fen = newfen;
-
-    const fenRows = fen.split('/');
-
-    for (let i = 0; i < fenRows.length; i++) {
-      for (let j = 0; j < fenRows[i].length; j++) {
-        if (fenRows[i][j] !== ' ') {
-          if (fenRows[i][j] === fenRows[i][j].toUpperCase()) {
-            convertedBoard[i][j] = pieceRepo[fenRows[i][j].toLowerCase()][1];
-          } else {
-            convertedBoard[i][j] = pieceRepo[fenRows[i][j].toLowerCase()][0];
-          }
-        }
-      }
-    }
-
-    return convertedBoard
+    return result
   }
 
   return (
-    <div className="Board" onClick={handleCellClick}>
+    <div className="Board" onClick={handleCellClick} /*ONLY TESTING*/ onDoubleClick={() => boardMovePiece('f6g4')}>
+
+      {lastMovedFromCell && lastMovedToCell && (
+        <>
+          <div className="cell highlight-cell" style={{ left: `calc(${lastMovedFromCell[1]} * (80vh / 8)`, top: `calc(${lastMovedFromCell[0]} * (80vh / 8)` }}></div>
+          <div className="cell highlight-cell" style={{ left: `calc(${lastMovedToCell[1]} * (80vh / 8)`, top: `calc(${lastMovedToCell[0]} * (80vh / 8)` }}></div>
+        </>
+      )}
 
       {board.map((row, rowId) => {
         return row.map((piece, pieceId) => {
-          let styleToSet = {left: pieceId * ((window.innerHeight * 0.8) / 8), top: rowId * ((window.innerHeight * 0.8) / 8)}
 
+          const modifierClasses = []
           if (selectedCell && (rowId === selectedCell[0] && pieceId === selectedCell[1])) {
-            styleToSet = {left: pieceId * ((window.innerHeight * 0.8) / 8), top: rowId * ((window.innerHeight * 0.8) / 8), opacity: .5}
+            modifierClasses.push('selected-piece')
           }
+
           return piece != '' && <img
             key={`${rowId}${pieceId}`}
-            className="piece"
+            className={`piece ${modifierClasses.join(' ')}`}
             src={piece}
-            style={styleToSet}
+            style={{ left: `calc(${pieceId} * (80vh / 8)`, top: `calc(${rowId} * (80vh / 8)` }}
           ></img>
         })
       })}
@@ -196,4 +236,4 @@ function Board() {
   )
 }
 
-export default Board;
+export default Board

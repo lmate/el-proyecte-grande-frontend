@@ -9,7 +9,6 @@ body {
 .Board {
   height: 80vh;
   width: 80vh;
-  border: 1px solid black;
 }
 
 .Board > .cell {
@@ -22,9 +21,20 @@ body {
   background-color: var(--accent);
 }
 
+.Board > .highlight-cell {
+  position: absolute;
+  background-color: rgb(77, 255, 77);
+  pointer-events: none;
+  opacity: .8;
+}
+
 .Board > .piece {
   position: absolute;
   width: calc(80vh / 8);
   height: calc(80vh / 8);
   pointer-events: none;
+}
+
+.Board > .selected-piece {
+  opacity: .5;
 }
