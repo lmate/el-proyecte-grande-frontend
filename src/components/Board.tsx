@@ -11,6 +11,7 @@ import wR from '../assets/pieces/wR.svg'
 import wB from '../assets/pieces/wB.svg'
 import wN from '../assets/pieces/wN.svg'
 import wP from '../assets/pieces/wP.svg'
+import BishopMovement from '../movements/BishopMovement';
 
 import { useEffect, useState } from 'react'
 
@@ -50,7 +51,9 @@ function Board() {
       setBoard(newBoard);
 
     } else if (board[clickedCell[0]][clickedCell[1]] !== '') {
-      console.log(board[clickedCell[0]][clickedCell[1]]);
+      console.log(clickedCell);
+      const bishop : BishopMovement = new BishopMovement();
+      console.log(bishop.forwardLeftMovements(clickedCell))
       setSelectedCell(structuredClone(clickedCell));
     }
   }
