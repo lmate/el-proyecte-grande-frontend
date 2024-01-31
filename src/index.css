@@ -23,10 +23,9 @@ body {
 
 .Board > .highlight-cell {
   position: absolute;
-  box-sizing: border-box;
-  border: 4.5px solid rgb(146, 172, 0);
-  border-style: dashed;
+  background-color: rgb(77, 255, 77);
   pointer-events: none;
+  opacity: .8;
 }
 
 .Board > .piece {

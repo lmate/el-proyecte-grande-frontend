@@ -137,6 +137,13 @@ function Board() {
   return (
     <div className="Board" onClick={handleCellClick} /*ONLY TESTING*/ onDoubleClick={() => boardMovePiece('f6g4')}>
 
+      {lastMovedFromCell && lastMovedToCell && (
+        <>
+          <div className="cell highlight-cell" style={{ left: `calc(${lastMovedFromCell[1]} * (80vh / 8)`, top: `calc(${lastMovedFromCell[0]} * (80vh / 8)` }}></div>
+          <div className="cell highlight-cell" style={{ left: `calc(${lastMovedToCell[1]} * (80vh / 8)`, top: `calc(${lastMovedToCell[0]} * (80vh / 8)` }}></div>
+        </>
+      )}
+
       {board.map((row, rowId) => {
         return row.map((piece, pieceId) => {
 
@@ -153,13 +160,6 @@ function Board() {
           ></img>
         })
       })}
-
-      {lastMovedFromCell && lastMovedToCell && (
-        <>
-          <div className="cell highlight-cell" style={{ left: `calc(${lastMovedFromCell[1]} * (80vh / 8)`, top: `calc(${lastMovedFromCell[0]} * (80vh / 8)` }}></div>
-          <div className="cell highlight-cell" style={{ left: `calc(${lastMovedToCell[1]} * (80vh / 8)`, top: `calc(${lastMovedToCell[0]} * (80vh / 8)` }}></div>
-        </>
-      )}
 
       <div className="11 cell"></div>
       <div className="12 cell cell-black"></div>
