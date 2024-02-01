@@ -37,7 +37,7 @@ function Game() {
     const response = await fetch('/api/puzzle')
     const result = await response.json()
     setPuzzle(result)
-    setTimeout(() => {setNewMoveByBoard(result.firstMove)}, 1000)
+    setTimeout(() => {setNewMoveByBoard(result.firstMove)}, 0)
   }
 
   useEffect(() => {
@@ -45,7 +45,7 @@ function Game() {
 
   function showCompleteIndicator() {
     setIsShowCompleteIndicator(true)
-    setTimeout(() => setIsShowCompleteIndicator(false), 1500)
+    setTimeout(() => setIsShowCompleteIndicator(false), 1000)
   }
 
   return (
