@@ -20,11 +20,11 @@ class RookMovement extends MovementGenerator{
     }
 
     private generateForwardMovement(currentPos: number[]): number[][]{
-        const xPos: number = currentPos[0];
-        let yPos: number = currentPos[1];
+        const xPos: number = currentPos[1];
+        let yPos: number = currentPos[0];
         const avaibleMoves: number[][] = [];
 
-        while(yPos >= this.MIN_BOARD_SIZE){
+        while(yPos > this.MIN_BOARD_SIZE){
             yPos--;
             const avaiblePosition: number[] = [xPos, yPos];
             avaibleMoves.push(avaiblePosition);
@@ -34,11 +34,11 @@ class RookMovement extends MovementGenerator{
     }
 
     private generateRightMovement(currentPos: number[]): number[][]{
-        let xPos: number = currentPos[0];
-        const yPos: number = currentPos[1];
+        let xPos: number = currentPos[1];
+        const yPos: number = currentPos[0];
         const avaibleMoves: number[][] = [];
 
-        while(xPos < this.MAX_BOARD_SIZE){
+        while(xPos < this.MAX_BOARD_SIZE - 1){
             xPos++;
             const avaiblePosition: number[] = [xPos, yPos];
             avaibleMoves.push(avaiblePosition);
@@ -47,11 +47,11 @@ class RookMovement extends MovementGenerator{
     }
 
     private generateBackwardMovement(currentPos: number[]): number[][]{
-        const xPos: number = currentPos[0];
-        let yPos: number = currentPos[1];
+        const xPos: number = currentPos[1];
+        let yPos: number = currentPos[0];
         const avaibleMoves: number[][] = [];
 
-        while(yPos < this.MAX_BOARD_SIZE){
+        while(yPos < this.MAX_BOARD_SIZE - 1){
             yPos++;
             const avaiblePosition: number[] = [xPos, yPos];
             avaibleMoves.push(avaiblePosition);
@@ -61,11 +61,11 @@ class RookMovement extends MovementGenerator{
     }
 
     private generateLeftMovement(currentPos: number[]): number[][]{
-        let xPos: number = currentPos[0];
-        const yPos: number = currentPos[1];
+        let xPos: number = currentPos[1];
+        const yPos: number = currentPos[0];
         const avaibleMoves: number[][] = [];
 
-        while(xPos >= this.MIN_BOARD_SIZE){
+        while(xPos > this.MIN_BOARD_SIZE){
             xPos--;
             const avaiblePosition: number[] = [xPos, yPos];
             avaibleMoves.push(avaiblePosition);
