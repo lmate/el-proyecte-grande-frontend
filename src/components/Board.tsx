@@ -79,7 +79,7 @@ function Board({ newMoveByBoard, handlePlayerMove, newBoard }) {
       to: [to[0], to[1]]
     })
 
-    let isMoveValid = await handlePlayerMove(convertMoveToLichessMove(from, to), moveCount)
+    const isMoveValid = await handlePlayerMove(convertMoveToLichessMove(from, to), moveCount)
 
     if (!isMoveValid){
       setBoard(boardBeforeMove)

@@ -75,7 +75,7 @@ body {
 }
 
 .Game > .disabler {
-  width: 72vh;
+  width: 100vh;
   height: 72vh;
   position: absolute;
   top: 0;
@@ -99,6 +99,54 @@ body {
   margin-top: 1.5vh;
   filter: invert(45%) sepia(58%) saturate(3613%) hue-rotate(121deg) brightness(94%) contrast(95%);
 }
+
+.play-btn {
+  position:absolute;
+  margin-left: 20vh;
+  margin-top: -38vh;
+  align-items: center;
+  font-weight: 500;
+  font-size: 25px;
+  padding: 0.7em 1.4em 0.7em 1.1em;
+  color: white;
+  background: #ad5389;
+  background: linear-gradient(0deg, rgba(20,167,62,1) 0%, rgba(102,247,113,1) 100%);
+  border: none;
+  box-shadow: 0 0.7em 1.5em -0.5em #14a73e98;
+  letter-spacing: 0.05em;
+  border-radius: 20em;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.next-puzzle-btn{
+  position:absolute;
+  margin-left: 75vh;
+  margin-top: -8vh;
+  align-items: center;
+  font-weight: 500;
+  font-size: 15px;
+  padding: 0.7em 1.4em 0.7em 1.1em;
+  color: rgb(255, 255, 255);
+  background: #ad5389;
+  background: linear-gradient(0deg, rgb(20, 95, 41) 0%, rgb(19, 119, 28) 100%);
+  border: none;
+  box-shadow: 0 0.7em 1.5em -0.5em #14a73e98;
+  border-radius: 20em;
+  cursor: pointer;
+  z-index: 0;
+}
+
+.blur{
+  top:0;
+  position:absolute;
+  height: 72vh;
+  width: 72vh;
+  box-shadow: 0px 0px 20px rgb(0, 0, 0);
+  backdrop-filter: blur(2px);
+  filter: brightness(50%);
+}
+
 
 .Auth {
   position: absolute;
