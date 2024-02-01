@@ -1,31 +1,36 @@
 import { Link } from "react-router-dom";
 
+import homeIcon from '../assets/home-icon.svg'
+import profileIcon from '../assets/profile-icon.svg'
+import leaderboardIcon from '../assets/leaderboard-icon.svg'
+import head2headIcon from '../assets/head2head-icon.svg'
+
 function Navbar(){
     return(
-        <nav className="navbar">
+        <nav className="Navbar">
             <ul className="menu"> 
                 <li>
                     <Link className="menu-point" to='/'>
-                        <img className="menu-icon" src="" />
-                        <p className="menu-title">Home</p>
+                        <img src={homeIcon} />
+                        <span>Home</span>
                     </Link>
                 </li>
                 <li>
                     <Link className="menu-point" to='/profile'>
-                        <img className="menu-icon" src="" />
-                        <p className="menu-title">Profile</p>
+                        <img src={profileIcon} />
+                        <span>Profile</span>
                     </Link>
                 </li>
                 <li>
                     <Link className="menu-point" to='/leaderboard'>
-                        <img className="menu-icon" src="" />
-                        <p className="menu-title">Leaderboard</p>
+                        <img src={leaderboardIcon} />
+                        <span>Leaderboard</span>
                     </Link>
                 </li>
                 <li>
                     <Link className="menu-point" to='/head2head'>
-                        <img className="menu-icon" src="" />
-                        <p className="menu-title">Head-2-Head</p>
+                        <img src={head2headIcon} />
+                        <span>Head-2-Head</span>
                     </Link>
                 </li>
             </ul>

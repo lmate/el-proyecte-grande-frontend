@@ -163,8 +163,8 @@ function Board({ newMoveByBoard, handlePlayerMove, newBoard }) {
 
       {lastMovedFromCell && lastMovedToCell && (
         <>
-          <div className="cell highlight-cell" style={{ left: `calc(${lastMovedFromCell[1]} * (80vh / 8)`, top: `calc(${lastMovedFromCell[0]} * (80vh / 8)` }}></div>
-          <div className="cell highlight-cell" style={{ left: `calc(${lastMovedToCell[1]} * (80vh / 8)`, top: `calc(${lastMovedToCell[0]} * (80vh / 8)` }}></div>
+          <div className="cell highlight-cell" style={{ left: `calc(${lastMovedFromCell[1]} * (72vh / 8)`, top: `calc(${lastMovedFromCell[0]} * (72vh / 8)` }}></div>
+          <div className="cell highlight-cell" style={{ left: `calc(${lastMovedToCell[1]} * (72vh / 8)`, top: `calc(${lastMovedToCell[0]} * (72vh / 8)` }}></div>
         </>
       )}
 
@@ -180,7 +180,7 @@ function Board({ newMoveByBoard, handlePlayerMove, newBoard }) {
             key={`${rowId}${pieceId}`}
             className={`piece ${modifierClasses.join(' ')}`}
             src={piece}
-            style={{ left: `calc(${pieceId} * (80vh / 8)`, top: `calc(${rowId} * (80vh / 8)` }}
+            style={{ left: `calc(${pieceId} * (72vh / 8)`, top: `calc(${rowId} * (72vh / 8)` }}
           ></img>
         })
       })}
@@ -256,6 +256,19 @@ function Board({ newMoveByBoard, handlePlayerMove, newBoard }) {
       <div className="86 cell"></div>
       <div className="87 cell cell-black"></div>
       <div className="88 cell"></div>
+
+      {[8, 7, 6, 5, 4, 3, 2, 1].map((num, index) => {
+        return (
+          <p key={num} className='legend legend-num' style={{marginTop: `calc(${index} * (72vh / 8)`}}>{num}</p>
+        )
+      })}
+
+      {['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'].map((letter, index) => {
+        return (
+          <p key={letter} className='legend legend-letter' style={{marginLeft: `calc(${index} * (72vh / 8)`}}>{letter}</p>
+        )
+      })}
+
     </div>
   )
 }
