@@ -1,5 +1,5 @@
 #root {
-  --accent: #5200A5;
+  --accent: #4B7399;
 }
 
 body {
@@ -24,7 +24,7 @@ body {
   float: left;
   width: calc(72vh / 8);
   height: calc(72vh / 8);
-  background-color: #9d9d9d;
+  background-color: #EAE9D2;
 }
 
 .Board > .cell-black {
@@ -51,19 +51,19 @@ body {
 
 .Board > .legend {
   position: absolute;
-  color: #9d9d9d;
+  color: #EAE9D2;
   font-weight: 700;
 }
 
 .Board > .legend-num {
-  margin-left: -5vh;
+  margin-left: -3.5vh;
   width: 2vh;
   text-align: right;
   padding-top: 3.5vh;
 }
 
 .Board > .legend-letter {
-  margin-top: calc(72vh + 2vh);
+  margin-top: calc(72vh + 1vh);
   width: calc(72vh / 8);
   text-align: center;
 }
