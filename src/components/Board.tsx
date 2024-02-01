@@ -15,6 +15,7 @@ import wN from '../assets/pieces/wN.svg'
 import wP from '../assets/pieces/wP.svg'
 import BishopMovement from '../movements/BishopMovement';
 import KingMovement from '../movements/KingMovement'
+import RookMovement from '../movements/RookMovement'
 
 import useSound from 'use-sound';
 import completedSound from '../assets/sounds/puzzle-done.mp3';
@@ -125,6 +126,8 @@ function Board({ newMoveByBoard, handlePlayerMove, newBoard }) {
 
     } else {
       if (isClickedCellHasWhitePiece(clickedCell)) {
+        const rook: RookMovement = new RookMovement();
+        console.log(rook.generateAvaibleMoves(clickedCell));
         setSelectedCell(structuredClone(clickedCell))
       }
     }
