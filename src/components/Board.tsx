@@ -13,6 +13,9 @@ import wR from '../assets/pieces/wR.svg'
 import wB from '../assets/pieces/wB.svg'
 import wN from '../assets/pieces/wN.svg'
 import wP from '../assets/pieces/wP.svg'
+import BishopMovement from '../movements/BishopMovement';
+import KingMovement from '../movements/KingMovement'
+import RookMovement from '../movements/RookMovement'
 
 import useSound from 'use-sound';
 import completedSound from '../assets/sounds/puzzle-done.mp3';
@@ -108,7 +111,6 @@ function Board({ newMoveByBoard, handlePlayerMove, newBoard }) {
 
   function handleCellClick(e) {
     const clickedCell = [parseInt(e.target.className.split(" ")[0].charAt(0)) - 1, parseInt(e.target.className.split(" ")[0].charAt(1)) - 1]
-
     if (selectedCell) {
 
       if (clickedCell.join('') === selectedCell.join('')) {
