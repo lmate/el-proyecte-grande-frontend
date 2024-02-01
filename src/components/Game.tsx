@@ -8,6 +8,7 @@ function Game() {
   const [puzzle, setPuzzle] = useState(null)
   const [diableClick, setDisableClick] = useState(false)
   const [isShowCompleteIndicator, setIsShowCompleteIndicator] = useState(false);
+  const [isHomeScreen, setIsHomeScreen] = useState(true);
 
   const [newMoveByBoard, setNewMoveByBoard] = useState(null);
 
@@ -36,25 +37,33 @@ function Game() {
     const response = await fetch('/api/puzzle')
     const result = await response.json()
     setPuzzle(result)
-    setTimeout(() => {setNewMoveByBoard(result.firstMove)}, 1000)
+    setTimeout(() => {setNewMoveByBoard(result.firstMove)}, 0)
   }
 
   useEffect(() => {
-    getRandomPuzzle()
   }, [])
 
   function showCompleteIndicator() {
     setIsShowCompleteIndicator(true)
-    setTimeout(() => setIsShowCompleteIndicator(false), 1500)
+    setTimeout(() => setIsShowCompleteIndicator(false), 1000)
   }
 
   return (
     <div className="Game">
       <Board newMoveByBoard={newMoveByBoard} handlePlayerMove={handlePlayerMove} newBoard={puzzle && puzzle.table.split(' ')[0]}/>
-      {diableClick && (
-        <div className="disabler"></div>
-      )}
-
+      {isHomeScreen ?(
+        <>
+        <div className="blur"></div>
+      <button className="play-btn"onClick={() => {getRandomPuzzle(), setIsHomeScreen(false)}}>Start playing!</button>
+        </> 
+      ) : (
+        <button className="next-puzzle-btn"onClick={() => {getRandomPuzzle(), setDisableClick(true), setTimeout(() => {
+          setDisableClick(false)
+        }, 1000)}}>Get new puzzle</button>
+        )}
+        {diableClick && (
+          <div className="disabler"></div>
+        )}
       <div className="complete-indicator" style={{top: isShowCompleteIndicator ? '5vh' : '-26vh'}}><img src={checkIcon} /></div>
     </div>
   )
