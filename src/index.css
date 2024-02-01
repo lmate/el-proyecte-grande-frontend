@@ -99,3 +99,55 @@ body {
   margin-top: 1.5vh;
   filter: invert(45%) sepia(58%) saturate(3613%) hue-rotate(121deg) brightness(94%) contrast(95%);
 }
+
+.Auth {
+  position: absolute;
+  top: 5vh;
+  left: 92.5vw;
+}
+
+.Auth > .login-link {
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.Auth > .login-link:hover {
+  text-decoration: underline;
+}
+
+.Navbar {
+  position: absolute;
+  top: 0px;
+}
+
+.Navbar > .menu {
+  list-style-type: none;
+  padding-top: 10vh;
+}
+
+.Navbar > .menu > li {
+  margin-top: 7vh;
+}
+
+.Navbar > .menu > li > .menu-point {
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 800;
+  font-size: 2.6vh;
+}
+
+.Navbar > .menu > li > .menu-point > img {
+  filter: invert(100%) sepia(0%) saturate(3527%) hue-rotate(211deg) brightness(111%) contrast(101%);
+  width: 4vh;
+  position: absolute;
+  margin-top: -.5vh;
+}
+
+.Navbar > .menu > li > .menu-point > span {
+  padding-left: 7vh;
+}
+
+.Navbar > .menu > li > .menu-point > span:hover {
+  text-decoration: underline;
+}
