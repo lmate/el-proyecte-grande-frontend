@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
-import Board from "../components/Board"
 
+import Board from "../components/Board"
 import checkIcon from '../assets/check-icon.svg'
 
 function Game() {
