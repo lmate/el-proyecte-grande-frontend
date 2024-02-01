@@ -9,9 +9,9 @@ body {
 }
 
 .logo {
-  width: 22vw;
-  margin-left: calc((100vw - 22vw) / 2);
-  margin-top: 6vh;
+  width: 25vw;
+  margin-left: calc((100vw - 25vw) / 2);
+  margin-top: 5vh;
 }
 
 .Board {
@@ -70,7 +70,7 @@ body {
 
 .Game {
   position: relative;
-  margin-top: 7vh;
+  margin-top: 5.5vh;
   margin-left: calc((100vw - 72vh) / 2);
 }
 
