@@ -14,12 +14,19 @@ import wB from '../assets/pieces/wB.svg'
 import wN from '../assets/pieces/wN.svg'
 import wP from '../assets/pieces/wP.svg'
 
+import useSound from 'use-sound';
+import completedSound from '../assets/sounds/puzzle-done.mp3';
+import moveSound from '../assets/sounds/move.mp3';
+
+
 function Board({ newMoveByBoard, handlePlayerMove, newBoard }) {
 
   const [moveCount, setMoveCount] = useState(0)
   const [selectedCell, setSelectedCell] = useState(null)
   const [lastMovedFromCell, setLastMovedFromCell] = useState(null)
   const [lastMovedToCell, setLastMovedToCell] = useState(null)
+  const [playMoveSound] = useSound(moveSound); 
+  const [playCompletedSound] = useSound(completedSound); 
   const [board, setBoard] = useState(
     [
       [bR, bN, bB, bQ, bK, bB, bN, bR],
@@ -39,6 +46,7 @@ function Board({ newMoveByBoard, handlePlayerMove, newBoard }) {
 
   useEffect(() => {
     if (newBoard) {
+      playCompletedSound()
       setBoard(convertFenToBoard(newBoard))
       setMoveCount(0)
       setSelectedCell(null)
@@ -57,6 +65,7 @@ function Board({ newMoveByBoard, handlePlayerMove, newBoard }) {
 
     setLastMovedFromCell([move.from[0], move.from[1]])
     setLastMovedToCell([move.to[0], move.to[1]])
+    playMoveSound()
 
     setMoveCount(moveCount + 1)
   }
