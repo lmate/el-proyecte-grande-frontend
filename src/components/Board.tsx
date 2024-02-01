@@ -242,7 +242,7 @@ function Board({ newMoveByBoard, handlePlayerMove, newBoard }) {
       <div className="72 cell cell-black"></div>
       <div className="73 cell"></div>
       <div className="74 cell cell-black"></div>
-      <div className="72 cell"></div>
+      <div className="75 cell"></div>
       <div className="76 cell cell-black"></div>
       <div className="77 cell"></div>
       <div className="78 cell cell-black"></div>
