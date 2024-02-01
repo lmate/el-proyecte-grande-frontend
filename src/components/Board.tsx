@@ -126,8 +126,6 @@ function Board({ newMoveByBoard, handlePlayerMove, newBoard }) {
 
     } else {
       if (isClickedCellHasWhitePiece(clickedCell)) {
-        const rook: RookMovement = new RookMovement();
-        console.log(rook.generateAvaibleMoves(clickedCell));
         setSelectedCell(structuredClone(clickedCell))
       }
     }
