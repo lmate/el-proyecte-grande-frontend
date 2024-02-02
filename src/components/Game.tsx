@@ -3,9 +3,21 @@ import { useEffect, useState } from "react"
 import Board from "../components/Board"
 import checkIcon from '../assets/check-icon.svg'
 
+
+type Move = `${string}${number}${string}${number}`;
+
+interface Puzzle{
+  // DTO : String id, String table, String firstMove, float rating, float popularity
+  id: string,
+  table: string,
+  firstMove: Move,
+  rating: number,
+  popularity: number
+}
+
 function Game() {
 
-  const [puzzle, setPuzzle] = useState(null)
+  const [puzzle, setPuzzle] = useState<Puzzle | null>(null);
   const [diableClick, setDisableClick] = useState(false)
   const [isShowCompleteIndicator, setIsShowCompleteIndicator] = useState(false);
   const [isHomeScreen, setIsHomeScreen] = useState(true);

@@ -1,6 +1,6 @@
 import MovementGenerator from "./MovementGenerator";
 
-class BishpoMovement extends MovementGenerator{
+class BishopMovement extends MovementGenerator{
     constructor(){
         super('bishop');
     }
@@ -91,4 +91,4 @@ class BishpoMovement extends MovementGenerator{
     
 }
 
-export default BishpoMovement;
+export default BishopMovement;
