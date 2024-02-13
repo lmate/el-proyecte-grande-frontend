@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 
-function Auth({ user, setUser }) {
+function Auth() {
+
+  const [user, setUser] = useState()
 
   const [isShowingModal, setIsShowingModal] = useState(false)
   const [isLogin, setIsLogin] = useState(true)
@@ -13,7 +16,9 @@ function Auth({ user, setUser }) {
   const [isSuccess, setIsSuccess] = useState(-1)
 
   useEffect(() => {
-    autoLogin()
+    if (!user) {
+      autoLogin()
+    }
   }, [])
 
   async function autoLogin() {
@@ -47,8 +52,9 @@ function Auth({ user, setUser }) {
 
     if (response.ok) {
       setIsSuccess(1)
-      localStorage.setItem('auth', `${emailInput}|${passwordInput}`);
-      setUser(await response.json())
+      const user = await response.json()
+      localStorage.setItem('auth', `${emailInput}|${passwordInput}|${user.image}`);
+      setUser(user)
       setTimeout(() => {
         setIsSuccess(-1)
         setIsLogin(true)
@@ -71,8 +77,9 @@ function Auth({ user, setUser }) {
 
     if (response.ok) {
       setIsSuccess(1)
-      localStorage.setItem('auth', `${emailInput}|${passwordInput}`);
-      setUser(await response.json())
+      const user = await response.json()
+      localStorage.setItem('auth', `${emailInput}|${passwordInput}|${user.image}`);
+      setUser(user)
       setTimeout(() => {
         setIsSuccess(-1)
         setIsLogin(true)
@@ -87,10 +94,11 @@ function Auth({ user, setUser }) {
   return (
     <div className="Auth">
       {user ? (
-        <>
+        <Link className="router" to='/profile'>
           <p className="user-name">{user.userName}</p>
           <img className="user-img" src={user.image} />
-        </>
+        </Link>
+
       ) : (
         <>
           <p className="auth-btn" onClick={() => { setIsShowingModal(!isShowingModal) }}>Login</p>

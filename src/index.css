@@ -278,7 +278,7 @@ body {
   color: var(--accent);
 }
 
-.Auth > .user-name {
+.Auth > .router > .user-name {
   color: var(--white);
   width: 15.5vw;
   font-weight: 600;
@@ -287,7 +287,7 @@ body {
   text-align: right;
 }
 
-.Auth > .user-img {
+.Auth > .router > .user-img {
   position: absolute;
   width: 6vh;
   border-radius: 3vw;
