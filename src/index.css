@@ -1,5 +1,6 @@
 #root {
   --accent: #4B7399;
+  --white: #d9d9d9;
 }
 
 body {
@@ -86,7 +87,7 @@ body {
   height: 8vh;
   width: 8vh;
   border-radius: 5vh;
-  background-color: #ffffff;
+  background-color: var(--white);
   margin-left: calc((72vh - 8vh) / 2);
   box-shadow: 0px 0px 20px rgb(0, 0, 0);
   transition: top .5s;
@@ -147,21 +148,114 @@ body {
   filter: brightness(50%);
 }
 
-
 .Auth {
   position: absolute;
-  top: 5vh;
-  left: 92.5vw;
+  top: 3vh;
+  left: 78vw;
 }
 
-.Auth > .login-link {
-  color: #ffffff;
+.Auth > .auth-btn {
+  color: var(--white);
   text-decoration: none;
   font-weight: 500;
+  background-color: var(--accent);
+  padding: .9vw;
+  padding-left: 1.7vw;
+  padding-right: 1.7vw;
+  cursor: pointer;
+  border-radius: 3px;
+  margin-left: 14vw;
 }
 
-.Auth > .login-link:hover {
+.Auth > .auth-btn:hover {
   text-decoration: underline;
+}
+
+.Auth > .auth-btn:active {
+  transform: scale(.95);
+}
+
+.Auth > .auth-modal {
+  position: absolute;
+  top: 11vh;
+  width: 20vw;
+  background: none;
+  border: 3.5px solid var(--accent);
+  border-radius: 3px;
+  padding-top: 1vh;
+  padding-bottom: 2vh;
+}
+
+.Auth > .success {
+  border: 3.5px solid green;
+}
+
+.Auth > .fail {
+  border: 3.5px solid red;
+}
+
+.Auth > .auth-modal > .auth-button {
+  width: 40%;
+  height: 4.5vh;
+  margin-top: 5vh;
+  margin-left: 30%;
+  border: none;
+  border-radius: 3px;
+  background-color: var(--accent);
+  color: var(--white);
+  font-size: 2vh;
+  cursor: pointer;
+}
+
+.Auth > .auth-modal > .auth-button:hover {
+  text-decoration: underline;
+}
+
+.Auth > .auth-modal > .auth-button:active {
+  transform: scale(.95);
+}
+
+.Auth > .auth-modal > .auth-switcher {
+  width: 100%;
+  margin-top: 4vh;
+  text-align: center;
+  color: var(--white);
+  font-size: 1.8vh;
+  cursor: pointer;
+}
+
+.Auth > .auth-modal > .auth-switcher:hover {
+  text-decoration: underline;
+}
+
+.Auth > .auth-modal > .auth-input {
+  width: calc(80% - 1.6vh);
+  margin-left: 10%;
+  margin-top: 4vh;
+  padding: .8vh;
+  outline: none;
+  border: none;
+  border-bottom: 3px solid var(--accent);
+  background: none;
+  color: var(--white);
+  font-size: 2vh;
+  font-weight: 600;
+}
+
+.Auth > .auth-modal > .auth-input::placeholder {
+  color: var(--accent);
+}
+
+.Auth > .user-name {
+  color: var(--white);
+  text-decoration: none;
+  font-weight: 500;
+  cursor: pointer;
+  margin-left: 14vw;
+}
+
+.Auth > .user-img {
+  width: 15vw;
 }
 
 .Navbar {
@@ -179,7 +273,7 @@ body {
 }
 
 .Navbar > .menu > li > .menu-point {
-  color: #ffffff;
+  color: var(--white);
   text-decoration: none;
   font-weight: 800;
   font-size: 2.6vh;
