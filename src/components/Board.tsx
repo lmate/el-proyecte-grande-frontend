@@ -1,18 +1,18 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react';
 
-import bK from '../assets/pieces/bK.svg'
-import bQ from '../assets/pieces/bQ.svg'
-import bR from '../assets/pieces/bR.svg'
-import bB from '../assets/pieces/bB.svg'
-import bN from '../assets/pieces/bN.svg'
-import bP from '../assets/pieces/bP.svg'
+import bK from '../assets/pieces/bK.svg';
+import bQ from '../assets/pieces/bQ.svg';
+import bR from '../assets/pieces/bR.svg';
+import bB from '../assets/pieces/bB.svg';
+import bN from '../assets/pieces/bN.svg';
+import bP from '../assets/pieces/bP.svg';
+import wK from '../assets/pieces/wK.svg';
+import wQ from '../assets/pieces/wQ.svg';
+import wR from '../assets/pieces/wR.svg';
+import wB from '../assets/pieces/wB.svg';
+import wN from '../assets/pieces/wN.svg';
+import wP from '../assets/pieces/wP.svg';
 
-import wK from '../assets/pieces/wK.svg'
-import wQ from '../assets/pieces/wQ.svg'
-import wR from '../assets/pieces/wR.svg'
-import wB from '../assets/pieces/wB.svg'
-import wN from '../assets/pieces/wN.svg'
-import wP from '../assets/pieces/wP.svg'
 import BishopMovement from '../movements/BishopMovement';
 import KingMovement from '../movements/KingMovement'
 import RookMovement from '../movements/RookMovement'
@@ -22,9 +22,8 @@ import completedSound from '../assets/sounds/puzzle-done.mp3';
 import moveSound from '../assets/sounds/move.mp3';
 
 
-function Board({ newMoveByBoard, handlePlayerMove, newBoard }) {
+function Board({ newMoveByBoard, handlePlayerMove, newBoard, moveCount, setMoveCount, hint}) {
 
-  const [moveCount, setMoveCount] = useState(0)
   const [selectedCell, setSelectedCell] = useState(null)
   const [lastMovedFromCell, setLastMovedFromCell] = useState(null)
   const [lastMovedToCell, setLastMovedToCell] = useState(null)
@@ -109,6 +108,7 @@ function Board({ newMoveByBoard, handlePlayerMove, newBoard }) {
   }
 
 
+
   function handleCellClick(e) {
     const clickedCell = [parseInt(e.target.className.split(" ")[0].charAt(0)) - 1, parseInt(e.target.className.split(" ")[0].charAt(1)) - 1]
     if (selectedCell) {
@@ -168,6 +168,8 @@ function Board({ newMoveByBoard, handlePlayerMove, newBoard }) {
     return result
   }
 
+
+
   return (
     <div className="Board" onClick={handleCellClick}>
 
@@ -176,6 +178,10 @@ function Board({ newMoveByBoard, handlePlayerMove, newBoard }) {
           <div className="cell highlight-cell" style={{ left: `calc(${lastMovedFromCell[1]} * (72vh / 8)`, top: `calc(${lastMovedFromCell[0]} * (72vh / 8)` }}></div>
           <div className="cell highlight-cell" style={{ left: `calc(${lastMovedToCell[1]} * (72vh / 8)`, top: `calc(${lastMovedToCell[0]} * (72vh / 8)` }}></div>
         </>
+      )}
+
+      {hint && (
+         <div className="cell highlight-hint" style={{ left: `calc(${hint[1]} * (72vh / 8)`, top: `calc(${hint[0]} * (72vh / 8)` }}></div>
       )}
 
       {board.map((row, rowId) => {

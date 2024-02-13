@@ -37,6 +37,12 @@ body {
   pointer-events: none;
   opacity: .8;
 }
+.Board > .highlight-hint {
+  position: absolute;
+  background-color: rgb(255, 251, 15);
+  pointer-events: none;
+  opacity: 1;
+}
 
 .Board > .piece {
   position: absolute;
@@ -81,6 +87,32 @@ body {
   top: 0;
 }
 
+.hint-button {
+  position:absolute;
+  margin-left: 75vh;
+  margin-top: -20vh;
+  align-items: center;
+  font-weight: 500;
+  font-size: 15px;
+  padding: 0.7em 1.4em 0.7em 1.1em;
+  color: rgb(255, 255, 255);
+  background: #ad5389;
+  background: linear-gradient(0deg, rgb(20, 95, 41) 0%, rgb(19, 119, 28) 100%);
+  border: none;
+  box-shadow: 0 0.7em 1.5em -0.5em #14a73e98;
+  border-radius: 20em;
+  cursor: pointer;
+  z-index: 0;
+}
+
+.hint{
+  position:absolute;
+  margin-left: 80vh;
+  margin-top:-30vh;
+  font-size: 25px;
+  color:rgb(255,255,255);
+}
+
 .Game > .complete-indicator {
   position: absolute;
   height: 8vh;
@@ -89,7 +121,7 @@ body {
   background-color: #ffffff;
   margin-left: calc((72vh - 8vh) / 2);
   box-shadow: 0px 0px 20px rgb(0, 0, 0);
-  transition: top .5s;
+  transition: top .4s ease-in-out;
 }
 
 .Game > .complete-indicator > img {
