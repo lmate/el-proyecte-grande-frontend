@@ -248,14 +248,20 @@ body {
 
 .Auth > .user-name {
   color: var(--white);
-  text-decoration: none;
-  font-weight: 500;
+  width: 15.5vw;
+  font-weight: 600;
   cursor: pointer;
-  margin-left: 14vw;
+  margin-top: 3vh;
+  text-align: right;
 }
 
 .Auth > .user-img {
-  width: 15vw;
+  position: absolute;
+  width: 6vh;
+  border-radius: 3vw;
+  top: 1vh;
+  margin-left: 17vw;
+  cursor: pointer;
 }
 
 .Navbar {

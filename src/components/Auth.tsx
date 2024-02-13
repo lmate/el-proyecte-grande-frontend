@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 
 function Auth({ user, setUser }) {
@@ -11,6 +11,28 @@ function Auth({ user, setUser }) {
   const [passwordInput, setPasswordInput] = useState('')
 
   const [isSuccess, setIsSuccess] = useState(-1)
+
+  useEffect(() => {
+    autoLogin()
+  }, [])
+
+  async function autoLogin() {
+    const localAuthDetails = localStorage.getItem('auth')
+    if (localAuthDetails) {
+      const response = await fetch('/api/user/login', {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: localAuthDetails.split('|')[0],
+          password: localAuthDetails.split('|')[1]
+        })
+      });
+
+      if (response.ok) {
+        setUser(await response.json())
+      }
+    }
+  }
 
   async function handeLogin() {
 
@@ -25,6 +47,7 @@ function Auth({ user, setUser }) {
 
     if (response.ok) {
       setIsSuccess(1)
+      localStorage.setItem('auth', `${emailInput}|${passwordInput}`);
       setUser(await response.json())
       setTimeout(() => {
         setIsSuccess(-1)
@@ -48,6 +71,7 @@ function Auth({ user, setUser }) {
 
     if (response.ok) {
       setIsSuccess(1)
+      localStorage.setItem('auth', `${emailInput}|${passwordInput}`);
       setUser(await response.json())
       setTimeout(() => {
         setIsSuccess(-1)
@@ -65,7 +89,7 @@ function Auth({ user, setUser }) {
       {user ? (
         <>
           <p className="user-name">{user.userName}</p>
-          <img className="user-img" src={user.image}/>
+          <img className="user-img" src={user.image} />
         </>
       ) : (
         <>
