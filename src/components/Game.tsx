@@ -2,6 +2,7 @@ import {useEffect, useState } from "react"
 
 import Board from "../components/Board"
 import checkIcon from '../assets/check-icon.svg'
+import SingleGame from "./SingleGame";
 
 
 type Move = `${string}${number}${string}${number}`;
@@ -95,12 +96,7 @@ function Game() {
         </> 
       ) : (
         <>
-        <button className="next-puzzle-btn"onClick={() => {getRandomPuzzle(), setDisableClick(true), setTimeout(() => {
-          setDisableClick(false)
-        }, 1000)}}>Get new puzzle</button>
-        <button className="hint-button" onClick={() => {showHint(moveCount),console.log(hint + "hint");
-         setTimeout(() => {
-          setHint(null)}, 2000)}}>Show Hint💡</button>
+          <SingleGame getRandomPuzzle={getRandomPuzzle} setDisableClick={(disableValue) => setDisableClick(disableValue)} showHint={() => showHint(moveCount)} setHint={() => setHint(null)}/>
         </>
         )}
         {diableClick && 
