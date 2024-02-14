@@ -89,8 +89,9 @@ function Game() {
       <Board newMoveByBoard={newMoveByBoard} handlePlayerMove={handlePlayerMove} newBoard={puzzle && puzzle.table.split(' ')[0]} moveCount={moveCount} setMoveCount={setMoveCount} hint={hint} setHint={setHint}/>
       {isHomeScreen ?(
         <>
-        <div className="blur"></div>
-      <button className="play-btn"onClick={() => {getRandomPuzzle(), setIsHomeScreen(false)}}>Start playing!</button>
+          <div className="blur"></div>
+          <button className="play-btn"onClick={() => {getRandomPuzzle(), setIsHomeScreen(false)}}>Start playing!</button>
+          <button className="race-btn" onClick={() => console.log('Race')}>Play Race!</button>
         </> 
       ) : (
         <>

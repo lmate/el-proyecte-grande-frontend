@@ -133,9 +133,28 @@ body {
   filter: invert(45%) sepia(58%) saturate(3613%) hue-rotate(121deg) brightness(94%) contrast(95%);
 }
 
+.race-btn{
+  position:absolute;
+  margin-left: 40vh;
+  margin-top: -38vh;
+  align-items: center;
+  font-weight: 500;
+  font-size: 25px;
+  padding: 0.7em 1.4em 0.7em 1.1em;
+  color: white;
+  background: #ad5389;
+  background: linear-gradient(0deg, rgba(20,167,62,1) 0%, rgba(102,247,113,1) 100%);
+  border: none;
+  box-shadow: 0 0.7em 1.5em -0.5em #14a73e98;
+  letter-spacing: 0.05em;
+  border-radius: 20em;
+  cursor: pointer;
+  z-index: 1;
+}
+
 .play-btn {
   position:absolute;
-  margin-left: 20vh;
+  margin-left: 2vh;
   margin-top: -38vh;
   align-items: center;
   font-weight: 500;
