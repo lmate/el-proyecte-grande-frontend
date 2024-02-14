@@ -3,6 +3,7 @@ import {useEffect, useState } from "react"
 import Board from "../components/Board"
 import checkIcon from '../assets/check-icon.svg'
 import SingleGame from "./SingleGame";
+import Race from "./Race";
 
 
 type Move = `${string}${number}${string}${number}`;
@@ -27,6 +28,8 @@ function Game() {
   const [hint, setHint] = useState<Cell | null>(null);
 
   const [newMoveByBoard, setNewMoveByBoard] = useState<Move | null>(null);
+
+  const [isRace, setIsRace] = useState<boolean>(false);
 
   async function handlePlayerMove(move:Move, moveCount:number):Promise<boolean> {
 
@@ -85,6 +88,12 @@ function Game() {
     setTimeout(() => setIsShowCompleteIndicator(false), 600)
   } 
 
+  function startRace(){
+    setIsRace(true);
+    setIsHomeScreen(false);
+    getRandomPuzzle();
+  }
+
   return (
     <div className="Game">
       <Board newMoveByBoard={newMoveByBoard} handlePlayerMove={handlePlayerMove} newBoard={puzzle && puzzle.table.split(' ')[0]} moveCount={moveCount} setMoveCount={setMoveCount} hint={hint} setHint={setHint}/>
@@ -92,11 +101,16 @@ function Game() {
         <>
           <div className="blur"></div>
           <button className="play-btn"onClick={() => {getRandomPuzzle(), setIsHomeScreen(false)}}>Start playing!</button>
-          <button className="race-btn" onClick={() => console.log('Race')}>Play Race!</button>
+          <button className="race-btn" onClick={() => startRace()}>Play Race!</button>
         </> 
       ) : (
         <>
-          <SingleGame getRandomPuzzle={getRandomPuzzle} setDisableClick={(disableValue) => setDisableClick(disableValue)} showHint={() => showHint(moveCount)} setHint={() => setHint(null)}/>
+          {!isRace ? 
+            <SingleGame getRandomPuzzle={getRandomPuzzle} setDisableClick={(disableValue) => setDisableClick(disableValue)} showHint={() => showHint(moveCount)} setHint={() => setHint(null)}/>
+            :
+            <Race disableCick={() => setDisableClick(true)}/>
+        }
+          
         </>
         )}
         {diableClick && 
