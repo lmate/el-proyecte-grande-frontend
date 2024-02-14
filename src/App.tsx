@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Route, Routes } from "react-router-dom";
 
 import Game from "./components/Game"
@@ -9,37 +10,36 @@ import logo from './assets/logo.svg'
 
 function App() {
 
+  const [user, setUser] = useState()
+
   return (
     <>
       <img className="logo" src={logo} />
-      <Auth />
+      <Auth user={user} setUser={setUser} />
+      <Navbar user={user} />
 
       <Routes>
         <Route path="/" element={(
           <>
             <Game />
-            <Navbar />
           </>
         )}>
         </Route>
-        <Route path="/profile" element={(
+        <Route path="/profile/:userName" element={(
           <>
-            <Profile />
-            <Navbar />
+            <Profile user={user} />
           </>
         )}>
         </Route>
         <Route path="/leaderboard" element={(
           <>
             {/* LEADERBOARD */}
-            <Navbar />
           </>
         )}>
         </Route>
         <Route path="/head2head" element={(
           <>
             {/* HEAD2HEAD */}
-            <Navbar />
           </>
         )}>
         </Route>
