@@ -184,6 +184,7 @@ body {
   position: absolute;
   top: 3vh;
   left: 78vw;
+  z-index: 2;
 }
 
 .Auth > .auth-btn {
