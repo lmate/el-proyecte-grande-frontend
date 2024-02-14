@@ -331,3 +331,44 @@ body {
 .Navbar > .menu > li > .menu-point > span:hover {
   text-decoration: underline;
 }
+
+.Profile > .basedata {
+  margin-left: 22vw;
+  margin-top: 7vh;
+  width: 73vw;
+}
+
+.Profile > .basedata > .image {
+  width: 10vw;
+  border-radius: 10vw;
+}
+
+.Profile > .basedata > .name {
+  color: var(--white);
+  display: inline-block;
+  position: absolute;
+  margin-top: 12vh;
+  margin-left: 3vw;
+  font-size: 2vh;
+}
+
+.Profile > .basedata > .userName {
+  color: var(--white);
+  display: inline-block;
+  position: absolute;
+  margin-left: 3vw;
+  font-size: 4.5vh;
+  font-weight: 600;
+}
+
+.Profile > .basedata > .rating {
+  color: var(--white);
+  display: inline-block;
+  position: absolute;
+  top: 10vh;
+  margin-left: 26.5vw;
+  text-align: right;
+  width: 35vw;
+  font-size: 12vh;
+  font-weight: 900;
+}

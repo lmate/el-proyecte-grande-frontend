@@ -5,7 +5,7 @@ import profileIcon from '../assets/profile-icon.svg'
 import leaderboardIcon from '../assets/leaderboard-icon.svg'
 import head2headIcon from '../assets/head2head-icon.svg'
 
-function Navbar(){
+function Navbar({ user }){
     return(
         <nav className="Navbar">
             <ul className="menu"> 
@@ -16,7 +16,7 @@ function Navbar(){
                     </Link>
                 </li>
                 <li>
-                    <Link className="menu-point" to='/profile'>
+                    <Link className="menu-point" to={user && `/profile/${user.userName}`}>
                         <img src={profileIcon} />
                         <span>Profile</span>
                     </Link>

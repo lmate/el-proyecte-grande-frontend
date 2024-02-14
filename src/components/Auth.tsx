@@ -2,9 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 
-function Auth() {
-
-  const [user, setUser] = useState()
+function Auth({ user, setUser }) {
 
   const [isShowingModal, setIsShowingModal] = useState(false)
   const [isLogin, setIsLogin] = useState(true)
@@ -94,7 +92,7 @@ function Auth() {
   return (
     <div className="Auth">
       {user ? (
-        <Link className="router" to='/profile'>
+        <Link className="router" to={`/profile/${user.userName}`}>
           <p className="user-name">{user.userName}</p>
           <img className="user-img" src={user.image} />
         </Link>
