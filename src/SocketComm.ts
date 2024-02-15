@@ -12,10 +12,10 @@ function sendSocketMessage(endpoint, body, isExpectResponse) {
       'body': JSON.stringify(body) })
     )
     
-    const requesPromise = new Promise((myResolve) => {
+    const requestPromise = new Promise((myResolve) => {
       responses[identifier] = myResolve
     })
-    return requesPromise
+    return requestPromise
 
   } else {
     socket.send(JSON.stringify({
