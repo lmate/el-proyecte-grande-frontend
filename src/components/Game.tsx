@@ -29,7 +29,9 @@ function Game() {
 
   const [newMoveByBoard, setNewMoveByBoard] = useState<Move | null>(null);
 
-  const [isRace, setIsRace] = useState<boolean>(false);
+  const [isRush, setIsRush] = useState<boolean>(false);
+  const [currentMaxDifficulty, setCurrentMaxDifficulty] = useState<number>(550);
+  const [currentMinDifficulty, setCurrentMinDifficulty] = useState<number>(399);
 
   async function handlePlayerMove(move:Move, moveCount:number):Promise<boolean> {
 
@@ -51,7 +53,7 @@ function Game() {
   }
 
   async function getRandomPuzzle() {
-    const response = await fetch('/api/puzzle?min=399&max=550')
+    const response = await fetch(`/api/puzzle?min=${currentMinDifficulty}&max=${currentMaxDifficulty}`);
     const result = await response.json()
     setPuzzle(result)
     setTimeout(() => {setNewMoveByBoard(result.firstMove)}, 0)
@@ -89,7 +91,7 @@ function Game() {
   } 
 
   function startRace(){
-    setIsRace(true);
+    setIsRush(true);
     setIsHomeScreen(false);
     getRandomPuzzle();
   }
@@ -105,7 +107,7 @@ function Game() {
         </> 
       ) : (
         <>
-          {!isRace ? 
+          {!isRush ? 
             <SingleGame getRandomPuzzle={getRandomPuzzle} setDisableClick={(disableValue) => setDisableClick(disableValue)} showHint={() => showHint(moveCount)} setHint={() => setHint(null)}/>
             :
             <Rush disableCick={() => setDisableClick(true)}/>
