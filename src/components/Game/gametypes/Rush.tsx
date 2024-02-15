@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 
-function Rush({disableCick, changePuzzle, changeMoveByBoard, puzzleResults}){
-    const [timer, setTimer] = useState<number>(3000);
+import correctPuzzle from '../../../assets/puzzle-complete-correct.svg';
+import wrongPuzzle from '../../../assets/puzzle-complete-wrong.svg';
+
+
+function Rush({disableCick, changePuzzle, changeMoveByBoard, puzzleResults, getPuzzle}){
+    const [timer, setTimer] = useState<number>(180);
     
 
     const [currentDifficultyMin, setCurrentDifficultyMin] = useState<number>(400);
@@ -20,15 +24,18 @@ function Rush({disableCick, changePuzzle, changeMoveByBoard, puzzleResults}){
     useEffect(() => {
         if(puzzleResults[puzzleResults.length - 1] === false){
             getPuzzleByDifficulty(currentDifficultyMin, currentDifficultyMax);
-        }
-        
-        if(puzzleResults[puzzleResults.length - 1] === true){
+        } 
+        else if(puzzleResults[puzzleResults.length - 1] === true){
             const newDifficultiMin: number = currentDifficultyMin + difficultyIncrementor;
             const newDifficultiMax: number = currentDifficultyMax + difficultyIncrementor;
             setCurrentDifficultyMin(newDifficultiMin);
             setCurrentDificultyMax(newDifficultiMax);
             getPuzzleByDifficulty(newDifficultiMin, newDifficultiMax);
         }
+        else{
+            getPuzzle()
+        }
+
     },[puzzleResults]);
 
 
@@ -48,16 +55,22 @@ function Rush({disableCick, changePuzzle, changeMoveByBoard, puzzleResults}){
         countDown();
     }, []);
 
+    function formatSeconds(sec) {
+        let min = Math.floor(sec / 60);
+        let remainingSec = sec % 60;
+        let formattedSec = remainingSec < 10 ? "0" + remainingSec : remainingSec;
+        return min + ":" + formattedSec;
+    }
+    
     return(
         <>
             <div className="timer">
-                <h1>Timer: </h1>
-                <h1> {timer}</h1>
+                <h1> {formatSeconds(timer)}</h1>
             </div>
             <div className="score">
-                <p>Correct puzzle count: {puzzleResults.filter(result => result == true).length}</p>
                 {
-                    puzzleResults.map(result => <span>{result ? '1 ' : '0 '}</span>)
+                    puzzleResults.map((result, index ) => (
+                    <img key={index} src={result ? correctPuzzle : wrongPuzzle} />))
                 }
             </div>
         </>
