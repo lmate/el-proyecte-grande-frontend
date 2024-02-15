@@ -1,7 +1,9 @@
 import {useEffect, useState } from "react"
 
-import Board from "../components/Board"
-import checkIcon from '../assets/check-icon.svg'
+import Board from "./Board"
+import checkIcon from '../../assets/check-icon.svg'
+import Casual from "./gametypes/Casual";
+import Rush from "./gametypes/Rush";
 
 
 type Move = `${string}${number}${string}${number}`;
@@ -27,19 +29,25 @@ function Game() {
 
   const [newMoveByBoard, setNewMoveByBoard] = useState<Move | null>(null);
 
+  const [isRush, setIsRush] = useState<boolean>(false);
+  const [currentMaxDifficulty, setCurrentMaxDifficulty] = useState<number>(550);
+  const [currentMinDifficulty, setCurrentMinDifficulty] = useState<number>(399);
+  const [puzzleResults, setPuzzleResults] = useState<boolean[]>([]);
+
   async function handlePlayerMove(move:Move, moveCount:number):Promise<boolean> {
 
     setDisableClick(true)
     const response = await fetch(`/api/puzzle/valid/${puzzle!.id}/${move}/${moveCount}`)
     const result = await response.text()
-    console.log(result)
     setDisableClick(false)
 
     if (result === 'win') {
       getRandomPuzzle()
       showCompleteIndicator()
+      setPuzzleResults(prev => [...prev, true]);
       return true
     } else if (!result) {
+      setPuzzleResults(prev => [...prev, false]);
       return false
     }
     setNewMoveByBoard(result as Move)
@@ -47,8 +55,9 @@ function Game() {
   }
 
   async function getRandomPuzzle() {
+    
     const sentRequestAt = Date.now()
-    const response = await fetch('/api/puzzle?min=399&max=550')
+    const response = await fetch(`/api/puzzle?min=${currentMinDifficulty}&max=${currentMaxDifficulty}`);
     const result = await response.json()
 
     setPuzzle(result)
@@ -90,22 +99,35 @@ function Game() {
     setTimeout(() => setIsShowCompleteIndicator(false), 600)
   } 
 
+  function startRace(){
+    setIsRush(true);
+    setIsHomeScreen(false);
+    getRandomPuzzle();
+  }
+
+  function changeMaxMinDifficulty(max: number, min: number){
+    setCurrentMaxDifficulty(max);
+    setCurrentMinDifficulty(min);
+    getRandomPuzzle();
+  }
+
   return (
     <div className="Game">
       <Board newMoveByBoard={newMoveByBoard} handlePlayerMove={handlePlayerMove} newBoard={puzzle && puzzle.table.split(' ')[0]} moveCount={moveCount} setMoveCount={setMoveCount} hint={hint} setHint={setHint}/>
       {isHomeScreen ?(
         <>
-        <div className="blur"></div>
-      <button className="play-btn"onClick={() => {getRandomPuzzle(), setIsHomeScreen(false)}}>Start playing!</button>
+          <div className="blur"></div>
+          <button className="play-btn"onClick={() => {getRandomPuzzle(), setIsHomeScreen(false)}}>Start playing!</button>
+          <button className="race-btn" onClick={() => startRace()}>Play Race!</button>
         </> 
       ) : (
         <>
-        <button className="next-puzzle-btn"onClick={() => {getRandomPuzzle(), setDisableClick(true), setTimeout(() => {
-          setDisableClick(false)
-        }, 1000)}}>Get new puzzle</button>
-        <button className="hint-button" onClick={() => {showHint(moveCount),console.log(hint + "hint");
-         setTimeout(() => {
-          setHint(null)}, 2000)}}>Show Hint💡</button>
+          {!isRush ? 
+            <Casual getRandomPuzzle={getRandomPuzzle} setDisableClick={(disableValue) => setDisableClick(disableValue)} showHint={() => showHint(moveCount)} setHint={() => setHint(null)}/>
+            :
+            <Rush disableCick={() => setDisableClick(true)} puzzleResults={puzzleResults} changePuzzle={(newPuzzle) => setPuzzle(newPuzzle)} changeMoveByBoard={(firstMove) => setNewMoveByBoard(firstMove)}/>
+        }
+          
         </>
         )}
         {diableClick && 
