@@ -41,9 +41,11 @@ function Rush({disableCick, invalidMoveCount, changePuzzle, changeMoveByBoard}){
     }, []);
 
     return(
-        <div>
-            {timer}
+        <div className="timer">
+            <h1>Timer: </h1>
+            <h1> {timer}</h1>
         </div>
+        
     )
 }
 
