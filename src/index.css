@@ -395,7 +395,8 @@ body {
 
 .timer{
   color: white;
-  margin-left: 60vh;
+  margin-left: 40vh;
   margin-top: -70vh;
+  width: 40%;
   text-align: center;
 }
