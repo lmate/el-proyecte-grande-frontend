@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
 
-function Rush({disableCick, invalidMoveCount, changePuzzle, changeMoveByBoard, validMoveCount}){
+function Rush({disableCick, changePuzzle, changeMoveByBoard, puzzleResults}){
     const [timer, setTimer] = useState<number>(3000);
     
 
     const [currentDifficultyMin, setCurrentDifficultyMin] = useState<number>(400);
     const [currentDifficultyMax, setCurrentDificultyMax] = useState<number>(450);
-    const [currentInvalidCount, setCurrentInvalidCount] = useState<number>(invalidMoveCount);
     const difficultyIncrementor = 50
 
 
@@ -19,19 +18,18 @@ function Rush({disableCick, invalidMoveCount, changePuzzle, changeMoveByBoard, v
     }
 
     useEffect(() => {
-        if(invalidMoveCount !== 0){
-            setCurrentInvalidCount(invalidMoveCount);
+        if(puzzleResults[puzzleResults.length - 1] === false){
             getPuzzleByDifficulty(currentDifficultyMin, currentDifficultyMax);
         }
         
-        if(validMoveCount !== 0 && invalidMoveCount === currentInvalidCount){
+        if(puzzleResults[puzzleResults.length - 1] === true){
             const newDifficultiMin: number = currentDifficultyMin + difficultyIncrementor;
             const newDifficultiMax: number = currentDifficultyMax + difficultyIncrementor;
             setCurrentDifficultyMin(newDifficultiMin);
             setCurrentDificultyMax(newDifficultiMax);
             getPuzzleByDifficulty(newDifficultiMin, newDifficultiMax);
         }
-    },[invalidMoveCount, validMoveCount]);
+    },[puzzleResults]);
 
 
     useEffect(() => {
@@ -51,11 +49,18 @@ function Rush({disableCick, invalidMoveCount, changePuzzle, changeMoveByBoard, v
     }, []);
 
     return(
-        <div className="timer">
-            <h1>Timer: </h1>
-            <h1> {timer}</h1>
-        </div>
-        
+        <>
+            <div className="timer">
+                <h1>Timer: </h1>
+                <h1> {timer}</h1>
+            </div>
+            <div className="score">
+                <p>Correct puzzle count: {puzzleResults.filter(result => result == true).length}</p>
+                {
+                    puzzleResults.map(result => <span>{result ? '1 ' : '0 '}</span>)
+                }
+            </div>
+        </>
     )
 }
 

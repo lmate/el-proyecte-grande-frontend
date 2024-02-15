@@ -13,9 +13,9 @@ import wB from '../assets/pieces/wB.svg';
 import wN from '../assets/pieces/wN.svg';
 import wP from '../assets/pieces/wP.svg';
 
-import BishopMovement from '../movements/BishopMovement';
-import KingMovement from '../movements/KingMovement'
-import RookMovement from '../movements/RookMovement'
+import BishopMovement from '../../movements/BishopMovement';
+import KingMovement from '../../movements/KingMovement'
+import RookMovement from '../../movements/RookMovement'
 
 import useSound from 'use-sound';
 import completedSound from '../assets/sounds/puzzle-done.mp3';

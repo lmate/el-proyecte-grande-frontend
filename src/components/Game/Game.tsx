@@ -1,9 +1,9 @@
 import {useEffect, useState } from "react"
 
-import Board from "../components/Board"
+import Board from "./Board"
 import checkIcon from '../assets/check-icon.svg'
-import SingleGame from "./SingleGame";
-import Rush from "./Rush";
+import SingleGame from "./gametypes/Casual";
+import Rush from "./gametypes/Rush";
 
 
 type Move = `${string}${number}${string}${number}`;
@@ -32,8 +32,7 @@ function Game() {
   const [isRush, setIsRush] = useState<boolean>(false);
   const [currentMaxDifficulty, setCurrentMaxDifficulty] = useState<number>(550);
   const [currentMinDifficulty, setCurrentMinDifficulty] = useState<number>(399);
-  const [invalidMoveCount, setInvalidMoveCount] = useState<number>(0);
-  const [validMoveCount, setValidMoveCount] = useState<number>(0);
+  const [puzzleResults, setPuzzleResults] = useState<boolean[]>([]);
 
   async function handlePlayerMove(move:Move, moveCount:number):Promise<boolean> {
 
@@ -45,10 +44,10 @@ function Game() {
     if (result === 'win') {
       getRandomPuzzle()
       showCompleteIndicator()
-      setValidMoveCount(prev => prev + 1);
+      setPuzzleResults(prev => [...prev, true]);
       return true
     } else if (!result) {
-      setInvalidMoveCount(prev => prev + 1);
+      setPuzzleResults(prev => [...prev, false]);
       return false
     }
     setNewMoveByBoard(result as Move)
@@ -119,7 +118,7 @@ function Game() {
           {!isRush ? 
             <SingleGame getRandomPuzzle={getRandomPuzzle} setDisableClick={(disableValue) => setDisableClick(disableValue)} showHint={() => showHint(moveCount)} setHint={() => setHint(null)}/>
             :
-            <Rush disableCick={() => setDisableClick(true)} invalidMoveCount={invalidMoveCount} validMoveCount={validMoveCount} changePuzzle={(newPuzzle) => setPuzzle(newPuzzle)} changeMoveByBoard={(firstMove) => setNewMoveByBoard(firstMove)}/>
+            <Rush disableCick={() => setDisableClick(true)} puzzleResults={puzzleResults} changePuzzle={(newPuzzle) => setPuzzle(newPuzzle)} changeMoveByBoard={(firstMove) => setNewMoveByBoard(firstMove)}/>
         }
           
         </>
