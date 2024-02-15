@@ -1,25 +1,26 @@
 import { useEffect, useState } from 'react';
 
-import bK from '../assets/pieces/bK.svg';
-import bQ from '../assets/pieces/bQ.svg';
-import bR from '../assets/pieces/bR.svg';
-import bB from '../assets/pieces/bB.svg';
-import bN from '../assets/pieces/bN.svg';
-import bP from '../assets/pieces/bP.svg';
-import wK from '../assets/pieces/wK.svg';
-import wQ from '../assets/pieces/wQ.svg';
-import wR from '../assets/pieces/wR.svg';
-import wB from '../assets/pieces/wB.svg';
-import wN from '../assets/pieces/wN.svg';
-import wP from '../assets/pieces/wP.svg';
+import bK from '../../assets/pieces/bK.svg';
+import bQ from '../../assets/pieces/bQ.svg';
+import bR from '../../assets/pieces/bR.svg';
+import bB from '../../assets/pieces/bB.svg';
+import bN from '../../assets/pieces/bN.svg';
+import bP from '../../assets/pieces/bP.svg';
+import wK from '../../assets/pieces/wK.svg';
+import wQ from '../../assets/pieces/wQ.svg';
+import wR from '../../assets/pieces/wR.svg';
+import wB from '../../assets/pieces/wB.svg';
+import wN from '../../assets/pieces/wN.svg';
+import wP from '../../assets/pieces/wP.svg';
 
+/*
 import BishopMovement from '../../movements/BishopMovement';
 import KingMovement from '../../movements/KingMovement'
-import RookMovement from '../../movements/RookMovement'
+import RookMovement from '../../movements/RookMovement'*/
 
 import useSound from 'use-sound';
-import completedSound from '../assets/sounds/puzzle-done.mp3';
-import moveSound from '../assets/sounds/move.mp3';
+import completedSound from '../../assets/sounds/puzzle-done.mp3';
+import moveSound from '../../assets/sounds/move.mp3';
 
 
 function Board({ newMoveByBoard, handlePlayerMove, newBoard, moveCount, setMoveCount, hint}) {

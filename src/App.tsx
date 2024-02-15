@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Route, Routes } from "react-router-dom";
 
 import Game from "./components/Game/Game.tsx"
-import Auth from "./components/Auth"
+import Auth from "./components/auth/Auth.tsx"
 import Navbar from "./components/Navbar"
 import Profile from './components/Profile.tsx'
 

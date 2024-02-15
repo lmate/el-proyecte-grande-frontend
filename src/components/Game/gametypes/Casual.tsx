@@ -1,4 +1,4 @@
-function SingleGame({getRandomPuzzle, setDisableClick, showHint, setHint}){
+function Casual({getRandomPuzzle, setDisableClick, showHint, setHint}){
     return(
         <>
             <button className="next-puzzle-btn"onClick={() => {getRandomPuzzle(); setDisableClick(true); setTimeout(() => {setDisableClick(false)}, 1000)}}>Get new puzzle</button>
@@ -7,4 +7,4 @@ function SingleGame({getRandomPuzzle, setDisableClick, showHint, setHint}){
     )
 }
 
-export default SingleGame;
+export default Casual;

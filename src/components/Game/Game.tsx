@@ -1,8 +1,8 @@
 import {useEffect, useState } from "react"
 
 import Board from "./Board"
-import checkIcon from '../assets/check-icon.svg'
-import SingleGame from "./gametypes/Casual";
+import checkIcon from '../../assets/check-icon.svg'
+import Casual from "./gametypes/Casual";
 import Rush from "./gametypes/Rush";
 
 
@@ -116,7 +116,7 @@ function Game() {
       ) : (
         <>
           {!isRush ? 
-            <SingleGame getRandomPuzzle={getRandomPuzzle} setDisableClick={(disableValue) => setDisableClick(disableValue)} showHint={() => showHint(moveCount)} setHint={() => setHint(null)}/>
+            <Casual getRandomPuzzle={getRandomPuzzle} setDisableClick={(disableValue) => setDisableClick(disableValue)} showHint={() => showHint(moveCount)} setHint={() => setHint(null)}/>
             :
             <Rush disableCick={() => setDisableClick(true)} puzzleResults={puzzleResults} changePuzzle={(newPuzzle) => setPuzzle(newPuzzle)} changeMoveByBoard={(firstMove) => setNewMoveByBoard(firstMove)}/>
         }
