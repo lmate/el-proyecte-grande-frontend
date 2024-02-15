@@ -3,7 +3,7 @@ import {useEffect, useState } from "react"
 import Board from "../components/Board"
 import checkIcon from '../assets/check-icon.svg'
 import SingleGame from "./SingleGame";
-import Race from "./Race";
+import Rush from "./Rush";
 
 
 type Move = `${string}${number}${string}${number}`;
@@ -108,7 +108,7 @@ function Game() {
           {!isRace ? 
             <SingleGame getRandomPuzzle={getRandomPuzzle} setDisableClick={(disableValue) => setDisableClick(disableValue)} showHint={() => showHint(moveCount)} setHint={() => setHint(null)}/>
             :
-            <Race disableCick={() => setDisableClick(true)}/>
+            <Rush disableCick={() => setDisableClick(true)}/>
         }
           
         </>

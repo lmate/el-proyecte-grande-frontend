@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-function Race({disableCick}){
+function Rush({disableCick}){
     const [timer, setTimer] = useState<number>(10);
 
     useEffect(() => {
@@ -26,4 +26,4 @@ function Race({disableCick}){
     )
 }
 
-export default Race;
+export default Rush;
