@@ -1,27 +1,37 @@
 import { useEffect, useState } from "react";
 
-function Rush({disableCick, invalidMoveCount, changePuzzle, changeMoveByBoard}){
+function Rush({disableCick, invalidMoveCount, changePuzzle, changeMoveByBoard, validMoveCount}){
     const [timer, setTimer] = useState<number>(3000);
     
 
     const [currentDifficultyMin, setCurrentDifficultyMin] = useState<number>(400);
     const [currentDifficultyMax, setCurrentDificultyMax] = useState<number>(450);
+    const [currentInvalidCount, setCurrentInvalidCount] = useState<number>(invalidMoveCount);
     const difficultyIncrementor = 50
 
 
-    useEffect(() => {
-        console.log(invalidMoveCount);
-        if(invalidMoveCount !== 0){
-            const getPuzzleByDifficulty = async () => {
-                const newPuzzleData = await fetch(`/api/puzzle?min=${currentDifficultyMin}&max=${currentDifficultyMax}`);
-                const newPuzzleResponse = await newPuzzleData.json();
-                changePuzzle(newPuzzleResponse);
-                setTimeout(() => {changeMoveByBoard(newPuzzleResponse.firstMove)}, 0)
-            }
+    async function getPuzzleByDifficulty(min:number, max:number) {
+        const newPuzzleData = await fetch(`/api/puzzle?min=${min}&max=${max}`);
+        const newPuzzleResponse = await newPuzzleData.json();
+        console.log(newPuzzleResponse.rating);
+        changePuzzle(newPuzzleResponse);
+        setTimeout(() => {changeMoveByBoard(newPuzzleResponse.firstMove)}, 0)
+    }
 
-            getPuzzleByDifficulty();
+    useEffect(() => {
+        if(invalidMoveCount !== 0){
+            setCurrentInvalidCount(invalidMoveCount);
+            getPuzzleByDifficulty(currentDifficultyMin, currentDifficultyMax);
         }
-    },[invalidMoveCount]);
+        
+        if(validMoveCount !== 0 && invalidMoveCount === currentInvalidCount){
+            const newDifficultiMin: number = currentDifficultyMin + difficultyIncrementor;
+            const newDifficultiMax: number = currentDifficultyMax + difficultyIncrementor;
+            setCurrentDifficultyMin(newDifficultiMin);
+            setCurrentDificultyMax(newDifficultiMax);
+            getPuzzleByDifficulty(newDifficultiMin, newDifficultiMax);
+        }
+    },[invalidMoveCount, validMoveCount]);
 
 
     useEffect(() => {

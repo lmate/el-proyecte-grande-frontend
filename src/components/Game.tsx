@@ -33,6 +33,7 @@ function Game() {
   const [currentMaxDifficulty, setCurrentMaxDifficulty] = useState<number>(550);
   const [currentMinDifficulty, setCurrentMinDifficulty] = useState<number>(399);
   const [invalidMoveCount, setInvalidMoveCount] = useState<number>(0);
+  const [validMoveCount, setValidMoveCount] = useState<number>(0);
 
   async function handlePlayerMove(move:Move, moveCount:number):Promise<boolean> {
 
@@ -44,6 +45,7 @@ function Game() {
     if (result === 'win') {
       getRandomPuzzle()
       showCompleteIndicator()
+      setValidMoveCount(prev => prev + 1);
       return true
     } else if (!result) {
       setInvalidMoveCount(prev => prev + 1);
@@ -117,7 +119,7 @@ function Game() {
           {!isRush ? 
             <SingleGame getRandomPuzzle={getRandomPuzzle} setDisableClick={(disableValue) => setDisableClick(disableValue)} showHint={() => showHint(moveCount)} setHint={() => setHint(null)}/>
             :
-            <Rush disableCick={() => setDisableClick(true)} invalidMoveCount={invalidMoveCount} changePuzzle={(newPuzzle) => setPuzzle(newPuzzle)} changeMoveByBoard={(firstMove) => setNewMoveByBoard(firstMove)}/>
+            <Rush disableCick={() => setDisableClick(true)} invalidMoveCount={invalidMoveCount} validMoveCount={validMoveCount} changePuzzle={(newPuzzle) => setPuzzle(newPuzzle)} changeMoveByBoard={(firstMove) => setNewMoveByBoard(firstMove)}/>
         }
           
         </>
