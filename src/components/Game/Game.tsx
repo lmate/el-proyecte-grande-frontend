@@ -55,6 +55,7 @@ function Game() {
   }
 
   async function getRandomPuzzle() {
+    
     const response = await fetch(`/api/puzzle`);
     const result = await response.json()
     setPuzzle(result)
@@ -62,10 +63,17 @@ function Game() {
   } 
 
   async function getPuzzleByRating(){
+    
+    const sentRequestAt = Date.now()
     const response = await fetch(`/api/puzzle?min=${currentMinDifficulty}&max=${currentMaxDifficulty}`);
     const result = await response.json()
+
     setPuzzle(result)
-    setTimeout(() => {setNewMoveByBoard(result.firstMove)}, 0)
+    if (Date.now() - sentRequestAt < 200) {
+      setTimeout(() => {setNewMoveByBoard(result.firstMove)}, 500)
+    } else {
+      setTimeout(() => {setNewMoveByBoard(result.firstMove)}, 0)
+    }
   }
 
   async function showHint(moveCount:number){
