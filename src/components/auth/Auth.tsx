@@ -20,17 +20,11 @@ function Auth({ user, setUser }) {
   }, [])
 
   async function autoLogin() {
-    const localAuthDetails = localStorage.getItem('auth')
-    if (localAuthDetails) {
-      const response = await fetch('/api/user/login', {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: localAuthDetails.split('|')[0],
-          password: localAuthDetails.split('|')[1]
-        })
-      });
-
+    const userName = localStorage.getItem('username');
+    const userPassword = localStorage.getItem('password');
+    if (userName) {
+      const response =
+          await fetch(`/api/user/login?name=${userName}&pass=${userPassword}`);
       if (response.ok) {
         setUser(await response.json())
       }
@@ -38,32 +32,9 @@ function Auth({ user, setUser }) {
   }
 
   async function handeLogin() {
-
-    const response = await fetch('/api/user/login', {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        email: emailInput,
-        password: passwordInput
-      })
-    });
-
-    if (response.ok) {
-      setIsSuccess(1)
-      const user = await response.json()
-      localStorage.setItem('auth', `${emailInput}|${passwordInput}|${user.image}`);
-      setUser(user)
-      setTimeout(() => {
-        setIsSuccess(-1)
-        setIsLogin(true)
-        setIsShowingModal(false)
-      }, 1000)
-    } else {
-      setIsSuccess(0)
-      setTimeout(() => { setIsSuccess(-1) }, 1000)
-    }
+    const response = await fetch(`/api/user/login?name=${emailInput}&pass=${passwordInput}`);
+    await handleResponse(response);
   }
-
   async function handeSignup() {
     const response = await fetch('/api/user/registration', {
       method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({
@@ -72,11 +43,15 @@ function Auth({ user, setUser }) {
         password: passwordInput
       })
     });
-
+    await handleResponse(response);
+  }
+  async function handleResponse(response){
     if (response.ok) {
       setIsSuccess(1)
       const user = await response.json()
-      localStorage.setItem('auth', `${emailInput}|${passwordInput}|${user.image}`);
+      localStorage.setItem('username', `${user.userName}`);
+      localStorage.setItem('password', `${user.password}`);
+      localStorage.setItem('auth', `${user.userId}|${user.userName}|${user.password}|${user.image}`);
       setUser(user)
       setTimeout(() => {
         setIsSuccess(-1)

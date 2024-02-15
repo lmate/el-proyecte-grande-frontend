@@ -4,6 +4,7 @@ import Board from "./Board"
 import checkIcon from '../../assets/check-icon.svg'
 import Casual from "./gametypes/Casual";
 import Rush from "./gametypes/Rush";
+import {defaultMethod} from "react-router-dom/dist/dom";
 
 
 type Move = `${string}${number}${string}${number}`;
@@ -18,7 +19,7 @@ interface Puzzle{
   popularity: number
 }
 
-function Game() {
+function Game({user}) {
 
   const [moveCount, setMoveCount] = useState(0)
   const [puzzle, setPuzzle] = useState<Puzzle | null>(null);
@@ -42,6 +43,7 @@ function Game() {
     setDisableClick(false)
 
     if (result === 'win') {
+      savePuzzleToUser();
       getRandomPuzzle()
       showCompleteIndicator()
       setPuzzleResults(prev => [...prev, true]);
@@ -53,7 +55,12 @@ function Game() {
     setNewMoveByBoard(result as Move)
     return true
   }
-
+   async function savePuzzleToUser(){
+    await fetch(`/api/user/savePuzzle/${user.userId}/${puzzle?.id}`,
+        {
+      method: "PUT"
+    });
+  }
   async function getRandomPuzzle() {
     const response = await fetch(`/api/puzzle?min=${currentMinDifficulty}&max=${currentMaxDifficulty}`);
     const result = await response.json()
