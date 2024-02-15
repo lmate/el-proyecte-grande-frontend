@@ -2,6 +2,7 @@ import {useEffect, useState } from "react"
 
 import Board from "../components/Board"
 import checkIcon from '../assets/check-icon.svg'
+import sendSocketMessage from "../SocketComm";
 
 
 type Move = `${string}${number}${string}${number}`;
