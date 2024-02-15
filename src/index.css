@@ -7,6 +7,7 @@ body {
   margin: 0px;
   background-color: #141414;
   font-family: "Montserrat", sans-serif;
+  user-select: none;
 }
 
 .logo {

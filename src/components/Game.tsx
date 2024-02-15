@@ -2,7 +2,6 @@ import {useEffect, useState } from "react"
 
 import Board from "../components/Board"
 import checkIcon from '../assets/check-icon.svg'
-import sendSocketMessage from "../SocketComm";
 
 
 type Move = `${string}${number}${string}${number}`;
@@ -48,10 +47,16 @@ function Game() {
   }
 
   async function getRandomPuzzle() {
+    const sentRequestAt = Date.now()
     const response = await fetch('/api/puzzle?min=399&max=550')
     const result = await response.json()
+
     setPuzzle(result)
-    setTimeout(() => {setNewMoveByBoard(result.firstMove)}, 0)
+    if (Date.now() - sentRequestAt < 200) {
+      setTimeout(() => {setNewMoveByBoard(result.firstMove)}, 500)
+    } else {
+      setTimeout(() => {setNewMoveByBoard(result.firstMove)}, 0)
+    }
   }
 
   async function showHint(moveCount:number){
