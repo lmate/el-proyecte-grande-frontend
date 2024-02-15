@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import defaultProfilePicture from "../../assets/default-profile-picture.webp"
 
 
 function Auth({ user, setUser }) {
@@ -26,7 +27,7 @@ function Auth({ user, setUser }) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          email: localAuthDetails.split('|')[0],
+          authenticator: localAuthDetails.split('|')[0],
           password: localAuthDetails.split('|')[1]
         })
       });
@@ -43,7 +44,7 @@ function Auth({ user, setUser }) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        email: emailInput,
+        authenticator: emailInput,
         password: passwordInput
       })
     });
@@ -94,7 +95,7 @@ function Auth({ user, setUser }) {
       {user ? (
         <Link className="router" to={`/profile/${user.userName}`}>
           <p className="user-name">{user.userName}</p>
-          <img className="user-img" src={user.image} />
+          <img className="user-img" src={user.image == 'default' ? defaultProfilePicture : user.image} />
         </Link>
 
       ) : (

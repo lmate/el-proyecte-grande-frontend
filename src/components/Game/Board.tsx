@@ -177,8 +177,8 @@ function Board({ newMoveByBoard, handlePlayerMove, newBoard, moveCount, setMoveC
 
   function handleDragStart(e) {
     const clickedCell = [parseInt(e.target.className.split(" ")[0].charAt(0)) - 1, parseInt(e.target.className.split(" ")[0].charAt(1)) - 1]
+    setLastDragStartedAt(Date.now())
     if (isClickedCellHasWhitePiece(clickedCell)) {
-      setLastDragStartedAt(Date.now())
       setDragStartCell(clickedCell)
       setDraggingPiece(clickedCell)
     }
@@ -186,9 +186,10 @@ function Board({ newMoveByBoard, handlePlayerMove, newBoard, moveCount, setMoveC
 
   function handleDragEnd(e) {
     const dropCell = [parseInt(e.target.className.split(" ")[0].charAt(0)) - 1, parseInt(e.target.className.split(" ")[0].charAt(1)) - 1]
-    if ((!isClickedCellHasWhitePiece(dropCell)) && !(dragStartCell[0] == dropCell[0] && dragStartCell[1] == dropCell[1])) {
+    if (dragStartCell && (!isClickedCellHasWhitePiece(dropCell)) && !(dragStartCell[0] == dropCell[0] && dragStartCell[1] == dropCell[1])) {
       playerMovePiece(dragStartCell, dropCell)
     }
+    setDragStartCell(null)
     setDraggingPiece(null)
   }
 
