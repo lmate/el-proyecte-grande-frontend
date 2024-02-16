@@ -39,11 +39,22 @@ body {
   pointer-events: none;
   opacity: .8;
 }
+
 .Board > .highlight-hint {
   position: absolute;
   background-color: rgb(255, 251, 15);
   pointer-events: none;
   opacity: 1;
+}
+
+.Board > .highlight-drop {
+  position: absolute;
+  background-color: transparent;
+  pointer-events: none;
+  opacity: 1;
+  width: calc(72vh / 8 - 10px);
+  height: calc(72vh / 8 - 10px);
+  border: 5px dashed #032b50;
 }
 
 .Board > .piece {
@@ -78,6 +89,7 @@ body {
 
 .Game {
   position: relative;
+  height: 72vh;
   margin-top: 5.5vh;
   margin-left: calc((100vw - 72vh) / 2);
 }
