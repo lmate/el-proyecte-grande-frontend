@@ -5,7 +5,9 @@ import wrongPuzzle from '../../../assets/puzzle-complete-wrong.svg';
 
 
 function Rush({disableCick, changePuzzle, changeMoveByBoard, puzzleResults, getPuzzle}){
-    const [timer, setTimer] = useState<number>(180);
+
+    const START_TIMER = 45;
+    const [timer, setTimer] = useState<number>(5);
     
 
     const [currentDifficultyMin, setCurrentDifficultyMin] = useState<number>(400);
@@ -72,7 +74,21 @@ function Rush({disableCick, changePuzzle, changeMoveByBoard, puzzleResults, getP
                     puzzleResults.map((result, index ) => (
                     <img key={index} src={result ? correctPuzzle : wrongPuzzle} />))
                 }
-            </div>
+                </div>
+
+        {timer < 1 && (
+        <>
+        <div className="blur">
+        </div>
+        <dialog open className="rush-end-dialog">
+            <h2>Congrats!</h2>
+            <h2>You finished {puzzleResults.length} puzzles!</h2>
+            <h2>Success rate: {Math.round((puzzleResults.filter((result) => result == true).length / puzzleResults.length) * 100)}% </h2>
+            <h2>Average time per puzzle: {Math.round((START_TIMER / puzzleResults.length) * 100 ) / 100 }  seconds </h2>
+        </dialog> 
+        </>
+        )
+        }
         </>
     )
 }
