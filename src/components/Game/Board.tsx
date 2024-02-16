@@ -177,8 +177,8 @@ function Board({ newMoveByBoard, handlePlayerMove, newBoard, moveCount, setMoveC
 
   function handleDragStart(e) {
     const clickedCell = [parseInt(e.target.className.split(" ")[0].charAt(0)) - 1, parseInt(e.target.className.split(" ")[0].charAt(1)) - 1]
+    setLastDragStartedAt(Date.now())
     if (isClickedCellHasWhitePiece(clickedCell)) {
-      setLastDragStartedAt(Date.now())
       setDragStartCell(clickedCell)
       setDraggingPiece(clickedCell)
     }
@@ -186,9 +186,10 @@ function Board({ newMoveByBoard, handlePlayerMove, newBoard, moveCount, setMoveC
 
   function handleDragEnd(e) {
     const dropCell = [parseInt(e.target.className.split(" ")[0].charAt(0)) - 1, parseInt(e.target.className.split(" ")[0].charAt(1)) - 1]
-    if ((!isClickedCellHasWhitePiece(dropCell)) && !(dragStartCell[0] == dropCell[0] && dragStartCell[1] == dropCell[1])) {
+    if (dragStartCell && (!isClickedCellHasWhitePiece(dropCell)) && !(dragStartCell[0] == dropCell[0] && dragStartCell[1] == dropCell[1])) {
       playerMovePiece(dragStartCell, dropCell)
     }
+    setDragStartCell(null)
     setDraggingPiece(null)
   }
 
@@ -204,6 +205,12 @@ function Board({ newMoveByBoard, handlePlayerMove, newBoard, moveCount, setMoveC
     }
   }, []);
 
+  const cellSideLength = document.body.clientHeight * 0.835 / 8
+  const boardMarginLeft = ((document.body.clientWidth - document.body.clientHeight * 0.73) / 2)
+  const boardMarginTop = ((document.body.clientHeight * 0.23) / 2)
+
+  const dropHighlightLeft = Math.floor((mousePos.x - (boardMarginLeft - cellSideLength / 2)) / cellSideLength)
+  const dropHighlightTop = Math.floor((mousePos.y - (boardMarginTop - cellSideLength / 2)) / cellSideLength) - 1
 
   return (
     <div className="Board" onClick={handleCellClick} onMouseDown={handleDragStart} onMouseUp={handleDragEnd}>
@@ -217,6 +224,13 @@ function Board({ newMoveByBoard, handlePlayerMove, newBoard, moveCount, setMoveC
 
       {hint && (
         <div className="cell highlight-hint" style={{ left: `calc(${hint[1]} * (72vh / 8)`, top: `calc(${hint[0]} * (72vh / 8)` }}></div>
+      )}
+
+      {draggingPiece && Date.now() - lastDragStartedAt > 100 && dropHighlightLeft >= 0 && dropHighlightLeft <= 7 && dropHighlightTop >= 0 && dropHighlightTop <= 7 && (
+        <div className="cell highlight-drop" style={{
+          left: `calc(${dropHighlightLeft} * (72vh / 8))`,
+          top: `calc(${dropHighlightTop} * (72vh / 8))`
+        }}></div>
       )}
 
       {board.map((row, rowId) => {
