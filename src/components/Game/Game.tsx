@@ -126,7 +126,7 @@ function Game() {
         <>
           <div className="blur"></div>
           <button className="play-btn"onClick={() => {getRandomPuzzle(), setIsHomeScreen(false)}}>Start playing!</button>
-          <button className="race-btn" onClick={() => startRace()}>Play Race!</button>
+          <button className="race-btn" onClick={() => startRace()}>Puzzle Rush!</button>
         </> 
       ) : (
         <>

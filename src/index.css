@@ -241,14 +241,7 @@ body {
 }
 
 .Auth > .auth-modal {
-  position: absolute;
-  top: 11vh;
-  width: 20vw;
-  background: none;
-  border: 3.5px solid var(--accent);
-  border-radius: 3px;
-  padding-top: 1vh;
-  padding-bottom: 2vh;
+
 }
 
 .Auth > .success {
@@ -416,4 +409,10 @@ body {
 
 .score{
   color: white;
+}
+
+.rush-end-dialog{
+position: absolute;
+top: 15vh;
+left: -32.5vw;
 }
