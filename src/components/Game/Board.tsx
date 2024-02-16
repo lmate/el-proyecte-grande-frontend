@@ -18,9 +18,10 @@ import BishopMovement from '../../movements/BishopMovement';
 import KingMovement from '../../movements/KingMovement'
 import RookMovement from '../../movements/RookMovement'*/
 
-import useSound from 'use-sound';
+//import useSound from 'use-sound';
 import completedSound from '../../assets/sounds/puzzle-done.mp3';
 import moveSound from '../../assets/sounds/move.mp3';
+import useOurSound from '../../hooks/useOurSound';
 
 
 function Board({ newMoveByBoard, handlePlayerMove, newBoard, moveCount, setMoveCount, hint }) {
@@ -30,8 +31,8 @@ function Board({ newMoveByBoard, handlePlayerMove, newBoard, moveCount, setMoveC
   const [selectedCell, setSelectedCell] = useState(null)
   const [lastMovedFromCell, setLastMovedFromCell] = useState(null)
   const [lastMovedToCell, setLastMovedToCell] = useState(null)
-  const [playMoveSound] = useSound(moveSound);
-  const [playCompletedSound] = useSound(completedSound);
+  const [playMoveSound] = useOurSound(moveSound);
+  const [playCompletedSound] = useOurSound(completedSound);
   const [draggingPiece, setDraggingPiece] = useState(null);
   const [mousePos, setMousePos] = useState({});
   const [board, setBoard] = useState(
