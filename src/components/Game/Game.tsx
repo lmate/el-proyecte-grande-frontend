@@ -133,7 +133,7 @@ function Game() {
           {!isRush ? 
             <Casual getRandomPuzzle={getRandomPuzzle} setDisableClick={(disableValue) => setDisableClick(disableValue)} showHint={() => showHint(moveCount)} setHint={() => setHint(null)}/>
             :
-            <Rush disableCick={() => setDisableClick(true)} getPuzzle={getPuzzleByRating}puzzleResults={puzzleResults} changePuzzle={(newPuzzle) => setPuzzle(newPuzzle)} changeMoveByBoard={(firstMove) => setNewMoveByBoard(firstMove)}/>
+            <Rush disableCick={() => setDisableClick(true)} getPuzzle={getPuzzleByRating}puzzleResults={puzzleResults} changePuzzle={(newPuzzle) => setPuzzle(newPuzzle)} changeMoveByBoard={(firstMove) => setNewMoveByBoard(firstMove)} setIsHomeScreen={(value) => setIsHomeScreen(value)} />
         }
           
         </>
