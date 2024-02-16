@@ -4,10 +4,10 @@ import correctPuzzle from '../../../assets/puzzle-complete-correct.svg';
 import wrongPuzzle from '../../../assets/puzzle-complete-wrong.svg';
 
 
-function Rush({disableCick, changePuzzle, changeMoveByBoard, puzzleResults, getPuzzle}){
+function Rush({disableCick, changePuzzle, changeMoveByBoard, puzzleResults, getPuzzle, setIsHomeScreen}){
 
     const START_TIMER = 45;
-    const [timer, setTimer] = useState<number>(5);
+    const [timer, setTimer] = useState<number>(2);
     
 
     const [currentDifficultyMin, setCurrentDifficultyMin] = useState<number>(400);
@@ -85,6 +85,7 @@ function Rush({disableCick, changePuzzle, changeMoveByBoard, puzzleResults, getP
             <h2>You finished {puzzleResults.length} puzzles!</h2>
             <h2>Success rate: {Math.round((puzzleResults.filter((result) => result == true).length / puzzleResults.length) * 100)}% </h2>
             <h2>Average time per puzzle: {Math.round((START_TIMER / puzzleResults.length) * 100 ) / 100 }  seconds </h2>
+            <button className="rush-end-button" onClick={() => setIsHomeScreen(true)}>Go Home</button>
         </dialog> 
         </>
         )
