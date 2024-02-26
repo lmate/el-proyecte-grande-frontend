@@ -119,8 +119,12 @@ function Board({ newMoveByBoard, handlePlayerMove, newBoard, moveCount, setMoveC
     }
 
     const clickedCell = [parseInt(e.target.className.split(" ")[0].charAt(0)) - 1, parseInt(e.target.className.split(" ")[0].charAt(1)) - 1]
-    if (selectedCell) {
 
+    //Todo
+    console.log(board[clickedCell[0]][clickedCell[1]][0]);
+    //Todo
+
+    if (selectedCell) {
       if (clickedCell.join('') === selectedCell.join('')) {
         setSelectedCell(null)
         return
