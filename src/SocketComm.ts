@@ -1,40 +1,46 @@
-const socket = new WebSocket('ws://localhost:5173/ws')
+const socket = new WebSocket("ws://localhost:5173/ws");
 
-const responses = {}
+const responses: { [key: string]: (val: unknown) => void } = {};
 
-function sendSocketMessage(endpoint, body, isExpectResponse) {
+function sendSocketMessage(
+  endpoint: string,
+  body: Record<string, unknown>,
+  isExpectResponse: boolean
+) {
   if (isExpectResponse) {
-    const identifier = `${Date.now()}-${Object.keys(responses).length}`
+    const identifier = `${Date.now()}-${Object.keys(responses).length}`;
 
-    socket.send(JSON.stringify({
-      'endpoint': endpoint,
-      'identifier': identifier,
-      'body': JSON.stringify(body) })
-    )
-    
-    const requesPromise = new Promise((myResolve) => {
-      responses[identifier] = myResolve
-    })
-    return requesPromise
+    socket.send(
+      JSON.stringify({
+        endpoint: endpoint,
+        identifier: identifier,
+        body: JSON.stringify(body),
+      })
+    );
 
-  } else {
-    socket.send(JSON.stringify({
-      'endpoint': endpoint,
-      'identifier': 0,
-      'body': JSON.stringify(body) })
-    )
+    const requestPromise = new Promise((myResolve) => {
+      responses[identifier] = myResolve;
+    });
+
+    return requestPromise;
   }
-  return
+
+  socket.send(
+    JSON.stringify({
+      endpoint: endpoint,
+      identifier: 0,
+      body: JSON.stringify(body),
+    })
+  );
 }
 
 socket.onmessage = ({ data }) => {
-  const result = JSON.parse(data)
+  const result = JSON.parse(data);
 
-  if (result.identifier !== '0') {
-    const body = JSON.parse(result.body)
-
+  if (result.identifier !== "0") {
+    const body = JSON.parse(result.body);
     responses[result.identifier](body);
   }
-}
+};
 
-export default sendSocketMessage
+export default sendSocketMessage;

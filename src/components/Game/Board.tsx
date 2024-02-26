@@ -18,18 +18,23 @@ import BishopMovement from '../../movements/BishopMovement';
 import KingMovement from '../../movements/KingMovement'
 import RookMovement from '../../movements/RookMovement'*/
 
-import useSound from 'use-sound';
+//import useSound from 'use-sound';
 import completedSound from '../../assets/sounds/puzzle-done.mp3';
 import moveSound from '../../assets/sounds/move.mp3';
+import useOurSound from '../../hooks/useOurSound';
 
 
-function Board({ newMoveByBoard, handlePlayerMove, newBoard, moveCount, setMoveCount, hint}) {
+function Board({ newMoveByBoard, handlePlayerMove, newBoard, moveCount, setMoveCount, hint }) {
 
+  const [lastDragStartedAt, setLastDragStartedAt] = useState(null)
+  const [dragStartCell, setDragStartCell] = useState(null)
   const [selectedCell, setSelectedCell] = useState(null)
   const [lastMovedFromCell, setLastMovedFromCell] = useState(null)
   const [lastMovedToCell, setLastMovedToCell] = useState(null)
-  const [playMoveSound] = useSound(moveSound); 
-  const [playCompletedSound] = useSound(completedSound); 
+  const [playMoveSound] = useOurSound(moveSound);
+  const [playCompletedSound] = useOurSound(completedSound);
+  const [draggingPiece, setDraggingPiece] = useState(null);
+  const [mousePos, setMousePos] = useState({});
   const [board, setBoard] = useState(
     [
       [bR, bN, bB, bQ, bK, bB, bN, bR],
@@ -72,7 +77,7 @@ function Board({ newMoveByBoard, handlePlayerMove, newBoard, moveCount, setMoveC
 
     setMoveCount(moveCount + 1)
   }
-  
+
   async function playerMovePiece(from, to) {
 
     const boardBeforeMove = structuredClone(board)
@@ -84,7 +89,7 @@ function Board({ newMoveByBoard, handlePlayerMove, newBoard, moveCount, setMoveC
 
     const isMoveValid = await handlePlayerMove(convertMoveToLichessMove(from, to), moveCount)
 
-    if (!isMoveValid){
+    if (!isMoveValid) {
       setBoard(boardBeforeMove)
       setMoveCount(moveCount)
     }
@@ -108,9 +113,11 @@ function Board({ newMoveByBoard, handlePlayerMove, newBoard, moveCount, setMoveC
     return letters[from[1]] + (8 - from[0]) + letters[to[1]] + (8 - to[0])
   }
 
-
-
   function handleCellClick(e) {
+    if (Date.now() - lastDragStartedAt > 200) {
+      return
+    }
+
     const clickedCell = [parseInt(e.target.className.split(" ")[0].charAt(0)) - 1, parseInt(e.target.className.split(" ")[0].charAt(1)) - 1]
     if (selectedCell) {
 
@@ -169,10 +176,45 @@ function Board({ newMoveByBoard, handlePlayerMove, newBoard, moveCount, setMoveC
     return result
   }
 
+  function handleDragStart(e) {
+    const clickedCell = [parseInt(e.target.className.split(" ")[0].charAt(0)) - 1, parseInt(e.target.className.split(" ")[0].charAt(1)) - 1]
+    setLastDragStartedAt(Date.now())
+    if (isClickedCellHasWhitePiece(clickedCell)) {
+      setDragStartCell(clickedCell)
+      setDraggingPiece(clickedCell)
+    }
+  }
 
+  function handleDragEnd(e) {
+    const dropCell = [parseInt(e.target.className.split(" ")[0].charAt(0)) - 1, parseInt(e.target.className.split(" ")[0].charAt(1)) - 1]
+    if (dragStartCell && (!isClickedCellHasWhitePiece(dropCell)) && !(dragStartCell[0] == dropCell[0] && dragStartCell[1] == dropCell[1])) {
+      playerMovePiece(dragStartCell, dropCell)
+    }
+    setDragStartCell(null)
+    setDraggingPiece(null)
+  }
+
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      setMousePos({ x: e.clientX, y: e.clientY })
+    };
+
+    window.addEventListener('mousemove', handleMouseMove)
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove)
+    }
+  }, []);
+
+  const cellSideLength = document.body.clientHeight * 0.835 / 8
+  const boardMarginLeft = ((document.body.clientWidth - document.body.clientHeight * 0.73) / 2)
+  const boardMarginTop = ((document.body.clientHeight * 0.23) / 2)
+
+  const dropHighlightLeft = Math.floor((mousePos.x - (boardMarginLeft - cellSideLength / 2)) / cellSideLength)
+  const dropHighlightTop = Math.floor((mousePos.y - (boardMarginTop - cellSideLength / 2)) / cellSideLength) - 1
 
   return (
-    <div className="Board" onClick={handleCellClick}>
+    <div className="Board" onClick={handleCellClick} onMouseDown={handleDragStart} onMouseUp={handleDragEnd}>
 
       {lastMovedFromCell && lastMovedToCell && (
         <>
@@ -182,7 +224,14 @@ function Board({ newMoveByBoard, handlePlayerMove, newBoard, moveCount, setMoveC
       )}
 
       {hint && (
-         <div className="cell highlight-hint" style={{ left: `calc(${hint[1]} * (72vh / 8)`, top: `calc(${hint[0]} * (72vh / 8)` }}></div>
+        <div className="cell highlight-hint" style={{ left: `calc(${hint[1]} * (72vh / 8)`, top: `calc(${hint[0]} * (72vh / 8)` }}></div>
+      )}
+
+      {draggingPiece && Date.now() - lastDragStartedAt > 100 && dropHighlightLeft >= 0 && dropHighlightLeft <= 7 && dropHighlightTop >= 0 && dropHighlightTop <= 7 && (
+        <div className="cell highlight-drop" style={{
+          left: `calc(${dropHighlightLeft} * (72vh / 8))`,
+          top: `calc(${dropHighlightTop} * (72vh / 8))`
+        }}></div>
       )}
 
       {board.map((row, rowId) => {
@@ -193,12 +242,24 @@ function Board({ newMoveByBoard, handlePlayerMove, newBoard, moveCount, setMoveC
             modifierClasses.push('selected-piece')
           }
 
-          return piece != '' && <img
-            key={`${rowId}${pieceId}`}
-            className={`piece ${modifierClasses.join(' ')}`}
-            src={piece}
-            style={{ left: `calc(${pieceId} * (72vh / 8)`, top: `calc(${rowId} * (72vh / 8)` }}
-          ></img>
+          if (draggingPiece && draggingPiece[0] == rowId && draggingPiece[1] == pieceId) {
+            return piece != '' && <img
+              key={`${rowId}${pieceId}`}
+              className={`piece ${modifierClasses.join(' ')}`}
+              src={piece}
+              draggable={false}
+              style={{ zIndex: '5', left: `calc(${mousePos.x}px - ((100vw - 72vh) / 2) - ((72vh / 8) / 2))`, top: `calc(${mousePos.y}px - ((100vh - 72vh) / 2) - 3.5vh - ((72vh / 8) / 2))` }}
+            ></img>
+
+          } else {
+            return piece != '' && <img
+              key={`${rowId}${pieceId}`}
+              className={`piece ${modifierClasses.join(' ')}`}
+              src={piece}
+              draggable={false}
+              style={{ left: `calc(${pieceId} * (72vh / 8))`, top: `calc(${rowId} * (72vh / 8))` }}
+            ></img>
+          }
         })
       })}
 
@@ -276,13 +337,13 @@ function Board({ newMoveByBoard, handlePlayerMove, newBoard, moveCount, setMoveC
 
       {[8, 7, 6, 5, 4, 3, 2, 1].map((num, index) => {
         return (
-          <p key={num} className='legend legend-num' style={{marginTop: `calc(${index} * (72vh / 8)`}}>{num}</p>
+          <p key={num} className='legend legend-num' style={{ marginTop: `calc(${index} * (72vh / 8)` }}>{num}</p>
         )
       })}
 
       {['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'].map((letter, index) => {
         return (
-          <p key={letter} className='legend legend-letter' style={{marginLeft: `calc(${index} * (72vh / 8)`}}>{letter}</p>
+          <p key={letter} className='legend legend-letter' style={{ marginLeft: `calc(${index} * (72vh / 8)` }}>{letter}</p>
         )
       })}
 

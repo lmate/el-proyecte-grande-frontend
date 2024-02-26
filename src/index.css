@@ -7,6 +7,7 @@ body {
   margin: 0px;
   background-color: #141414;
   font-family: "Montserrat", sans-serif;
+  user-select: none;
 }
 
 .logo {
@@ -38,11 +39,22 @@ body {
   pointer-events: none;
   opacity: .8;
 }
+
 .Board > .highlight-hint {
   position: absolute;
   background-color: rgb(255, 251, 15);
   pointer-events: none;
   opacity: 1;
+}
+
+.Board > .highlight-drop {
+  position: absolute;
+  background-color: transparent;
+  pointer-events: none;
+  opacity: 1;
+  width: calc(72vh / 8 - 10px);
+  height: calc(72vh / 8 - 10px);
+  border: 5px dashed #032b50;
 }
 
 .Board > .piece {
@@ -77,6 +89,7 @@ body {
 
 .Game {
   position: relative;
+  height: 72vh;
   margin-top: 5.5vh;
   margin-left: calc((100vw - 72vh) / 2);
 }
@@ -228,14 +241,7 @@ body {
 }
 
 .Auth > .auth-modal {
-  position: absolute;
-  top: 11vh;
-  width: 20vw;
-  background: none;
-  border: 3.5px solid var(--accent);
-  border-radius: 3px;
-  padding-top: 1vh;
-  padding-bottom: 2vh;
+
 }
 
 .Auth > .success {
@@ -403,4 +409,29 @@ body {
 
 .score{
   color: white;
+}
+
+.rush-end-dialog{
+position: absolute;
+top: 15vh;
+left: -32.5vw;
+z-index: 15;
+}
+
+.rush-end-button{
+  position:absolute;
+  margin-left: 2vh;
+  margin-top: 0vh;
+  align-items: center;
+  font-weight: 500;
+  font-size: 15px;
+  padding: 0.7em 1.4em 0.7em 1.1em;
+  color: white;
+  background: #ad5389;
+  background: linear-gradient(0deg, rgba(20,167,62,1) 0%, rgba(102,247,113,1) 100%);
+  border: none;
+  box-shadow: 0 0.7em 1.5em -0.5em #14a73e98;
+  letter-spacing: 0.05em;
+  border-radius: 20em;
+  cursor: pointer;
 }
