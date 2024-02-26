@@ -1,9 +1,9 @@
-import BishopMovement from './BishopMovement';
-import KingMovement from './KingMovement';
+import BishopMovement from './movementGenerators/BishopMovement';
+import KingMovement from './movementGenerators/KingMovement';
 import MovementGeneratorFactory from './MovementGeneratorFactory';
-import MovementGenerator from './MovementGenerator';
-import QueenMovements from './QueenMovements';
-import RookMovement from './RookMovement';
+import MovementGenerator from './movementGenerators/MovementGenerator';
+import QueenMovements from './movementGenerators/QueenMovements';
+import RookMovement from './movementGenerators/RookMovement';
 
 class MovementGeneratorFactoryImpl implements MovementGeneratorFactory{
     getMoves(piece: string): MovementGenerator | undefined{

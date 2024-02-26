@@ -1,4 +1,4 @@
-import MovementGenerator from "./MovementGenerator";
+import MovementGenerator from "./movementGenerators/MovementGenerator";
 
 interface MovementGeneratorFactory{
 
