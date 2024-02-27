@@ -1,3 +1,6 @@
+import {raceSocketListener} from '../src/components/Game/gametypes/Race'
+import {createRaceSocketListener} from '../src/components/Game/CreateRace'
+
 const socket = new WebSocket("ws://localhost:5173/ws");
 
 const responses: { [key: string]: (val: unknown) => void } = {};
@@ -36,10 +39,13 @@ function sendSocketMessage(
 
 socket.onmessage = ({ data }) => {
   const result = JSON.parse(data);
+  const body = JSON.parse(result.body);
 
   if (result.identifier !== "0") {
-    const body = JSON.parse(result.body);
     responses[result.identifier](body);
+  } else {
+    raceSocketListener(result.endpoint, body)
+    createRaceSocketListener(result.endpoint, body)
   }
 };
 

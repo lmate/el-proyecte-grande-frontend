@@ -435,3 +435,133 @@ z-index: 15;
   border-radius: 20em;
   cursor: pointer;
 }
+
+.CreateRace > .timeframe-label {
+  text-align: center;
+  color: var(--white);
+  font-size: 2.4vh;
+  font-weight: 600;
+  margin-top: 10vh;
+}
+
+.CreateRace > .timeframe-select {
+  width: 10vw;
+  margin-left: calc((100vw - 10vw) / 2);
+  font-size: 3vh;
+  background-color: var(--white);
+  border: 3px solid var(--white);
+  border-radius: 1vw;
+  padding: 1vw;
+  padding-right: 2vw;
+  color: var(--accent);
+  outline: none;
+  font-weight: 600;
+}
+
+.CreateRace > .create-btn {
+  width: 15vw;
+  margin-left: calc((100vw - 15vw) / 2);
+  margin-top: 10vh;
+  align-items: center;
+  font-weight: 600;
+  font-size: 25px;
+  padding: 0.7em 1.4em 0.7em 1.1em;
+  color: white;
+  background: #ad5389;
+  background: linear-gradient(0deg, rgba(20,167,62,1) 0%, rgba(102,247,113,1) 100%);
+  border: none;
+  box-shadow: 0 0.7em 1.5em -0.5em #14a73e98;
+  letter-spacing: 0.05em;
+  border-radius: 20em;
+  cursor: pointer;
+}
+
+.CreateRace > .create-btn:active {
+  transform: scale(.97);
+}
+
+.CreateRace > .link {
+  color: var(--white);
+  font-weight: 700;
+  font-size: 4vh;
+  text-decoration: underline;
+  margin-left: 1vw;
+  user-select: all;
+}
+
+.CreateRace > .link-description {
+  color: var(--white);
+  font-weight: 500;
+  font-size: 3vh;
+  margin-left: 30vw;
+  margin-top: 7vh;
+}
+
+.CreateRace > .copy-btn {
+  filter: invert(100%) sepia(0%) saturate(3527%) hue-rotate(211deg) brightness(111%) contrast(101%);
+  margin-left: 30vw;
+  width: 2vw;
+  cursor: pointer;
+}
+
+.CreateRace > .copy-btn:active {
+  transform: scale(.9);
+}
+
+.CreateRace > .playerList,
+.Race > .playerList {
+  margin-top: 10vh;
+  margin-left: 20vw;
+}
+
+.CreateRace > .playerList > .playerListElement,
+.Race > .playerList > .playerListElement {
+  width: 20vh;
+  height: 20vh;
+  background-color: var(--accent);
+  border-radius: 20vh;
+  margin-left: 2vw;
+  float: left;
+}
+
+.CreateRace > .playerList > .playerListElement > .playerName,
+.Race > .playerList > .playerListElement > .playerName {
+  width: 20vh;
+  padding-top: 5vh;
+  color: var(--white);
+  font-weight: 700;
+  text-align: center;
+}
+
+.CreateRace > .start-btn,
+.Race > .join-btn {
+  position: absolute;
+  width: 15vw;
+  left: calc((100vw - 15vw) / 2);
+  top: 85vh;
+  align-items: center;
+  font-weight: 600;
+  font-size: 25px;
+  padding: 0.7em 1.4em 0.7em 1.1em;
+  color: white;
+  background: #ad5389;
+  background: linear-gradient(0deg, rgba(20,167,62,1) 0%, rgba(102,247,113,1) 100%);
+  border: none;
+  box-shadow: 0 0.7em 1.5em -0.5em #14a73e98;
+  letter-spacing: 0.05em;
+  border-radius: 20em;
+  cursor: pointer;
+}
+
+.CreateRace > .start-btn:active,
+.Race > .join-btn:active {
+  transform: scale(.97);
+}
+
+.Race > .waiting-label {
+  color: var(--white);
+  font-size: 3vh;
+  font-weight: 600;
+  margin-top: 10vh;
+  margin-left: 35vw;
+}
