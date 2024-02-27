@@ -48,6 +48,7 @@ function Board({ newMoveByBoard, handlePlayerMove, newBoard, moveCount, setMoveC
   const [playCompletedSound] = useOurSound(completedSound);
   const [draggingPiece, setDraggingPiece] = useState(null);
   const [mousePos, setMousePos] = useState({});
+  const [validMoves, setValidMoves] = useState<string[]>();
   const [board, setBoard] = useState(
     [
       [bR, bN, bB, bQ, bK, bB, bN, bR],
@@ -59,15 +60,14 @@ function Board({ newMoveByBoard, handlePlayerMove, newBoard, moveCount, setMoveC
       [wP, wP, wP, wP, wP, wP, wP, wP],
       [wR, wN, wB, wQ, wK, wB, wN, wR]
     ]
-  )
-
-  const MOVEMENT_GENERATOR_FACTORY: MovementGeneratorFactory = new MovementGeneratorFactoryImpl();
-
-  useEffect(() => {
-    newMoveByBoard && boardMovePiece(newMoveByBoard)
-  }, [newMoveByBoard])
-
-  useEffect(() => {
+  );
+  const movementGeneratorFactory: MovementGeneratorFactory = new MovementGeneratorFactoryImpl();
+    
+    useEffect(() => {
+      newMoveByBoard && boardMovePiece(newMoveByBoard)
+    }, [newMoveByBoard])
+    
+    useEffect(() => {
     if (newBoard) {
       playCompletedSound()
       setBoard(convertFenToBoard(newBoard))
@@ -128,6 +128,12 @@ function Board({ newMoveByBoard, handlePlayerMove, newBoard, moveCount, setMoveC
     return letters[from[1]] + (8 - from[0]) + letters[to[1]] + (8 - to[0])
   }
 
+  function changeValidPositions(clickedCell){
+    const validator: MovementValidator = new MovementValidator(movementGeneratorFactory);
+    setValidMoves(validator.getValidPositions(board, clickedCell));
+  }
+
+
   function handleCellClick(e) {
     if (Date.now() - lastDragStartedAt > 200) {
       return
@@ -135,12 +141,7 @@ function Board({ newMoveByBoard, handlePlayerMove, newBoard, moveCount, setMoveC
 
     const clickedCell = [parseInt(e.target.className.split(" ")[0].charAt(0)) - 1, parseInt(e.target.className.split(" ")[0].charAt(1)) - 1]
 
-    //Todo
-  
-    const movementGeneratorFactory: MovementGeneratorFactory = new MovementGeneratorFactoryImpl();
-    const validator: MovementValidator = new MovementValidator(movementGeneratorFactory);
-    console.log(validator.getValidPositions(board, clickedCell));
-    //Todo
+    changeValidPositions(clickedCell);
 
     if (selectedCell) {
       if (clickedCell.join('') === selectedCell.join('')) {
@@ -227,6 +228,11 @@ function Board({ newMoveByBoard, handlePlayerMove, newBoard, moveCount, setMoveC
       window.removeEventListener('mousemove', handleMouseMove)
     }
   }, []);
+
+
+  useEffect(() => {
+    console.log(validMoves);
+  }, [validMoves])
 
   const cellSideLength = document.body.clientHeight * 0.835 / 8
   const boardMarginLeft = ((document.body.clientWidth - document.body.clientHeight * 0.73) / 2)
