@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import defaultProfilePicture from "../../assets/default-profile-picture.webp";
 
-function Auth({ user, onChangeUser }) {
+function Auth({ user, setUser }) {
   const [isShowingModal, setIsShowingModal] = useState(false);
   const [isLogin, setIsLogin] = useState(true);
   const [emailInput, setEmailInput] = useState("");
@@ -24,11 +24,11 @@ function Auth({ user, onChangeUser }) {
         });
 
         if (response.ok) {
-          onChangeUser(await response.json());
+          setUser(await response.json());
         }
       }
     },
-    [onChangeUser]
+    [setUser]
   );
 
   useEffect(() => {
@@ -54,7 +54,7 @@ function Auth({ user, onChangeUser }) {
         "auth",
         `${emailInput}|${passwordInput}|${user.image}`
       );
-      onChangeUser(user);
+      setUser(user);
       setTimeout(() => {
         setIsSuccess(-1);
         setIsLogin(true);
@@ -86,7 +86,7 @@ function Auth({ user, onChangeUser }) {
         "auth",
         `${emailInput}|${passwordInput}|${user.image}`
       );
-      onChangeUser(user);
+      setUser(user);
       setTimeout(() => {
         setIsSuccess(-1);
         setIsLogin(true);
