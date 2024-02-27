@@ -22,6 +22,9 @@ import RookMovement from '../../movements/RookMovement'*/
 import completedSound from '../../assets/sounds/puzzle-done.mp3';
 import moveSound from '../../assets/sounds/move.mp3';
 import useOurSound from '../../hooks/useOurSound';
+import MovementGeneratorFactoryImpl from '../../movements/MovementGeneratorFactoryImpl';
+import MovementGeneratorFactory from '../../movements/MovementGeneratorFactory';
+import MovementGenerator from '../../movements/movementGenerators/MovementGenerator';
 
 
 function Board({ newMoveByBoard, handlePlayerMove, newBoard, moveCount, setMoveCount, hint }) {
@@ -47,6 +50,8 @@ function Board({ newMoveByBoard, handlePlayerMove, newBoard, moveCount, setMoveC
       [wR, wN, wB, wQ, wK, wB, wN, wR]
     ]
   )
+
+  const MOVEMENT_GENERATOR_FACTORY: MovementGeneratorFactory = new MovementGeneratorFactoryImpl();
 
   useEffect(() => {
     newMoveByBoard && boardMovePiece(newMoveByBoard)
@@ -121,7 +126,8 @@ function Board({ newMoveByBoard, handlePlayerMove, newBoard, moveCount, setMoveC
     const clickedCell = [parseInt(e.target.className.split(" ")[0].charAt(0)) - 1, parseInt(e.target.className.split(" ")[0].charAt(1)) - 1]
 
     //Todo
-    console.log(board[clickedCell[0]][clickedCell[1]][0]);
+    const movementGenerator: MovementGenerator | undefined = MOVEMENT_GENERATOR_FACTORY.getMoves(board[clickedCell[0]][clickedCell[1]][0])
+    console.log(movementGenerator.generateAvaibleMoves(clickedCell));
     //Todo
 
     if (selectedCell) {
