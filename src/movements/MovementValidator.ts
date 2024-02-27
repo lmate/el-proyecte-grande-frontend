@@ -35,7 +35,7 @@ class MovementValidator{
     }
 
     private concatPositionToString(validMoves: number[][]): string[]{
-        return validMoves.map(move => move.join());
+        return validMoves.map(move => move.join(''));
     }
 }
 
