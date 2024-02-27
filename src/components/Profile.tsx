@@ -10,7 +10,7 @@ type ProfileData = {
   rating: number;
 };
 
-function Profile({ user }) {
+function Profile({ user }:{user: ProfileData} ) {
   const [profileData, setProfileData] = useState<ProfileData | null>(null);
 
   const { userName } = useParams();
