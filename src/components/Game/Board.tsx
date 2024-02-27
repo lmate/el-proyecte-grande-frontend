@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 
+import {Cell, Move, Puzzle } from '../../types/boardtypes';
+
 import bK from '../../assets/pieces/bK.svg';
 import bQ from '../../assets/pieces/bQ.svg';
 import bR from '../../assets/pieces/bR.svg';
@@ -16,21 +18,28 @@ import wP from '../../assets/pieces/wP.svg';
 /*
 import BishopMovement from '../../movements/BishopMovement';
 import KingMovement from '../../movements/KingMovement'
-import RookMovement from '../../movements/RookMovement'*/
+import RookMovement from '../../movements/RookMovement'
+*/
 
-//import useSound from 'use-sound';
 import completedSound from '../../assets/sounds/puzzle-done.mp3';
 import moveSound from '../../assets/sounds/move.mp3';
 import useOurSound from '../../hooks/useOurSound';
 
 
-function Board({ newMoveByBoard, handlePlayerMove, newBoard, moveCount, setMoveCount, hint }) {
+function Board({ newMoveByBoard, handlePlayerMove, newBoard, moveCount, setMoveCount, hint } : {
+  newMoveByBoard : () => void;
+  handlePlayerMove: () => void;
+  newBoard: () => void;
+  moveCount: number;
+  setMoveCount: (count:number) => void;
+  hint : Cell
+}) {
 
-  const [lastDragStartedAt, setLastDragStartedAt] = useState(null)
-  const [dragStartCell, setDragStartCell] = useState(null)
-  const [selectedCell, setSelectedCell] = useState(null)
-  const [lastMovedFromCell, setLastMovedFromCell] = useState(null)
-  const [lastMovedToCell, setLastMovedToCell] = useState(null)
+  const [lastDragStartedAt, setLastDragStartedAt] = useState<Cell | null>(null)
+  const [dragStartCell, setDragStartCell] = useState<Cell | null>(null)
+  const [selectedCell, setSelectedCell] = useState<Cell | null>(null)
+  const [lastMovedFromCell, setLastMovedFromCell] = useState<Cell | null>(null)
+  const [lastMovedToCell, setLastMovedToCell] = useState<Cell | null>(null)
   const [playMoveSound] = useOurSound(moveSound);
   const [playCompletedSound] = useOurSound(completedSound);
   const [draggingPiece, setDraggingPiece] = useState(null);
@@ -65,7 +74,7 @@ function Board({ newMoveByBoard, handlePlayerMove, newBoard, moveCount, setMoveC
 
 
   function movePiece(move) {
-    const newBoard = structuredClone(board)
+    const newBoard = structuredClone(board) 
     newBoard[move.to[0]][move.to[1]] = newBoard[move.from[0]][move.from[1]]
     newBoard[move.from[0]][move.from[1]] = ''
     setSelectedCell(null)

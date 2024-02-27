@@ -5,17 +5,8 @@ import checkIcon from "../../assets/check-icon.svg";
 import Casual from "./gametypes/Casual";
 import Rush from "./gametypes/Rush";
 
-type Move = `${string}${number}${string}${number}`;
-type Cell = `${string}${number}`;
+import { Cell, Move, Puzzle } from '../../types/boardtypes';
 
-interface Puzzle {
-  // DTO : String id, String table, String firstMove, float rating, float popularity
-  id: string;
-  table: string;
-  firstMove: Move;
-  rating: number;
-  popularity: number;
-}
 
 function Game() {
   const [moveCount, setMoveCount] = useState(0);
@@ -164,7 +155,7 @@ function Game() {
             />
           ) : (
             <Rush
-              disableCick={() => setDisableClick(true)}
+              disableClick={() => setDisableClick(true)}
               getPuzzle={getPuzzleByRating}
               puzzleResults={puzzleResults}
               changePuzzle={(newPuzzle) => setPuzzle(newPuzzle)}
