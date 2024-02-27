@@ -27,6 +27,7 @@ import useOurSound from '../../hooks/useOurSound';
 import MovementGeneratorFactoryImpl from '../../movements/MovementGeneratorFactoryImpl';
 import MovementGeneratorFactory from '../../movements/MovementGeneratorFactory';
 import MovementGenerator from '../../movements/movementGenerators/MovementGenerator';
+import MovementValidator from '../../movements/MovementValidator';
 
 
 function Board({ newMoveByBoard, handlePlayerMove, newBoard, moveCount, setMoveCount, hint } : {
@@ -135,8 +136,10 @@ function Board({ newMoveByBoard, handlePlayerMove, newBoard, moveCount, setMoveC
     const clickedCell = [parseInt(e.target.className.split(" ")[0].charAt(0)) - 1, parseInt(e.target.className.split(" ")[0].charAt(1)) - 1]
 
     //Todo
-    const movementGenerator: MovementGenerator | undefined = MOVEMENT_GENERATOR_FACTORY.getMoves(board[clickedCell[0]][clickedCell[1]][0])
-    console.log(movementGenerator.generateAvaibleMoves(clickedCell));
+  
+    const movementGeneratorFactory: MovementGeneratorFactory = new MovementGeneratorFactoryImpl();
+    const validator: MovementValidator = new MovementValidator(movementGeneratorFactory);
+    console.log(validator.getValidPositions(board, clickedCell));
     //Todo
 
     if (selectedCell) {
