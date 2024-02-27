@@ -11,7 +11,7 @@ import { Cell, Move, Puzzle } from '../../types/boardtypes';
 function Game() {
   const [moveCount, setMoveCount] = useState(0);
   const [puzzle, setPuzzle] = useState<Puzzle | null>(null);
-  const [diableClick, setDisableClick] = useState<boolean>(false);
+  const [disableClick, setDisableClick] = useState<boolean>(false);
   const [isShowCompleteIndicator, setIsShowCompleteIndicator] =
     useState<boolean>(false);
   const [isHomeScreen, setIsHomeScreen] = useState<boolean>(true);
@@ -23,6 +23,7 @@ function Game() {
   const [currentMaxDifficulty, setCurrentMaxDifficulty] = useState<number>(550);
   const [currentMinDifficulty, setCurrentMinDifficulty] = useState<number>(399);
   const [puzzleResults, setPuzzleResults] = useState<boolean[]>([]);
+  const [isTimerOver, setIsTimerOver] = useState<boolean>(false);
 
   async function handlePlayerMove(
     move: Move,
@@ -56,6 +57,9 @@ function Game() {
       setNewMoveByBoard(result.firstMove);
     }, 0);
   }
+
+  console.log(isTimerOver);
+  
 
   async function getPuzzleByRating() {
     const sentRequestAt = Date.now();
@@ -107,10 +111,13 @@ function Game() {
     setTimeout(() => setIsShowCompleteIndicator(false), 600);
   }
 
-  function startRace() {
+  function startRush() {
+    setPuzzleResults([])
+    setDisableClick(false);
     setIsRush(true);
     setIsHomeScreen(false);
     getRandomPuzzle();
+    setIsTimerOver(false);
   }
 
   /*function changeMaxMinDifficulty(max: number, min: number) {
@@ -118,6 +125,12 @@ function Game() {
     setCurrentMinDifficulty(min);
     getRandomPuzzle();
   }*/
+
+  
+  function returnTimerValue(){
+    return isTimerOver;
+  }
+
 
   return (
     <div className="Game">
@@ -128,6 +141,7 @@ function Game() {
         moveCount={moveCount}
         setMoveCount={setMoveCount}
         hint={hint}
+        isTimerOver={returnTimerValue}
       />
       {isHomeScreen ? (
         <>
@@ -140,7 +154,7 @@ function Game() {
           >
             Start playing!
           </button>
-          <button className="race-btn" onClick={() => startRace()}>
+          <button className="race-btn" onClick={() => startRush()}>
             Puzzle Rush!
           </button>
         </>
@@ -161,11 +175,12 @@ function Game() {
               changePuzzle={(newPuzzle) => setPuzzle(newPuzzle)}
               changeMoveByBoard={(firstMove) => setNewMoveByBoard(firstMove)}
               setIsHomeScreen={(value) => setIsHomeScreen(value)}
+              setIsTimerOver={setIsTimerOver}
             />
           )}
         </>
       )}
-      {diableClick && <div className="disabler"></div>}
+      {disableClick && <div className="disabler"></div>}
       <div
         className="complete-indicator"
         style={{ top: isShowCompleteIndicator ? "5vh" : "-26vh" }}

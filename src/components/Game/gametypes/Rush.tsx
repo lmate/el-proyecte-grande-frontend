@@ -5,13 +5,14 @@ import correctPuzzle from '../../../assets/puzzle-complete-correct.svg';
 import wrongPuzzle from '../../../assets/puzzle-complete-wrong.svg';
 
 
-function Rush({disableClick, changePuzzle, changeMoveByBoard, puzzleResults, getPuzzle, setIsHomeScreen} : {
+function Rush({disableClick, changePuzzle, changeMoveByBoard, puzzleResults, getPuzzle, setIsHomeScreen, setIsTimerOver} : {
     disableClick: () => void;
     changePuzzle: (difficulty:number) => Puzzle;
     changeMoveByBoard: (move : Move) => Move;
     puzzleResults: boolean[];
     getPuzzle: () => Promise<void>;
     setIsHomeScreen: (bool:boolean) => void;
+    setIsTimerOver: (bool:boolean) => void;
 }){
     const START_TIMER:number = 180;
     const MIN_DIFFICULTY:number = 400;
@@ -54,6 +55,7 @@ function Rush({disableClick, changePuzzle, changeMoveByBoard, puzzleResults, get
                 if(currTime === 1){
                     clearInterval(interval);
                     disableClick();
+                    setIsTimerOver(true);
                 }
                 currTime--;
                 setTimer(currTime);
