@@ -26,13 +26,14 @@ import moveSound from '../../assets/sounds/move.mp3';
 import useOurSound from '../../hooks/useOurSound';
 
 
-function Board({ newMoveByBoard, handlePlayerMove, newBoard, moveCount, setMoveCount, hint } : {
+function Board({ newMoveByBoard, handlePlayerMove, newBoard, moveCount, setMoveCount, hint, isTimerOver } : {
   newMoveByBoard : () => void;
   handlePlayerMove: () => void;
   newBoard: () => void;
   moveCount: number;
   setMoveCount: (count:number) => void;
   hint : Cell
+  isTimerOver: () => boolean;
 }) {
 
   const [lastDragStartedAt, setLastDragStartedAt] = useState<Cell | null>(null)
@@ -71,6 +72,30 @@ function Board({ newMoveByBoard, handlePlayerMove, newBoard, moveCount, setMoveC
       setLastMovedToCell(null)
     }
   }, [newBoard])
+
+  useEffect(() => {
+    clearUpDrag()
+  }, [isTimerOver])
+
+  function clearUpDrag(){
+    if (isTimerOver()){
+      setDragStartCell(null)
+      setDraggingPiece(null)
+    }
+  }
+
+  
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      setMousePos({ x: e.clientX, y: e.clientY })
+    };
+
+    window.addEventListener('mousemove', handleMouseMove)
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove)
+    }
+  }, []);
 
 
   function movePiece(move) {
@@ -155,37 +180,20 @@ function Board({ newMoveByBoard, handlePlayerMove, newBoard, moveCount, setMoveC
     return false
   }
 
-  function replaceNumbersWithSpacesInFen(fen) {
-    let result = ''
-    for (const char of fen.split('')) {
-      result += /^\d+$/.test(char) ? ' '.repeat(parseInt(char)) : char
-    }
-    return result
-  }
-
-  function convertFenToBoard(fen) {
-    // r1bk3r/p2pBpNp/n4n2/1p1NP2P/6P1/3P4/P1P1K3/q5b1
-    fen = replaceNumbersWithSpacesInFen(fen)
-    const result = []
-    const pieceRepo = {
-      k: [bK, wK],
-      q: [bQ, wQ],
-      r: [bR, wR],
-      b: [bB, wB],
-      n: [bN, wN],
-      p: [bP, wP]
-    }
-
-    for (const row of fen.split('/')) {
-      result.push([])
-      for (const char of row.split('')) {
-        result.at(-1).push(char === ' ' ? '' : [pieceRepo[char.toLowerCase()][char === char.toUpperCase() ? 1 : 0]])
+  const renderCells = () => {
+    const cells = [];
+    for (let i = 1; i <= 8; i++) {
+      for (let j = 1; j <= 8; j++) {
+        const cellClassName = `${i}${j} cell${(i + j) % 2 === 0 ? ' cell-black' : ''}`;
+        cells.push(<div key={`${i}${j}`} className={cellClassName}></div>);
       }
     }
-    return result
-  }
+    return cells;
+  };
+
 
   function handleDragStart(e) {
+
     const clickedCell = [parseInt(e.target.className.split(" ")[0].charAt(0)) - 1, parseInt(e.target.className.split(" ")[0].charAt(1)) - 1]
     setLastDragStartedAt(Date.now())
     if (isClickedCellHasWhitePiece(clickedCell)) {
@@ -202,18 +210,6 @@ function Board({ newMoveByBoard, handlePlayerMove, newBoard, moveCount, setMoveC
     setDragStartCell(null)
     setDraggingPiece(null)
   }
-
-  useEffect(() => {
-    const handleMouseMove = (e) => {
-      setMousePos({ x: e.clientX, y: e.clientY })
-    };
-
-    window.addEventListener('mousemove', handleMouseMove)
-
-    return () => {
-      window.removeEventListener('mousemove', handleMouseMove)
-    }
-  }, []);
 
   const cellSideLength = document.body.clientHeight * 0.835 / 8
   const boardMarginLeft = ((document.body.clientWidth - document.body.clientHeight * 0.73) / 2)
@@ -272,77 +268,7 @@ function Board({ newMoveByBoard, handlePlayerMove, newBoard, moveCount, setMoveC
         })
       })}
 
-      <div className="11 cell"></div>
-      <div className="12 cell cell-black"></div>
-      <div className="13 cell"></div>
-      <div className="14 cell cell-black"></div>
-      <div className="15 cell"></div>
-      <div className="16 cell cell-black"></div>
-      <div className="17 cell"></div>
-      <div className="18 cell cell-black"></div>
-
-      <div className="21 cell cell-black"></div>
-      <div className="22 cell"></div>
-      <div className="23 cell cell-black"></div>
-      <div className="24 cell"></div>
-      <div className="25 cell cell-black"></div>
-      <div className="26 cell"></div>
-      <div className="27 cell cell-black"></div>
-      <div className="28 cell"></div>
-
-      <div className="31 cell"></div>
-      <div className="32 cell cell-black"></div>
-      <div className="33 cell"></div>
-      <div className="34 cell cell-black"></div>
-      <div className="35 cell"></div>
-      <div className="36 cell cell-black"></div>
-      <div className="37 cell"></div>
-      <div className="38 cell cell-black"></div>
-
-      <div className="41 cell cell-black"></div>
-      <div className="42 cell"></div>
-      <div className="43 cell cell-black"></div>
-      <div className="44 cell"></div>
-      <div className="45 cell cell-black"></div>
-      <div className="46 cell"></div>
-      <div className="47 cell cell-black"></div>
-      <div className="48 cell"></div>
-
-      <div className="51 cell"></div>
-      <div className="52 cell cell-black"></div>
-      <div className="53 cell"></div>
-      <div className="54 cell cell-black"></div>
-      <div className="55 cell"></div>
-      <div className="56 cell cell-black"></div>
-      <div className="57 cell"></div>
-      <div className="58 cell cell-black"></div>
-
-      <div className="61 cell cell-black"></div>
-      <div className="62 cell"></div>
-      <div className="63 cell cell-black"></div>
-      <div className="64 cell"></div>
-      <div className="65 cell cell-black"></div>
-      <div className="66 cell"></div>
-      <div className="67 cell cell-black"></div>
-      <div className="68 cell"></div>
-
-      <div className="71 cell"></div>
-      <div className="72 cell cell-black"></div>
-      <div className="73 cell"></div>
-      <div className="74 cell cell-black"></div>
-      <div className="75 cell"></div>
-      <div className="76 cell cell-black"></div>
-      <div className="77 cell"></div>
-      <div className="78 cell cell-black"></div>
-
-      <div className="81 cell cell-black"></div>
-      <div className="82 cell"></div>
-      <div className="83 cell cell-black"></div>
-      <div className="84 cell"></div>
-      <div className="85 cell cell-black"></div>
-      <div className="86 cell"></div>
-      <div className="87 cell cell-black"></div>
-      <div className="88 cell"></div>
+      {renderCells()}
 
       {[8, 7, 6, 5, 4, 3, 2, 1].map((num, index) => {
         return (
@@ -360,4 +286,37 @@ function Board({ newMoveByBoard, handlePlayerMove, newBoard, moveCount, setMoveC
   )
 }
 
+function convertFenToBoard(fen : string) {
+  fen = replaceNumbersWithSpacesInFen(fen)
+  const result = []
+  const pieceRepo :{ [key: string]: string[] } = {
+    k: [bK, wK],
+    q: [bQ, wQ],
+    r: [bR, wR],
+    b: [bB, wB],
+    n: [bN, wN],
+    p: [bP, wP]
+  }
+
+  for (const row of fen.split('/')) {
+    result.push([])
+    for (const char of row.split('')) {
+      result.at(-1).push(char === ' ' ? '' : [pieceRepo[char.toLowerCase()][char === char.toUpperCase() ? 1 : 0]])
+    }
+  }
+  return result
+}
+
+function replaceNumbersWithSpacesInFen(fen: string) {
+  let result = ''
+  for (const char of fen.split('')) {
+    result += /^\d+$/.test(char) ? ' '.repeat(parseInt(char)) : char
+  }
+  return result
+}
+
+
+
 export default Board
+
+export { convertFenToBoard, replaceNumbersWithSpacesInFen};
