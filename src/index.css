@@ -565,3 +565,7 @@ z-index: 15;
   margin-top: 10vh;
   margin-left: 35vw;
 }
+
+.Race > .extramargin {
+  margin-left: 47vw;
+}

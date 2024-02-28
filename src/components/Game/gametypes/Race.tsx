@@ -13,12 +13,16 @@ export function raceSocketListener(endpoint, body) {
 
 function Race({ user }) {
   const { raceId } = useParams()
+  const { isAlreadyJoined } = useParams()
   const navigate = useNavigate()
 
   const [isPending, setIsPending] = useState(true)
   const [playerList, setPlayerList] = useState([])
   const [loadingCounter, setLoadingCounter] = useState(3)
   const [isJoined, setIsJoined] = useState(false)
+  const [raceStartAt, setRaceStartAt] = useState(null)
+  const [raceLength, setRaceLength] = useState(null)
+  const [isCountdown, setIsCountdown] = useState(false)
 
   useEffect(() => { setInterval(() => { setLoadingCounter((parseInt(Date.now() / 1000) % 3) + 1) }, 1000) }, [])
 
@@ -30,6 +34,17 @@ function Race({ user }) {
 
     subscribeToSocketListener('joinRace', (socketBody) => {
       setPlayerList(playerList => [...playerList, socketBody.username])
+    })
+
+    subscribeToSocketListener('startCountdown', () => {
+      setIsCountdown(true)
+    })
+
+    subscribeToSocketListener('startRace', (socketBody) => {
+      setRaceStartAt(socketBody.startAt)
+      setRaceLength(socketBody.raceLength)
+      setIsPending(false)
+      window.history.replaceState(null, "PuzzleShowdown", `/race/${raceId}`)
     })
 
     async function getPlayersInRace() {
@@ -48,7 +63,7 @@ function Race({ user }) {
     <div className="Race">
       {isPending ? (
         <>
-          <p className="waiting-label">{`Waiting for the creator to start the race${'.'.repeat(loadingCounter)}`}</p>
+          <p className={`waiting-label ${isCountdown && 'extramargin'}`}>{isCountdown ? `Starting${'.'.repeat(loadingCounter)}` : `Waiting for the creator to start the race${'.'.repeat(loadingCounter)}`}</p>
           <div className="playerList">
             {playerList && playerList.map((playerName, index) => (
               <div key={playerName + index} className="playerListElement">
@@ -56,7 +71,7 @@ function Race({ user }) {
               </div>
             ))}
           </div>
-          {!isJoined && (
+          {!isJoined && !isAlreadyJoined && (
             <>
               <br/>
               <input className="join-btn" type="button" value="Join!" onClick={joinRace} />
@@ -64,7 +79,7 @@ function Race({ user }) {
           )}
         </>
       ) : (
-        <p>Here comes the Race</p>
+        <p>{`${raceStartAt} ${raceLength}`}</p>
       )}
     </div>
   )

@@ -53,6 +53,14 @@ function App() {
             </>
           }
         ></Route>
+        <Route
+          path="/race/:raceId/:isAlreadyJoined"
+          element={
+            <>
+              <Race user={user} />
+            </>
+          }
+        ></Route>
       </Routes>
     </>
   );
