@@ -3,23 +3,23 @@ import { useParams } from "react-router-dom";
 import defaultProfilePicture from "../assets/default-profile-picture.webp";
 
 type ProfileData = {
+  id: number;
+  username: string;
+  jwt: string;
   image: string;
-  firstName: string;
-  lastName: string;
-  userName: string;
   rating: number;
 };
 
 function Profile({ user }:{user: ProfileData} ) {
   const [profileData, setProfileData] = useState<ProfileData | null>(null);
 
-  const { userName } = useParams();
+  const { username } = useParams();
 
   useEffect(() => {
     let lock = false;
 
     async function getProfileData() {
-      const response = await fetch(`/api/user/profile/${userName}`);
+      const response = await fetch(`/api/user/profile/${username}`);
       const result = await response.json();
       if (!lock) {
         setProfileData(result);
@@ -33,11 +33,11 @@ function Profile({ user }:{user: ProfileData} ) {
     return () => {
       lock = true;
     }
-  }, [user, userName]);
+  }, [user, username]);
 
   return (
     <div className="Profile">
-      {profileData && user && profileData.userName === user.userName ? (
+      {profileData && user && profileData.username === user.username ? (
         <div className="basedata">
           <img
             className="image"
@@ -47,10 +47,7 @@ function Profile({ user }:{user: ProfileData} ) {
                 : profileData.image
             }
           />
-          {profileData.firstName && profileData.lastName && (
-            <p className="name">{`${profileData.firstName} ${profileData.lastName}`}</p>
-          )}
-          <p className="userName">{profileData.userName}</p>
+          <p className="userName">{profileData.username}</p>
           <p className="rating">{profileData.rating}</p>
         </div>
       ) : (

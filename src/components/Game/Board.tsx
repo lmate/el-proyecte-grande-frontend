@@ -243,7 +243,7 @@ function Board({ newMoveByBoard, handlePlayerMove, newBoard, moveCount, setMoveC
         return row.map((piece, pieceId) => {
 
           const modifierClasses = []
-          if (selectedCell && (rowId === selectedCell[0] && pieceId === selectedCell[1])) {
+          if (selectedCell && (rowId.toString() === selectedCell[0] && pieceId.toString() === selectedCell[1])) {
             modifierClasses.push('selected-piece')
           }
 

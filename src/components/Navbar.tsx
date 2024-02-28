@@ -16,7 +16,7 @@ function Navbar({ user }){
                     </Link>
                 </li>
                 <li>
-                    <Link className="menu-point" to={user && `/profile/${user.userName}`}>
+                    <Link className="menu-point" to={user && `/profile/${user.username}`}>
                         <img src={profileIcon} />
                         <span>Profile</span>
                     </Link>
