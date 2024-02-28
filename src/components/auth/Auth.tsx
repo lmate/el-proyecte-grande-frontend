@@ -2,6 +2,8 @@ import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import defaultProfilePicture from "../../assets/default-profile-picture.webp";
 
+
+
 function Auth({ user, setUser }) {
   const [isShowingModal, setIsShowingModal] = useState(false);
   const [isLogin, setIsLogin] = useState(true);
@@ -12,21 +14,15 @@ function Auth({ user, setUser }) {
 
   const autoLogin = useCallback(
     async function () {
-      const localAuthDetails = localStorage.getItem("auth");
-      if (localAuthDetails) {
+    
         const response = await fetch("/api/user/login", {
-          method: "POST",
+          method: "GET",
+          credentials: "include",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            authenticator: localAuthDetails.split("|")[0],
-            password: localAuthDetails.split("|")[1],
-          }),
         });
-
         if (response.ok) {
           setUser(await response.json());
         }
-      }
     },
     [setUser]
   );
@@ -37,12 +33,12 @@ function Auth({ user, setUser }) {
     }
   }, [user, autoLogin]);
 
-  async function handeLogin() {
+  async function handleLogin() {
     const response = await fetch("/api/user/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        authenticator: emailInput,
+        username: usernameInput,
         password: passwordInput,
       }),
     });
@@ -50,10 +46,6 @@ function Auth({ user, setUser }) {
     if (response.ok) {
       setIsSuccess(1);
       const user = await response.json();
-      localStorage.setItem(
-        "auth",
-        `${emailInput}|${passwordInput}|${user.image}`
-      );
       setUser(user);
       setTimeout(() => {
         setIsSuccess(-1);
@@ -68,12 +60,12 @@ function Auth({ user, setUser }) {
     }
   }
 
-  async function handeSignup() {
+  async function handleSignup() {
     const response = await fetch("/api/user/registration", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        userName: usernameInput,
+        username: usernameInput,
         email: emailInput,
         password: passwordInput,
       }),
@@ -84,7 +76,7 @@ function Auth({ user, setUser }) {
       const user = await response.json();
       localStorage.setItem(
         "auth",
-        `${emailInput}|${passwordInput}|${user.image}`
+        `${usernameInput}|${passwordInput}|${user.image}`
       );
       setUser(user);
       setTimeout(() => {
@@ -131,10 +123,10 @@ function Auth({ user, setUser }) {
                   <input
                     className="auth-input"
                     type="text"
-                    placeholder="Email / Username"
-                    value={emailInput}
+                    placeholder="Username"
+                    value={usernameInput}
                     onInput={(e) => {
-                      setEmailInput(e.target.value);
+                      setUsernameInput(e.target.value);
                     }}
                   />
                   <input
@@ -150,7 +142,7 @@ function Auth({ user, setUser }) {
                     className="auth-button"
                     type="button"
                     value="Login"
-                    onClick={handeLogin}
+                    onClick={handleLogin}
                   />
                   <br />
                   <p
@@ -195,7 +187,7 @@ function Auth({ user, setUser }) {
                     className="auth-button"
                     type="button"
                     value="Sign up"
-                    onClick={handeSignup}
+                    onClick={handleSignup}
                   />
                   <br />
                   <p

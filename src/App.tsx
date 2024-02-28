@@ -10,9 +10,10 @@ import Race from "./components/Game/gametypes/Race.tsx";
 
 import logo from "./assets/logo.svg";
 
+
 function App() {
   const [user, setUser] = useState();
-
+  
   return (
     <>
       <img className="logo" src={logo} />
@@ -29,7 +30,7 @@ function App() {
           }
         ></Route>
         <Route
-          path="/profile/:userName"
+          path="/profile/:username"
           element={
             <>
               <Profile user={user} />
