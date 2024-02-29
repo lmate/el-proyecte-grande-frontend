@@ -176,6 +176,7 @@ function Game() {
               changeMoveByBoard={(firstMove) => setNewMoveByBoard(firstMove)}
               setIsHomeScreen={(value) => setIsHomeScreen(value)}
               setIsTimerOver={setIsTimerOver}
+              isTimerOver={returnTimerValue}
             />
           )}
         </>
