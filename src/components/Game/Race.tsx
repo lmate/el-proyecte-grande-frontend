@@ -24,6 +24,8 @@ function Race({ user }) {
   const [raceStartAt, setRaceStartAt] = useState(null)
   const [raceLength, setRaceLength] = useState(null)
   const [isCountdown, setIsCountdown] = useState(false)
+  const [racePuzzleFirst, setRacePuzzleFirst] = useState(null)
+  const [racePuzzleStep, setRacePuzzleStep] = useState(null)
 
   useEffect(() => { setInterval(() => { setLoadingCounter((parseInt(Date.now() / 1000) % 3) + 1) }, 1000) }, [])
 
@@ -44,6 +46,8 @@ function Race({ user }) {
     subscribeToSocketListener('startRace', (socketBody) => {
       setRaceStartAt(socketBody.startAt)
       setRaceLength(socketBody.raceLength)
+      setRacePuzzleFirst(socketBody.first)
+      setRacePuzzleStep(socketBody.step)
       setIsPending(false)
       window.history.replaceState(null, "PuzzleShowdown", `/race/${raceId}`)
     })
@@ -80,7 +84,7 @@ function Race({ user }) {
           )}
         </>
       ) : (
-        <Game startGamemode={"Race"} />
+        <Game startGamemode={"Race"} racePuzzleFirst={racePuzzleFirst} racePuzzleStep={racePuzzleStep} />
       )}
     </div>
   )
