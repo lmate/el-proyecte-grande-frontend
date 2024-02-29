@@ -7,11 +7,11 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://10.44.11.25:8080',
+        target: 'http://localhost:8080',  //change it to other ip
         changeOrigin: true
       },
       '/ws': {
-        target: 'ws://10.44.11.25:8080',
+        target: 'ws://localhost:8080',  //change it to other ip
         ws: true
       }
     }
