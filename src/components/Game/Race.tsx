@@ -56,7 +56,7 @@ function Race({ user }) {
   }, [])
 
   function joinRace() {
-    sendSocketMessage('joinRace', { raceId: raceId, username: user ? user.userName : 'Anonymus' }, false)
+    sendSocketMessage('joinRace', { raceId: raceId, username: user ? user.username : 'Anonymus' }, false)
     setIsJoined(true)
   }
 

@@ -22,10 +22,10 @@ function CreateRace({ user }) {
   const [playerList, setPlayerList] = useState([])
 
   async function handleCreateRace() {
-    const result = await sendSocketMessage('createRace', { timeframe: selectedTimeframe, username: user ? user.userName : "Anonymus" }, true)
+    const result = await sendSocketMessage('createRace', { timeframe: selectedTimeframe, username: user ? user.username : "Anonymus" }, true)
     setRaceId(result.raceId)
     setSpectateId(result.spectateId)
-    setPlayerList([user ? user.userName : 'Anonymus'])
+    setPlayerList([user ? user.username : 'Anonymus'])
     setIsRaceCreated(true)
   }
 

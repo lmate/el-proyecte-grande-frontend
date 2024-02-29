@@ -167,10 +167,7 @@ function Game({ startGamemode }) {
       {isHomeScreen ? (
         <>
           <div className="blur"></div>
-          <button
-            className="play-btn"
-            onClick={startCasual}
-          >
+          <button className="play-btn" onClick={startCasual}>
             Start playing!
           </button>
           <button className="race-btn" onClick={startRush}>
