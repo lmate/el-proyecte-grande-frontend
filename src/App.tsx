@@ -6,7 +6,7 @@ import Auth from "./components/auth/Auth.tsx";
 import Navbar from "./components/Navbar";
 import Profile from "./components/Profile.tsx";
 import CreateRace from "./components/Game/CreateRace.tsx";
-import Race from "./components/Game/gametypes/Race.tsx";
+import Race from "./components/Game/Race.tsx";
 
 import logo from "./assets/logo.svg";
 
@@ -25,7 +25,7 @@ function App() {
           path="/"
           element={
             <>
-              <Game />
+              <Game startGamemode={""} />
             </>
           }
         ></Route>
@@ -48,6 +48,14 @@ function App() {
         ></Route>
         <Route
           path="/race/:raceId"
+          element={
+            <>
+              <Race user={user} />
+            </>
+          }
+        ></Route>
+        <Route
+          path="/race/:raceId/:isAlreadyJoined"
           element={
             <>
               <Race user={user} />

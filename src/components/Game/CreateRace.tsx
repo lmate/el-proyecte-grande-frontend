@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import sendSocketMessage from "../../SocketComm";
+import { useNavigate } from "react-router-dom";
 import copyIcon from '../../assets/copy-icon.svg';
 
 const socketSubscriberFunctions = {}
@@ -12,6 +13,8 @@ export function createRaceSocketListener(endpoint, body) {
 }
 
 function CreateRace({ user }) {
+  const navigate = useNavigate()
+
   const [isRaceCreated, setIsRaceCreated] = useState(false)
   const [selectedTimeframe, setSelectedTimeframe] = useState('3')
   const [raceId, setRaceId] = useState(null)
@@ -30,7 +33,13 @@ function CreateRace({ user }) {
     subscribeToSocketListener('joinRace', (socketBody) => {
       setPlayerList(playerList => [...playerList, socketBody.username])
     })
+
   }, [])
+
+  function startRace() {
+    sendSocketMessage('startRace', { raceId: raceId }, false)
+    navigate(`/race/${raceId}/joined`)
+  }
 
   return (
     <div className="CreateRace">
@@ -49,7 +58,7 @@ function CreateRace({ user }) {
               </div>
             ))}
           </div>
-          <input className="start-btn" type="button" value="Start!" onClick={() => console.log('Well this does not work yet...')} />
+          <input className="start-btn" type="button" value="Start!" onClick={startRace} />
         </>
       ) : (
         <>
