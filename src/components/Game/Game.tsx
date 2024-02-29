@@ -188,6 +188,7 @@ function Game({ startGamemode }) {
               changeMoveByBoard={(firstMove) => setNewMoveByBoard(firstMove)}
               setIsHomeScreen={(value) => setIsHomeScreen(value)}
               setIsTimerOver={setIsTimerOver}
+              isTimerOver={returnTimerValue}
             />
           )}
           {isRace && (
