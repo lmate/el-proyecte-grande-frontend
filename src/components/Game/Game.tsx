@@ -6,9 +6,10 @@ import Casual from "./gametypes/Casual";
 import Rush from "./gametypes/Rush";
 
 import { Cell, Move, Puzzle } from '../../types/boardtypes';
+import user from "../../types/user.ts";
 
 
-function Game() {
+function Game({user} : {user : user}) {
   const [moveCount, setMoveCount] = useState(0);
   const [puzzle, setPuzzle] = useState<Puzzle | null>(null);
   const [disableClick, setDisableClick] = useState<boolean>(false);
@@ -25,6 +26,13 @@ function Game() {
   const [puzzleResults, setPuzzleResults] = useState<boolean[]>([]);
   const [isTimerOver, setIsTimerOver] = useState<boolean>(false);
 
+  async function uploadSolvedPuzzle() {
+    await fetch(`/api/user/savePuzzle/${user.username}/${puzzle?.id}`,
+        {
+          method: "PUT"
+        });
+  }
+
   async function handlePlayerMove(
     move: Move,
     moveCount: number
@@ -37,7 +45,15 @@ function Game() {
     setDisableClick(false);
 
     if (result === "win") {
-      getRandomPuzzle();
+      console.log("new")
+      if (user){
+        console.log("getNew");
+        await uploadSolvedPuzzle();
+        await getFilteredPuzzle();
+      }
+      else{
+        await getRandomPuzzle();
+      }
       showCompleteIndicator();
       setPuzzleResults((prev) => [...prev, true]);
       return true;
@@ -48,6 +64,15 @@ function Game() {
     setNewMoveByBoard(result as Move);
     return true;
   }
+  async function getFilteredPuzzle(){
+    const response = await fetch(`/api/puzzle/new/${user.username}`);
+    const result = await response.json();
+    console.log(result);
+    setPuzzle(result);
+    setTimeout(() => {
+      setNewMoveByBoard(result.firstMove);
+    }, 1);
+  }
 
   async function getRandomPuzzle() {
     const response = await fetch(`/api/puzzle`);
@@ -55,7 +80,7 @@ function Game() {
     setPuzzle(result);
     setTimeout(() => {
       setNewMoveByBoard(result.firstMove);
-    }, 0);
+    }, 1);
   }
 
   console.log(isTimerOver);
@@ -111,12 +136,16 @@ function Game() {
     setTimeout(() => setIsShowCompleteIndicator(false), 600);
   }
 
-  function startRush() {
+  async function startCasual(){
+    user ? await getFilteredPuzzle() : await getPuzzleByRating();
+  }
+
+  async function startRush() {
     setPuzzleResults([])
     setDisableClick(false);
     setIsRush(true);
     setIsHomeScreen(false);
-    getRandomPuzzle();
+    await getRandomPuzzle();
     setIsTimerOver(false);
   }
 
@@ -149,7 +178,7 @@ function Game() {
           <button
             className="play-btn"
             onClick={() => {
-              getRandomPuzzle(), setIsHomeScreen(false);
+              startCasual(), setIsHomeScreen(false);
             }}
           >
             Start playing!
@@ -162,7 +191,7 @@ function Game() {
         <>
           {!isRush ? (
             <Casual
-              getRandomPuzzle={getRandomPuzzle}
+              getRandomPuzzle={startCasual}
               setDisableClick={(disableValue) => setDisableClick(disableValue)}
               showHint={() => showHint(moveCount)}
               onHintReset={() => setHint(null)}

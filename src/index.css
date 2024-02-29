@@ -396,6 +396,10 @@ body {
   font-weight: 900;
 }
 
+.Profile .profileStatistic{
+  color: var(--white);
+}
+
 .timer{
   color: white;
   margin-left: 40vh;
