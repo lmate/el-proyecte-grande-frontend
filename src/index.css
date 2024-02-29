@@ -240,9 +240,6 @@ body {
   transform: scale(.95);
 }
 
-.Auth > .auth-modal {
-
-}
 
 .Auth > .success {
   border: 3.5px solid green;
