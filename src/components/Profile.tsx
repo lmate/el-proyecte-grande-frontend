@@ -10,8 +10,13 @@ type ProfileData = {
   rating: number;
 };
 
+type UserStat = {
+  solvedPuzzles: number;
+}
+
 function Profile({ user }:{user: ProfileData} ) {
   const [profileData, setProfileData] = useState<ProfileData | null>(null);
+  const [userStatistics, setUserStatistics] = useState<UserStat | null>(null);
 
   const { username } = useParams();
 
@@ -20,9 +25,12 @@ function Profile({ user }:{user: ProfileData} ) {
 
     async function getProfileData() {
       const response = await fetch(`/api/user/profile/${username}`);
+      const responseStat = await fetch(`/api/user/statistics/${username}`);
       const result = await response.json();
+      const statistics = await responseStat.json();
       if (!lock) {
         setProfileData(result);
+        setUserStatistics(statistics);
       }
     }
 
@@ -46,8 +54,17 @@ function Profile({ user }:{user: ProfileData} ) {
                 ? defaultProfilePicture
                 : profileData.image
             }
-          />
+           alt={"Profile picture"}/>
           <p className="userName">{profileData.username}</p>
+          <p className="rating">{profileData.rating}</p>
+          <div className="profileStatistic">
+            {userStatistics ?
+            (
+              <p>Solved puzzles: {userStatistics.solvedPuzzles}</p>
+            ) : (<p>Error</p>)
+            }
+
+          </div>
           <p className="rating">Rating: {profileData.rating}</p>
         </div>
       ) : (

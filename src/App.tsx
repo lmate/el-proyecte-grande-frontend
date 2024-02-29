@@ -10,10 +10,11 @@ import Race from "./components/Game/Race.tsx";
 import LeaderBoard from "./components/LeaderBoard.tsx"
 
 import logo from "./assets/logo.svg";
+import user from "./types/user.ts";
 
 
 function App() {
-  const [user, setUser] = useState();
+  const [user, setUser] = useState<user>();
   return (
     <>
       <img className="logo" src={logo} />
@@ -25,7 +26,7 @@ function App() {
           path="/"
           element={
             <>
-              <Game startGamemode={""} />
+              <Game user={user} startGamemode={""}/>
             </>
           }
         ></Route>
