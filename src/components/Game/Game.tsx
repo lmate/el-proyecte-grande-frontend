@@ -6,6 +6,8 @@ import Casual from "./gametypes/Casual";
 import Rush from "./gametypes/Rush";
 
 import { Cell, Move, Puzzle } from '../../types/boardtypes';
+import user from "../../types/user.ts";
+
 
 
 function Game({ startGamemode, race }) {
@@ -36,6 +38,13 @@ function Game({ startGamemode, race }) {
       startCasual()
     }
   }, [startGamemode])
+
+  async function uploadSolvedPuzzle() {
+    await fetch(`/api/user/savePuzzle/${user.username}/${puzzle?.id}`,
+        {
+          method: "PUT"
+        });
+  }
 
   async function handlePlayerMove(
     move: Move,
@@ -69,6 +78,15 @@ function Game({ startGamemode, race }) {
       setNewMoveByBoard(result as Move);
       return true;
     }
+  }
+  async function getFilteredPuzzle(){
+    const response = await fetch(`/api/puzzle/new/${user.username}`);
+    const result = await response.json();
+    console.log(result);
+    setPuzzle(result);
+    setTimeout(() => {
+      setNewMoveByBoard(result.firstMove);
+    }, 0);
   }
 
   // Get new puzzle and alert socket when puzzle is done in race
@@ -148,18 +166,18 @@ function Game({ startGamemode, race }) {
     setTimeout(() => setIsShowCompleteIndicator(false), 600);
   }
 
-  function startRush() {
+  async function startRush() {
     setPuzzleResults([])
     setDisableClick(false);
     setIsRush(true);
     setIsHomeScreen(false);
-    getRandomPuzzle();
+    await getRandomPuzzle();
     setIsTimerOver(false);
   }
 
-  function startCasual() {
+  async function startCasual() {
     setIsCasual(true)
-    getRandomPuzzle();
+      user ? await getFilteredPuzzle() : await getPuzzleByRating();
     setIsHomeScreen(false);
   }
 
@@ -213,6 +231,7 @@ function Game({ startGamemode, race }) {
               changeMoveByBoard={(firstMove) => setNewMoveByBoard(firstMove)}
               setIsHomeScreen={(value) => setIsHomeScreen(value)}
               setIsTimerOver={setIsTimerOver}
+              isTimerOver={returnTimerValue}
             />
           )}
           {isRace && (

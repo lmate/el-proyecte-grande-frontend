@@ -7,13 +7,14 @@ import Navbar from "./components/Navbar";
 import Profile from "./components/Profile.tsx";
 import CreateRace from "./components/Game/CreateRace.tsx";
 import Race from "./components/Game/Race.tsx";
+import LeaderBoard from "./components/LeaderBoard.tsx"
 
 import logo from "./assets/logo.svg";
+import user from "./types/user.ts";
 
 
 function App() {
-  const [user, setUser] = useState();
-  
+  const [user, setUser] = useState<user>();
   return (
     <>
       <img className="logo" src={logo} />
@@ -37,7 +38,7 @@ function App() {
             </>
           }
         ></Route>
-        <Route path="/leaderboard" element={<>{/* LEADERBOARD */}</>}></Route>
+        <Route path="/leaderboard" element={<LeaderBoard currentUser={user}/>}></Route>
         <Route
           path="/head2head"
           element={
