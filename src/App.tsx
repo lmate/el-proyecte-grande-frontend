@@ -7,6 +7,7 @@ import Navbar from "./components/Navbar";
 import Profile from "./components/Profile.tsx";
 import CreateRace from "./components/Game/CreateRace.tsx";
 import Race from "./components/Game/gametypes/Race.tsx";
+import LeaderBoard from "./components/LeaderBoard.tsx"
 
 import logo from "./assets/logo.svg";
 
@@ -37,7 +38,7 @@ function App() {
             </>
           }
         ></Route>
-        <Route path="/leaderboard" element={<>{/* LEADERBOARD */}</>}></Route>
+        <Route path="/leaderboard" element={<LeaderBoard />}></Route>
         <Route
           path="/head2head"
           element={
