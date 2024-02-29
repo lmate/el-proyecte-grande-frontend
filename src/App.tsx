@@ -14,7 +14,6 @@ import logo from "./assets/logo.svg";
 
 function App() {
   const [user, setUser] = useState();
-  
   return (
     <>
       <img className="logo" src={logo} />
@@ -38,7 +37,7 @@ function App() {
             </>
           }
         ></Route>
-        <Route path="/leaderboard" element={<LeaderBoard />}></Route>
+        <Route path="/leaderboard" element={<LeaderBoard currentUser={user}/>}></Route>
         <Route
           path="/head2head"
           element={

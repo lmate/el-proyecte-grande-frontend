@@ -602,3 +602,7 @@ z-index: 15;
   width: 72vh;
   text-align: center;
 }
+
+.place-in-leaderboard{
+  background-color: rgba(255, 255, 0, 0.664);
+}

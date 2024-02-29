@@ -1,7 +1,8 @@
 import LeaderboardUser from "../../types/leaderboardUserDial";
+import User from "../../types/user";
 import LeaderBoardRow from "./LeaderBoardRow";
 
-function LeaderBoardTable({users}: {users: LeaderboardUser[]}){
+function LeaderBoardTable({users, currentUser}: {users: LeaderboardUser[], currentUser: User}){
 
     return(
         <table className="leader-board-table">
@@ -11,7 +12,7 @@ function LeaderBoardTable({users}: {users: LeaderboardUser[]}){
                 <th>Rating</th>
             </tr>
 
-            {users.map((user, i) => <LeaderBoardRow key={user.username} user={user} rank={i + 1}/>) }
+            {users.map((user, i) => <LeaderBoardRow key={user.username} user={user} currentUser={currentUser} rank={i + 1}/>) }
             
         </table>
     )

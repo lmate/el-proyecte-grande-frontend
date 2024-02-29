@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import LeaderBoardTable from "./leaderboard/LeaderBoardTable";
+import User from "../types/user";
 
-function LeaderBoard(){
+function LeaderBoard({currentUser}: {currentUser: User | undefined}){
     const [leaderboard, setLeaderboard] = useState([]);
 
     useEffect(() => {
@@ -19,7 +20,7 @@ function LeaderBoard(){
     return(
         <div className="leaderboard-container">
             <h1>LeaderBoard</h1>
-            <LeaderBoardTable users={leaderboard}/>
+            <LeaderBoardTable users={leaderboard} currentUser={currentUser}/>
         </div>
     )
 }
