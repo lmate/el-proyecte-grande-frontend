@@ -4,13 +4,13 @@ import Board from "./Board";
 import checkIcon from "../../assets/check-icon.svg";
 import Casual from "./gametypes/Casual";
 import Rush from "./gametypes/Rush";
-import Race from "./gametypes/Race";
 
 import { Cell, Move, Puzzle } from '../../types/boardtypes';
 import user from "../../types/user.ts";
 
 
-function Game({user} : {user : user}, {startGamemode}) {
+
+function Game({ startGamemode, race }) {
   const [moveCount, setMoveCount] = useState(0);
   const [puzzle, setPuzzle] = useState<Puzzle | null>(null);
   const [disableClick, setDisableClick] = useState<boolean>(false);
@@ -51,29 +51,33 @@ function Game({user} : {user : user}, {startGamemode}) {
     moveCount: number
   ): Promise<boolean> {
     setDisableClick(true);
-    const response = await fetch(
-      `/api/puzzle/valid/${puzzle!.id}/${move}/${moveCount}`
-    );
+    const response = await fetch(`/api/puzzle/valid/${puzzle!.id}/${move}/${moveCount}`);
     const result = await response.text();
     setDisableClick(false);
 
-    if (result === "win") {
-      if (user){
-        await uploadSolvedPuzzle();
-        await getFilteredPuzzle();
+    if (isRace) {
+      if (result === "win") {
+        showCompleteIndicator();
+        setPuzzleResults((prev) => [...prev, true]);
+      } else if (!result) {
+        setPuzzleResults((prev) => [...prev, false]);
+      } else {
+        setNewMoveByBoard(result as Move);
       }
-      else{
-        await getRandomPuzzle();
-      }
-      showCompleteIndicator();
-      setPuzzleResults((prev) => [...prev, true]);
       return true;
-    } else if (!result) {
-      setPuzzleResults((prev) => [...prev, false]);
-      return false;
+    } else {
+      if (result === "win") {
+        getRandomPuzzle();
+        showCompleteIndicator();
+        setPuzzleResults((prev) => [...prev, true]);
+        return true;
+      } else if (!result) {
+        setPuzzleResults((prev) => [...prev, false]);
+        return false;
+      }
+      setNewMoveByBoard(result as Move);
+      return true;
     }
-    setNewMoveByBoard(result as Move);
-    return true;
   }
   async function getFilteredPuzzle(){
     const response = await fetch(`/api/puzzle/new/${user.username}`);
@@ -85,8 +89,25 @@ function Game({user} : {user : user}, {startGamemode}) {
     }, 0);
   }
 
+  // Get new puzzle and alert socket when puzzle is done in race
+  useEffect(() => {
+    if (isRace) {
+      getNextPuzzleForRace()
+      race.handlePuzzleDone(puzzleResults.at(-1))
+    }
+  }, [puzzleResults])
+
   async function getRandomPuzzle() {
     const response = await fetch(`/api/puzzle`);
+    const result = await response.json();
+    setPuzzle(result);
+    setTimeout(() => {
+      setNewMoveByBoard(result.firstMove);
+    }, 0);
+  }
+
+  async function getNextPuzzleForRace() {
+    const response = await fetch(`/api/puzzle/next/${race.racePuzzleFirst}/${race.racePuzzleStep}/${puzzleResults.length + 1}`);
     const result = await response.json();
     setPuzzle(result);
     setTimeout(() => {
@@ -120,6 +141,7 @@ function Game({user} : {user : user}, {startGamemode}) {
     const hint = result as Cell;
     setHint(convertHint(hint));
   }
+
   function convertHint(hint: Cell): Cell {
     const letterToNumMap: { [key: string]: number } = {
       a: 0,
@@ -162,6 +184,7 @@ function Game({user} : {user : user}, {startGamemode}) {
   function startRace() {
     setIsRace(true)
     setIsHomeScreen(false)
+    getNextPuzzleForRace()
   }
 
   /*function changeMaxMinDifficulty(max: number, min: number) {
@@ -190,12 +213,7 @@ function Game({user} : {user : user}, {startGamemode}) {
       {isHomeScreen ? (
         <>
           <div className="blur"></div>
-          <button
-            className="play-btn"
-            onClick={() => {
-              startCasual(), setIsHomeScreen(false);
-            }}
-          >
+          <button className="play-btn" onClick={startCasual}>
             Start playing!
           </button>
           <button className="race-btn" onClick={startRush}>
@@ -217,7 +235,7 @@ function Game({user} : {user : user}, {startGamemode}) {
             />
           )}
           {isRace && (
-            <Race />
+            <></>
           )}
           {isCasual && (
             <Casual
