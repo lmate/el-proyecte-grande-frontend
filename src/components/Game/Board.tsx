@@ -98,7 +98,7 @@ function Board({ newMoveByBoard, handlePlayerMove, newBoard, moveCount, setMoveC
   }, []);
 
 
-  function movePiece(move) {
+  function movePiece(move: Move) {
     const newBoard = structuredClone(board) 
     newBoard[move.to[0]][move.to[1]] = newBoard[move.from[0]][move.from[1]]
     newBoard[move.from[0]][move.from[1]] = ''

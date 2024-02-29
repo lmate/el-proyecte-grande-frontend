@@ -1,15 +1,16 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import Board from "./Board";
 import checkIcon from "../../assets/check-icon.svg";
 import Casual from "./gametypes/Casual";
 import Rush from "./gametypes/Rush";
+import Race from "./gametypes/Race";
 
 import { Cell, Move, Puzzle } from '../../types/boardtypes';
 import user from "../../types/user.ts";
 
 
-function Game({user} : {user : user}) {
+function Game({user} : {user : user}, {startGamemode}) {
   const [moveCount, setMoveCount] = useState(0);
   const [puzzle, setPuzzle] = useState<Puzzle | null>(null);
   const [disableClick, setDisableClick] = useState<boolean>(false);
@@ -21,10 +22,22 @@ function Game({user} : {user : user}) {
   const [newMoveByBoard, setNewMoveByBoard] = useState<Move | null>(null);
 
   const [isRush, setIsRush] = useState<boolean>(false);
+  const [isRace, setIsRace] = useState<boolean>(false);
+  const [isCasual, setIsCasual] = useState<boolean>(false);
   const [currentMaxDifficulty, setCurrentMaxDifficulty] = useState<number>(550);
   const [currentMinDifficulty, setCurrentMinDifficulty] = useState<number>(399);
   const [puzzleResults, setPuzzleResults] = useState<boolean[]>([]);
   const [isTimerOver, setIsTimerOver] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (startGamemode == 'Race') {
+      startRace()
+    } else if (startGamemode == 'Rush') {
+      startRush()
+    } else if (startGamemode == 'Casual') {
+      startCasual()
+    }
+  }, [startGamemode])
 
   async function uploadSolvedPuzzle() {
     await fetch(`/api/user/savePuzzle/${user.username}/${puzzle?.id}`,
@@ -45,9 +58,7 @@ function Game({user} : {user : user}) {
     setDisableClick(false);
 
     if (result === "win") {
-      console.log("new")
       if (user){
-        console.log("getNew");
         await uploadSolvedPuzzle();
         await getFilteredPuzzle();
       }
@@ -71,7 +82,7 @@ function Game({user} : {user : user}) {
     setPuzzle(result);
     setTimeout(() => {
       setNewMoveByBoard(result.firstMove);
-    }, 1);
+    }, 0);
   }
 
   async function getRandomPuzzle() {
@@ -80,11 +91,8 @@ function Game({user} : {user : user}) {
     setPuzzle(result);
     setTimeout(() => {
       setNewMoveByBoard(result.firstMove);
-    }, 1);
+    }, 0);
   }
-
-  console.log(isTimerOver);
-  
 
   async function getPuzzleByRating() {
     const sentRequestAt = Date.now();
@@ -136,10 +144,6 @@ function Game({user} : {user : user}) {
     setTimeout(() => setIsShowCompleteIndicator(false), 600);
   }
 
-  async function startCasual(){
-    user ? await getFilteredPuzzle() : await getPuzzleByRating();
-  }
-
   async function startRush() {
     setPuzzleResults([])
     setDisableClick(false);
@@ -149,14 +153,25 @@ function Game({user} : {user : user}) {
     setIsTimerOver(false);
   }
 
+  async function startCasual() {
+    setIsCasual(true)
+      user ? await getFilteredPuzzle() : await getPuzzleByRating();
+    setIsHomeScreen(false);
+  }
+
+  function startRace() {
+    setIsRace(true)
+    setIsHomeScreen(false)
+  }
+
   /*function changeMaxMinDifficulty(max: number, min: number) {
     setCurrentMaxDifficulty(max);
     setCurrentMinDifficulty(min);
     getRandomPuzzle();
   }*/
 
-  
-  function returnTimerValue(){
+
+  function returnTimerValue() {
     return isTimerOver;
   }
 
@@ -183,20 +198,13 @@ function Game({user} : {user : user}) {
           >
             Start playing!
           </button>
-          <button className="race-btn" onClick={() => startRush()}>
+          <button className="race-btn" onClick={startRush}>
             Puzzle Rush!
           </button>
         </>
       ) : (
         <>
-          {!isRush ? (
-            <Casual
-              getRandomPuzzle={startCasual}
-              setDisableClick={(disableValue) => setDisableClick(disableValue)}
-              showHint={() => showHint(moveCount)}
-              onHintReset={() => setHint(null)}
-            />
-          ) : (
+          {isRush && (
             <Rush
               disableClick={() => setDisableClick(true)}
               getPuzzle={getPuzzleByRating}
@@ -205,6 +213,18 @@ function Game({user} : {user : user}) {
               changeMoveByBoard={(firstMove) => setNewMoveByBoard(firstMove)}
               setIsHomeScreen={(value) => setIsHomeScreen(value)}
               setIsTimerOver={setIsTimerOver}
+              isTimerOver={returnTimerValue}
+            />
+          )}
+          {isRace && (
+            <Race />
+          )}
+          {isCasual && (
+            <Casual
+              getRandomPuzzle={getRandomPuzzle}
+              setDisableClick={(disableValue) => setDisableClick(disableValue)}
+              showHint={() => showHint(moveCount)}
+              onHintReset={() => setHint(null)}
             />
           )}
         </>

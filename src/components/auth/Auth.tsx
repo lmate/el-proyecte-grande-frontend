@@ -96,7 +96,7 @@ function Auth({ user, setUser }) {
     <div className="Auth">
       {user ? (
         <Link className="router" to={`/profile/${user.username}`}>
-          <p className="user-name">{user.userName}</p>
+          <p className="user-name">{user.username}</p>
           <img
             className="user-img"
             src={user.image == "default" ? defaultProfilePicture : user.image}

@@ -65,9 +65,10 @@ function Profile({ user }:{user: ProfileData} ) {
             }
 
           </div>
+          <p className="rating">Rating: {profileData.rating}</p>
         </div>
       ) : (
-          <p>Different user</p>
+        <p>Different user</p>
       )}
     </div>
   );
