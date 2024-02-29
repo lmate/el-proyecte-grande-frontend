@@ -25,7 +25,7 @@ function App() {
           path="/"
           element={
             <>
-              <Game startGamemode={""} racePuzzleFirst={0} racePuzzleStep={0} />
+              <Game startGamemode={""} race={{}} />
             </>
           }
         ></Route>

@@ -82,7 +82,7 @@ function Rush({disableClick, changePuzzle, changeMoveByBoard, puzzleResults, get
                     puzzleResults.map((result: boolean, index:number ) => (
                     <img key={index} src={result ? correctPuzzle : wrongPuzzle} />))
                 }
-                </div>
+            </div>
 
         {timer < 1 && (
         <>

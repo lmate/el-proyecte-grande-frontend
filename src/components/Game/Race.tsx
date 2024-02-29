@@ -3,6 +3,9 @@ import { useParams, useNavigate } from "react-router-dom";
 import sendSocketMessage from "../../SocketComm";
 import Game from "./Game";
 
+import correctPuzzle from '../../assets/puzzle-complete-correct.svg';
+import wrongPuzzle from '../../assets/puzzle-complete-wrong.svg';
+
 const socketSubscriberFunctions = {}
 function subscribeToSocketListener(endpoint, func) {
   socketSubscriberFunctions[endpoint] = func;
@@ -27,6 +30,8 @@ function Race({ user }) {
   const [racePuzzleFirst, setRacePuzzleFirst] = useState(null)
   const [racePuzzleStep, setRacePuzzleStep] = useState(null)
 
+  const [players, setPlayers] = useState()
+
   useEffect(() => { setInterval(() => { setLoadingCounter((parseInt(Date.now() / 1000) % 3) + 1) }, 1000) }, [])
 
   useEffect(() => {
@@ -36,7 +41,7 @@ function Race({ user }) {
     })
 
     subscribeToSocketListener('joinRace', (socketBody) => {
-      setPlayerList(playerList => [...playerList, socketBody.username])
+      setPlayerList(playerList => [...playerList, [socketBody.username, socketBody.userId]])
     })
 
     subscribeToSocketListener('startCountdown', () => {
@@ -49,6 +54,18 @@ function Race({ user }) {
       setRacePuzzleFirst(socketBody.first)
       setRacePuzzleStep(socketBody.step)
       setIsPending(false)
+
+      async function getAllPlayers() {
+        const result = await sendSocketMessage('getPlayersInRace', { raceId: raceId }, true)
+        const newPlayers = {}
+        console.log(result)
+        for (let i = 0; i < result.players.length; i++) {
+          newPlayers[result.players[i][1]] = [result.players[i][0], []];
+        }
+        setPlayers(newPlayers)
+      }
+      getAllPlayers()
+
       window.history.replaceState(null, "PuzzleShowdown", `/race/${raceId}`)
     })
 
@@ -56,12 +73,17 @@ function Race({ user }) {
       const result = await sendSocketMessage('getPlayersInRace', { raceId: raceId }, true)
       setPlayerList(playerList.concat(result.players))
     }
-    getPlayersInRace()
+    setTimeout(getPlayersInRace, 2000)
   }, [])
 
   function joinRace() {
-    sendSocketMessage('joinRace', { raceId: raceId, username: user ? user.username : 'Anonymus' }, false)
+    console.log(user.userId)
+    sendSocketMessage('joinRace', { raceId: raceId, username: user ? user.username : 'Anonymus', userId: user ? user.userId.toString() : Date.now().toString() }, false)
     setIsJoined(true)
+  }
+
+  function handlePuzzleDone(success) {
+    console.log(success)
   }
 
   return (
@@ -70,9 +92,9 @@ function Race({ user }) {
         <>
           <p className={`waiting-label ${isCountdown && 'extramargin'}`}>{isCountdown ? `Starting${'.'.repeat(loadingCounter)}` : `Waiting for the creator to start the race${'.'.repeat(loadingCounter)}`}</p>
           <div className="playerList">
-            {playerList && playerList.map((playerName, index) => (
-              <div key={playerName + index} className="playerListElement">
-                <p className="playerName">{playerName}</p>
+            {playerList && playerList.map((player, index) => (
+              <div key={player[0] + index} className="playerListElement">
+                <p className="playerName">{player[0]}</p>
               </div>
             ))}
           </div>
@@ -84,7 +106,23 @@ function Race({ user }) {
           )}
         </>
       ) : (
-        <Game startGamemode={"Race"} racePuzzleFirst={racePuzzleFirst} racePuzzleStep={racePuzzleStep} />
+        <>
+          <Game startGamemode={"Race"} race={{
+            racePuzzleFirst,
+            racePuzzleStep,
+            handlePuzzleDone: (success) => handlePuzzleDone(success)
+          }} />
+          <div className="player-results">
+            {players && Object.keys(players).map(key => (
+              <>
+                <p key={key} className="user-name">{players[key][0]}</p>
+                {players[key][1].map((result: boolean, index: number) => (
+                  <img key={index} src={result ? correctPuzzle : wrongPuzzle} />
+                ))}
+              </>
+            ))}
+          </div>
+        </>
       )}
     </div>
   )

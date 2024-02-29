@@ -4,12 +4,11 @@ import Board from "./Board";
 import checkIcon from "../../assets/check-icon.svg";
 import Casual from "./gametypes/Casual";
 import Rush from "./gametypes/Rush";
-import Race from "./gametypes/Race";
 
 import { Cell, Move, Puzzle } from '../../types/boardtypes';
 
 
-function Game({ startGamemode, racePuzzleFirst, racePuzzleStep }) {
+function Game({ startGamemode, race }) {
   const [moveCount, setMoveCount] = useState(0);
   const [puzzle, setPuzzle] = useState<Puzzle | null>(null);
   const [disableClick, setDisableClick] = useState<boolean>(false);
@@ -76,6 +75,7 @@ function Game({ startGamemode, racePuzzleFirst, racePuzzleStep }) {
   useEffect(() => {
     if (isRace) {
       getNextPuzzleForRace()
+      race.handlePuzzleDone(puzzleResults.at(-1))
     }
   }, [puzzleResults])
 
@@ -89,7 +89,7 @@ function Game({ startGamemode, racePuzzleFirst, racePuzzleStep }) {
   }
 
   async function getNextPuzzleForRace() {
-    const response = await fetch(`/api/puzzle/next/${racePuzzleFirst}/${racePuzzleStep}/${puzzleResults.length + 1}`);
+    const response = await fetch(`/api/puzzle/next/${race.racePuzzleFirst}/${race.racePuzzleStep}/${puzzleResults.length + 1}`);
     const result = await response.json();
     setPuzzle(result);
     setTimeout(() => {
@@ -216,7 +216,7 @@ function Game({ startGamemode, racePuzzleFirst, racePuzzleStep }) {
             />
           )}
           {isRace && (
-            <Race />
+            <></>
           )}
           {isCasual && (
             <Casual
