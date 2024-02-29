@@ -591,7 +591,8 @@ z-index: 15;
 .RacePage > .player-results > .user-name {
   color: var(--white);
   font-size: 2vh;
-  
+}
+
 .leaderboard-container{
   height: 72vh;
   min-width: 72vh;

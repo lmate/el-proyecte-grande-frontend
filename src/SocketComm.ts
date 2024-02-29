@@ -1,7 +1,7 @@
 import {raceSocketListener} from './components/Game/Race'
 import {createRaceSocketListener} from '../src/components/Game/CreateRace'
 
-const socket = new WebSocket("ws://10.44.11.25:8080/ws");
+const socket = new WebSocket("ws://localhost:8080/ws");   //change it to other ip
 
 const responses: { [key: string]: (val: unknown) => void } = {};
 

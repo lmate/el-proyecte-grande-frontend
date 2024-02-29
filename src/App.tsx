@@ -26,7 +26,7 @@ function App() {
           path="/"
           element={
             <>
-              <Game startGamemode={""} race={{}} />
+              <Game user={user} startGamemode={""}/>
             </>
           }
         ></Route>

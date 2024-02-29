@@ -6,7 +6,8 @@ import Casual from "./gametypes/Casual";
 import Rush from "./gametypes/Rush";
 
 import { Cell, Move, Puzzle } from '../../types/boardtypes';
-import user from "../../types/user.ts";
+//import user from "../../types/user.ts";
+import Race from "./Race.tsx";
 
 
 
@@ -14,8 +15,7 @@ function Game({ startGamemode, race }) {
   const [moveCount, setMoveCount] = useState(0);
   const [puzzle, setPuzzle] = useState<Puzzle | null>(null);
   const [disableClick, setDisableClick] = useState<boolean>(false);
-  const [isShowCompleteIndicator, setIsShowCompleteIndicator] =
-    useState<boolean>(false);
+  const [isShowCompleteIndicator, setIsShowCompleteIndicator] = useState<boolean>(false);
   const [isHomeScreen, setIsHomeScreen] = useState<boolean>(true);
   const [hint, setHint] = useState<Cell | null>(null);
 

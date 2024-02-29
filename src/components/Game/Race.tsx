@@ -77,7 +77,7 @@ function Race({ user }) {
   }, [])
 
   function joinRace() {
-    console.log(user.userId)
+    //console.log(user.userId)
     sendSocketMessage('joinRace', { raceId: raceId, username: user ? user.username : 'Anonymus', userId: user ? user.userId.toString() : Date.now().toString() }, false)
     setIsJoined(true)
   }
@@ -107,6 +107,7 @@ function Race({ user }) {
         </>
       ) : (
         <>
+          {/*<Game startGamemode={"Race"} />*/}
           <Game startGamemode={"Race"} race={{
             racePuzzleFirst,
             racePuzzleStep,
