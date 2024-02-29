@@ -565,3 +565,40 @@ z-index: 15;
   margin-top: 10vh;
   margin-left: 35vw;
 }
+
+.leaderboard-container{
+  height: 72vh;
+  min-width: 72vh;
+  position: relative;
+  margin-top: 5.5vh;
+  margin-left: calc((100vw - 72vh) / 2);
+  color: white;
+}
+
+.leader-board-table{
+  width: 72vh;
+  height: 100%;
+}
+
+.user-img-leaderboard{
+  border-radius: 2vw;
+  width: 9vh;
+}
+
+.user-dial{
+  display: flex;
+  justify-content: space-around;
+}
+
+.leader-board-row{
+  text-align: center;
+}
+
+.leader-board-title th{
+  border-bottom: 1px solid white;
+}
+
+.leaderboard-container > h1{
+  width: 72vh;
+  text-align: center;
+}

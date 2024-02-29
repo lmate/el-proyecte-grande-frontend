@@ -4,9 +4,9 @@ import LeaderboardUser from '../../types/leaderboardUserDial';
 function UserDial({user}:{user: LeaderboardUser}){
 
     return(
-        <div className="user">
+        <div className="user-dial">
+            <img className="user-img-leaderboard" src={user.image == "default" ? defaultProfilePicture : user.image}/>
             <p className="user-name">{user.username}</p>
-            <img className="user-img" src={user.image == "default" ? defaultProfilePicture : user.image}/>
         </div>
     )
 }
