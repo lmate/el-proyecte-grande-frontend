@@ -1,4 +1,4 @@
-import {raceSocketListener} from '../src/components/Game/gametypes/Race'
+import {raceSocketListener} from './components/Game/Race'
 import {createRaceSocketListener} from '../src/components/Game/CreateRace'
 
 const socket = new WebSocket("ws://localhost:5173/ws");

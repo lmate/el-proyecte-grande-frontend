@@ -240,9 +240,6 @@ body {
   transform: scale(.95);
 }
 
-.Auth > .auth-modal {
-
-}
 
 .Auth > .success {
   border: 3.5px solid green;
@@ -509,13 +506,13 @@ z-index: 15;
 }
 
 .CreateRace > .playerList,
-.Race > .playerList {
+.RacePage > .playerList {
   margin-top: 10vh;
   margin-left: 20vw;
 }
 
 .CreateRace > .playerList > .playerListElement,
-.Race > .playerList > .playerListElement {
+.RacePage > .playerList > .playerListElement {
   width: 20vh;
   height: 20vh;
   background-color: var(--accent);
@@ -525,7 +522,7 @@ z-index: 15;
 }
 
 .CreateRace > .playerList > .playerListElement > .playerName,
-.Race > .playerList > .playerListElement > .playerName {
+.RacePage > .playerList > .playerListElement > .playerName {
   width: 20vh;
   padding-top: 5vh;
   color: var(--white);
@@ -534,7 +531,7 @@ z-index: 15;
 }
 
 .CreateRace > .start-btn,
-.Race > .join-btn {
+.RacePage > .join-btn {
   position: absolute;
   width: 15vw;
   left: calc((100vw - 15vw) / 2);
@@ -554,14 +551,66 @@ z-index: 15;
 }
 
 .CreateRace > .start-btn:active,
-.Race > .join-btn:active {
+.RacePage > .join-btn:active {
   transform: scale(.97);
 }
 
-.Race > .waiting-label {
+.RacePage > .waiting-label {
   color: var(--white);
   font-size: 3vh;
   font-weight: 600;
   margin-top: 10vh;
   margin-left: 35vw;
+}
+
+.RacePage > .extramargin {
+  margin-left: 47vw;
+}
+
+.RacePage > .board-container {
+  position: relative;
+  height: 72vh;
+  margin-top: 5.5vh;
+  margin-left: calc((100vw - 72vh) / 2);
+}
+
+.leaderboard-container{
+  height: 72vh;
+  min-width: 72vh;
+  position: relative;
+  margin-top: 5.5vh;
+  margin-left: calc((100vw - 72vh) / 2);
+  color: white;
+}
+
+.leader-board-table{
+  width: 72vh;
+  height: 100%;
+}
+
+.user-img-leaderboard{
+  border-radius: 2vw;
+  width: 9vh;
+}
+
+.user-dial{
+  display: flex;
+  justify-content: space-around;
+}
+
+.leader-board-row{
+  text-align: center;
+}
+
+.leader-board-title th{
+  border-bottom: 1px solid white;
+}
+
+.leaderboard-container > h1{
+  width: 72vh;
+  text-align: center;
+}
+
+.place-in-leaderboard{
+  background-color: rgba(255, 255, 0, 0.664);
 }
