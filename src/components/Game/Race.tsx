@@ -5,6 +5,8 @@ import Game from "./Game";
 
 import correctPuzzle from '../../assets/puzzle-complete-correct.svg';
 import wrongPuzzle from '../../assets/puzzle-complete-wrong.svg';
+import emptySvg from '../../assets/empty.svg';
+import Timer from "./Timer";
 
 const socketSubscriberFunctions = {}
 function subscribeToSocketListener(endpoint, func) {
@@ -29,6 +31,9 @@ function Race({ user }) {
   const [isCountdown, setIsCountdown] = useState(false)
   const [racePuzzleFirst, setRacePuzzleFirst] = useState(null)
   const [racePuzzleStep, setRacePuzzleStep] = useState(null)
+  const [userId, setUserId] = useState(user ? user.userId.toString() : Date.now().toString())
+  const [updatePlayersWithCompleteRacePuzzleUpdater, setUpdatePlayersWithCompleteRacePuzzleUpdater] = useState()
+  const [isTimerOver, setIsTimerOver] = useState(false)
 
   const [players, setPlayers] = useState()
 
@@ -48,6 +53,10 @@ function Race({ user }) {
       setIsCountdown(true)
     })
 
+    subscribeToSocketListener('completeRacePuzzle', (socketBody) => {
+      setUpdatePlayersWithCompleteRacePuzzleUpdater([socketBody.userId, socketBody.success == 'true' ? true : false])
+    })
+
     subscribeToSocketListener('startRace', (socketBody) => {
       setRaceStartAt(socketBody.startAt)
       setRaceLength(socketBody.raceLength)
@@ -58,7 +67,6 @@ function Race({ user }) {
       async function getAllPlayers() {
         const result = await sendSocketMessage('getPlayersInRace', { raceId: raceId }, true)
         const newPlayers = {}
-        console.log(result)
         for (let i = 0; i < result.players.length; i++) {
           newPlayers[result.players[i][1]] = [result.players[i][0], []];
         }
@@ -77,14 +85,30 @@ function Race({ user }) {
   }, [])
 
   function joinRace() {
-    //console.log(user.userId)
-    sendSocketMessage('joinRace', { raceId: raceId, username: user ? user.username : 'Anonymus', userId: user ? user.userId.toString() : Date.now().toString() }, false)
+    sendSocketMessage('joinRace', { raceId: raceId, username: user ? user.username : 'Anonymous', userId: userId }, false)
     setIsJoined(true)
   }
 
   function handlePuzzleDone(success) {
-    console.log(success)
+    sendSocketMessage('completeRacePuzzle', { raceId: raceId, userId: userId, success: success.toString() }, false)
   }
+
+  useEffect(() => {
+    if (updatePlayersWithCompleteRacePuzzleUpdater) {
+      setPlayers(CalculateNewPlayers(updatePlayersWithCompleteRacePuzzleUpdater[0], updatePlayersWithCompleteRacePuzzleUpdater[1]))
+    }
+    function CalculateNewPlayers(userId, success) {
+      let newPlayers = structuredClone(players)
+      newPlayers[userId][1].push(success)
+      return newPlayers
+    }
+  }, [updatePlayersWithCompleteRacePuzzleUpdater])
+
+  useEffect(() => {
+    if (isTimerOver) {
+      console.log('Time is up')
+    }
+  }, [isTimerOver])
 
   return (
     <div className="RacePage">
@@ -93,7 +117,7 @@ function Race({ user }) {
           <p className={`waiting-label ${isCountdown && 'extramargin'}`}>{isCountdown ? `Starting${'.'.repeat(loadingCounter)}` : `Waiting for the creator to start the race${'.'.repeat(loadingCounter)}`}</p>
           <div className="playerList">
             {playerList && playerList.map((player, index) => (
-              <div key={player[0] + index} className="playerListElement">
+              <div key={`player${player[0]}${index}`} className="playerListElement">
                 <p className="playerName">{player[0]}</p>
               </div>
             ))}
@@ -108,21 +132,28 @@ function Race({ user }) {
       ) : (
         <>
           {/*<Game startGamemode={"Race"} />*/}
+          <Timer setIsTimerOver={setIsTimerOver} START_TIMER={raceLength * 60} isRaceTimer={true} />
           <Game startGamemode={"Race"} race={{
             racePuzzleFirst,
             racePuzzleStep,
             handlePuzzleDone: (success) => handlePuzzleDone(success)
           }} />
-          <div className="player-results">
+          <div key={"playerResults"} className="player-results">
             {players && Object.keys(players).map(key => (
               <>
-                <p key={key} className="user-name">{players[key][0]}</p>
+                <p key={`${key}${players[key][0]}`} className="user-name">{players[key][0]}</p>
                 {players[key][1].map((result: boolean, index: number) => (
-                  <img key={index} src={result ? correctPuzzle : wrongPuzzle} />
+                  <img key={`img${key}${index}`} src={result ? correctPuzzle : wrongPuzzle} />
                 ))}
+                {players[key][1].length == 0 && (
+                  <img key={`imgempty`} src={emptySvg} />
+                )}
               </>
             ))}
           </div>
+          {isTimerOver && (
+            <div className="raceBlur"></div>
+          )}
         </>
       )}
     </div>

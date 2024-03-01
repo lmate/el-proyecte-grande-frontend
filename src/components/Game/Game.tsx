@@ -82,7 +82,6 @@ function Game({ startGamemode, race }) {
   async function getFilteredPuzzle(){
     const response = await fetch(`/api/puzzle/new/${user.username}`);
     const result = await response.json();
-    console.log(result);
     setPuzzle(result);
     setTimeout(() => {
       setNewMoveByBoard(result.firstMove);
@@ -137,7 +136,6 @@ function Game({ startGamemode, race }) {
   async function showHint(moveCount: number) {
     const response = await fetch(`/api/puzzle/hint/${puzzle!.id}/${moveCount}`);
     const result = await response.text();
-    console.log(result);
     const hint = result as Cell;
     setHint(convertHint(hint));
   }
