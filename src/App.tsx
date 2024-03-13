@@ -12,10 +12,13 @@ import LeaderBoard from "./components/LeaderBoard.tsx"
 import logo from "./assets/logo.svg";
 import User from "./types/user.ts";
 
-
 function App() {
   const [user, setUser] = useState<User | null>(null);
-
+  const race = {
+    racePuzzleFirst: "",
+    racePuzzleStep: 0,
+    handlePuzzleDone: () => {}
+  }
 
 
   return (
@@ -29,7 +32,7 @@ function App() {
           path="/"
           element={
             <>
-              <Game user={user} startGamemode={""}/>
+              <Game startGamemode={""} user={user} race={race}/>
             </>
           }
         ></Route>

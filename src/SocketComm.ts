@@ -21,9 +21,9 @@ function sendSocketMessage(
       })
     );
 
-    const requestPromise = new Promise<{[key: string]: string[]}>((myResolve) => {
+    const requestPromise = new Promise<{[key: string]: string[] | string }>((myResolve) => {
       responses[identifier] = myResolve;
-    });
+    }); 
 
     return requestPromise;
   }

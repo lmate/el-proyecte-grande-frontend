@@ -54,6 +54,7 @@ function Rush({ changePuzzle, changeMoveByBoard, puzzleResults, getPuzzle, setIs
         <Timer
          setIsTimerOver={setIsTimerOver}
          START_TIMER={START_TIMER}
+         isRaceTimer = {false}
         />
             <div className="score">
                 {

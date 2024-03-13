@@ -2,31 +2,46 @@ import { useState, useEffect } from "react";
 import sendSocketMessage from "../../SocketComm";
 import { useNavigate } from "react-router-dom";
 import copyIcon from '../../assets/copy-icon.svg';
+import User from "../../types/user";
 
-const socketSubscriberFunctions = {}
-function subscribeToSocketListener(endpoint, func) {
+const socketSubscriberFunctions: { [key: string]: (body: {[key: string]: string}) => void } = {
+  key: function (): void {
+    throw new Error("Function not implemented.");
+  }
+}
+
+ function subscribeToSocketListener(endpoint: string, func: (socketBody: {[key: string]: string}) => void) {
   socketSubscriberFunctions[endpoint] = func;
 }
 
-export function createRaceSocketListener(endpoint, body) {
+ export function createRaceSocketListener(endpoint: string, body: {[key: string]: string}) {
   socketSubscriberFunctions[endpoint] && socketSubscriberFunctions[endpoint](body)
 }
 
-function CreateRace({ user }) {
+
+function CreateRace({ user }: {
+  user : User | null
+}) {
   const navigate = useNavigate()
 
   const [isRaceCreated, setIsRaceCreated] = useState(false)
   const [selectedTimeframe, setSelectedTimeframe] = useState('3')
-  const [raceId, setRaceId] = useState(null)
-  const [spectateId, setSpectateId] = useState(null)
-  const [playerList, setPlayerList] = useState([])
+  const [raceId, setRaceId] = useState< string|null >(null)
+  const [spectateId, setSpectateId] = useState< string | null>(null)
+  const [playerList, setPlayerList] = useState< string[] | []>([])
 
   async function handleCreateRace() {
-    const result = await sendSocketMessage('createRace', { timeframe: selectedTimeframe, username: user ? user.username : "Anonymous", userId: user ? user.userId.toString() : Date.now().toString() }, true)
-    setRaceId(result.raceId)
-    setSpectateId(result.spectateId)
-    setPlayerList([user ? user.username : 'Anonymous'])
-    setIsRaceCreated(true)
+    const result = await sendSocketMessage(
+      'createRace', { timeframe: selectedTimeframe,
+         username: user ? user.username : "Anonymous",
+          userId: user ? user.userId.toString() : Date.now().toString() },
+           true) as {[key: string]: string} | undefined
+    if (result) {
+      setRaceId(result.raceId)
+      setSpectateId(result.spectateId)
+      setPlayerList([user ? user.username : 'Anonymous'])
+      setIsRaceCreated(true)
+    }
   }
 
   useEffect(() => {
