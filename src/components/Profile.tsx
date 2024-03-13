@@ -1,21 +1,14 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import defaultProfilePicture from "../assets/default-profile-picture.webp";
-
-type ProfileData = {
-  id: number;
-  username: string;
-  jwt: string;
-  image: string;
-  rating: number;
-};
+import User from "../types/user";
 
 type UserStat = {
   solvedPuzzles: number;
 }
 
-function Profile({ user }:{user: ProfileData} ) {
-  const [profileData, setProfileData] = useState<ProfileData | null>(null);
+function Profile({ user }:{user: User | null} ) {
+  const [profileData, setProfileData] = useState<User | null>(null);
   const [userStatistics, setUserStatistics] = useState<UserStat | null>(null);
 
   const { username } = useParams();

@@ -27,12 +27,12 @@ import useOurSound from '../../hooks/useOurSound';
 
 
 function Board({ newMoveByBoard, handlePlayerMove, newBoard, moveCount, setMoveCount, hint, isTimerOver } : {
-  newMoveByBoard : () => void;
-  handlePlayerMove: () => void;
-  newBoard: () => void;
+  newMoveByBoard : Move | null;
+  handlePlayerMove: (move: Move, moveCount: number) => Promise<boolean>;
+  newBoard: string | null;
   moveCount: number;
   setMoveCount: (count:number) => void;
-  hint : Cell
+  hint : Cell | null
   isTimerOver: () => boolean;
 }) {
 

@@ -112,6 +112,7 @@ function Race({ user } : {user: User | undefined}) {
     if (updatePlayersWithCompleteRacePuzzleUpdater) {
       setPlayers(CalculateNewPlayers(updatePlayersWithCompleteRacePuzzleUpdater[0], updatePlayersWithCompleteRacePuzzleUpdater[1]))
     }
+
     function CalculateNewPlayers(userId: string, success: boolean) {
       const newPlayers: {[key: string]: [string, boolean[]]} | undefined = structuredClone(players)
       newPlayers && newPlayers[userId][1].push(success)

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import LeaderBoardTable from "./leaderboard/LeaderBoardTable";
 import User from "../types/user";
 
-function LeaderBoard({currentUser}: {currentUser: User | undefined}){
+function LeaderBoard({currentUser}: {currentUser: User | null}){
     const [leaderboard, setLeaderboard] = useState([]);
 
     useEffect(() => {
