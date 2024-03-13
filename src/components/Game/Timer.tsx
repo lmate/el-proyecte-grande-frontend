@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-function Timer({ setIsTimerOver, START_TIMER }: { setIsTimerOver: (bool: boolean) => void, START_TIMER: number }) {
+function Timer({ setIsTimerOver, START_TIMER, isRaceTimer }: { setIsTimerOver: (bool: boolean) => void, START_TIMER: number, isRaceTimer : boolean }) {
 
     const [timer, setTimer] = useState<number>(START_TIMER);
 

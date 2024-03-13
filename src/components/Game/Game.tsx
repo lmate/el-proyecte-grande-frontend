@@ -1,17 +1,11 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Board from "./Board";
 import Casual from "./gametypes/Casual";
 import Rush from "./gametypes/Rush";
-import Race from "./Race";
 
 import { Cell, Move, Puzzle } from '../../types/boardtypes';
-import  User  from '../../types/user';
+import { GameProps } from "../../types/gameprops";
 
-interface GameProps {
-  startGamemode: string;
-  race: typeof Race;
-  user: User | null;
-}
 
 function Game({ startGamemode, race, user }: GameProps): JSX.Element {
   const [moveCount, setMoveCount] = useState<number>(0);
@@ -26,8 +20,10 @@ function Game({ startGamemode, race, user }: GameProps): JSX.Element {
   const [isRush, setIsRush] = useState<boolean>(false);
   const [isRace, setIsRace] = useState<boolean>(false);
   const [isCasual, setIsCasual] = useState<boolean>(false);
-  const [currentMaxDifficulty, setCurrentMaxDifficulty] = useState<number>(550);
-  const [currentMinDifficulty, setCurrentMinDifficulty] = useState<number>(399);
+  const [currentMaxDifficulty, setCurrentMaxDifficulty] = useState<number>(0);
+  setCurrentMaxDifficulty(550);
+  const [currentMinDifficulty, setCurrentMinDifficulty] = useState<number>(0);
+  setCurrentMinDifficulty(399);
   const [puzzleResults, setPuzzleResults] = useState<boolean[]>([]);
   const [isTimerOver, setIsTimerOver] = useState<boolean>(false);
 
@@ -41,12 +37,12 @@ function Game({ startGamemode, race, user }: GameProps): JSX.Element {
     }
   }, [startGamemode]);
 
-  async function uploadSolvedPuzzle() {
+ /* async function uploadSolvedPuzzle() {
     if (!user) return;
     await fetch(`/api/user/savePuzzle/${user.username}/${puzzle?.id}`, {
       method: "PUT"
     });
-  }
+  } */
 
   async function handlePlayerMove(move: Move, moveCount: number): Promise<boolean> {
     setDisableClick(true);
@@ -91,7 +87,7 @@ function Game({ startGamemode, race, user }: GameProps): JSX.Element {
   useEffect(() => {
     if (isRace) {
       getNextPuzzleForRace();
-      race.handlePuzzleDone(puzzleResults.at(-1));
+      race.handlePuzzleDone(puzzleResults[puzzleResults.length - 1]);
     }
   }, [puzzleResults]);
 

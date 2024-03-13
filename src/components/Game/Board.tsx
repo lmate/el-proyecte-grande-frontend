@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import {Cell, Move, Puzzle } from '../../types/boardtypes';
+import {Cell, Move } from '../../types/boardtypes';
 
 import bK from '../../assets/pieces/bK.svg';
 import bQ from '../../assets/pieces/bQ.svg';

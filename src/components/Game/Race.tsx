@@ -16,7 +16,7 @@ const socketSubscriberFunctions: { [key: string]: (body: {[key: string]: string}
   }
 }
 
-function subscribeToSocketListener(endpoint: string, func: (socketBody: {[key: string]: string}) => void) {
+ function subscribeToSocketListener(endpoint: string, func: (socketBody: {[key: string]: string | number}) => void) {
   socketSubscriberFunctions[endpoint] = func;
 }
 
@@ -25,7 +25,7 @@ export function raceSocketListener(endpoint: string, body: {[key: string]: strin
   socketSubscriberFunctions[endpoint] && socketSubscriberFunctions[endpoint](body)
 }
 
-function Race({ user } : {user: User | undefined}) {
+function Race({ user } : {user: User | null}) {
   const { raceId } = useParams()
   const { isAlreadyJoined } = useParams()
   const navigate = useNavigate()
@@ -39,7 +39,7 @@ function Race({ user } : {user: User | undefined}) {
   const [raceLength, setRaceLength] = useState<string | null>(null)
   const [isCountdown, setIsCountdown] = useState(false)
   const [racePuzzleFirst, setRacePuzzleFirst] = useState<string | null>(null)
-  const [racePuzzleStep, setRacePuzzleStep] = useState<string | null>(null)
+  const [racePuzzleStep, setRacePuzzleStep] = useState<number | null>(null)
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [userId, setUserId] = useState(user ? user.userId.toString() : Date.now().toString())
   const [updatePlayersWithCompleteRacePuzzleUpdater, setUpdatePlayersWithCompleteRacePuzzleUpdater] = useState<[string, boolean] | null>()
@@ -66,19 +66,19 @@ function Race({ user } : {user: User | undefined}) {
       setIsCountdown(true)
     })
 
-    subscribeToSocketListener('completeRacePuzzle', (socketBody) => {
-      setUpdatePlayersWithCompleteRacePuzzleUpdater([socketBody.userId, socketBody.success == 'true' ? true : false])
+    subscribeToSocketListener('completeRacePuzzle', (socketBody : { [key:string ] : string | boolean | number } ) => {
+      setUpdatePlayersWithCompleteRacePuzzleUpdater([socketBody.userId as string, socketBody.success == 'true' ? true : false])
     })
 
     subscribeToSocketListener('startRace', (socketBody) => {
-      setRaceStartAt(socketBody.startAt)
-      setRaceLength(socketBody.raceLength)
-      setRacePuzzleFirst(socketBody.first)
-      setRacePuzzleStep(socketBody.step)
+      setRaceStartAt(socketBody.startAt as string)
+      setRaceLength(socketBody.raceLength as string)
+      setRacePuzzleFirst(socketBody.first as string)
+      setRacePuzzleStep(socketBody.step as number)
       setIsPending(false)
 
       async function getAllPlayers() {
-        const result: {[key: string]: string[]} | undefined = await sendSocketMessage('getPlayersInRace', { raceId: raceId }, true)
+        const result = await sendSocketMessage('getPlayersInRace', { raceId: raceId }, true) as  {[key: string]: string[]} | undefined
         const newPlayers: {[key: string]: [string, boolean[]]} = {}
         if (result) {
           for (let i = 0; i < result.players.length; i++) {
@@ -93,7 +93,7 @@ function Race({ user } : {user: User | undefined}) {
     })
 
     async function getPlayersInRace() {
-      const result: {[key: string]: string[]} | undefined = await sendSocketMessage('getPlayersInRace', { raceId: raceId }, true)
+      const result= await sendSocketMessage('getPlayersInRace', { raceId: raceId }, true) as {[key: string]: string[]} | undefined 
       playerList && result && setPlayerList(playerList.concat(result.players))
     }
     setTimeout(getPlayersInRace, 2000)
@@ -150,7 +150,10 @@ function Race({ user } : {user: User | undefined}) {
         <>
           {/*<Game startGamemode={"Race"} />*/}
           <Timer setIsTimerOver={setIsTimerOver} START_TIMER={parseInt(raceLength!) * 60} isRaceTimer={true} />
-          <Game startGamemode={"Race"} race={{
+          <Game 
+          user={user}
+          startGamemode={"Race"}
+           race={{
             racePuzzleFirst,
             racePuzzleStep,
             handlePuzzleDone: (success: boolean) => handlePuzzleDone(success)
