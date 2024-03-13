@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from 'react';
 
-import {Cell, Move, Puzzle } from '../../types/boardtypes';
+import {Cell, Move} from '../../types/boardtypes';
 
 import bK from '../../assets/pieces/bK.svg';
 import bQ from '../../assets/pieces/bQ.svg';
@@ -28,23 +29,23 @@ import useOurSound from '../../hooks/useOurSound';
 
 function Board({ newMoveByBoard, handlePlayerMove, newBoard, moveCount, setMoveCount, hint, isTimerOver } : {
   newMoveByBoard : () => void;
-  handlePlayerMove: () => void;
-  newBoard: () => void;
+  handlePlayerMove: () => Promise<boolean>;
+  newBoard: string;
   moveCount: number;
   setMoveCount: (count:number) => void;
   hint : Cell
   isTimerOver: () => boolean;
 }) {
 
-  const [lastDragStartedAt, setLastDragStartedAt] = useState<Cell | null>(null)
-  const [dragStartCell, setDragStartCell] = useState<Cell | null>(null)
-  const [selectedCell, setSelectedCell] = useState<Cell | null>(null)
-  const [lastMovedFromCell, setLastMovedFromCell] = useState<Cell | null>(null)
-  const [lastMovedToCell, setLastMovedToCell] = useState<Cell | null>(null)
+  const [lastDragStartedAt, setLastDragStartedAt] = useState<number>(0)
+  const [dragStartCell, setDragStartCell] = useState<number[] | null>(null)
+  const [selectedCell, setSelectedCell] = useState<number[] | null>(null)
+  const [lastMovedFromCell, setLastMovedFromCell] = useState<number[] | null>(null)
+  const [lastMovedToCell, setLastMovedToCell] = useState<number[] | null>(null)
   const [playMoveSound] = useOurSound(moveSound);
   const [playCompletedSound] = useOurSound(completedSound);
-  const [draggingPiece, setDraggingPiece] = useState(null);
-  const [mousePos, setMousePos] = useState({});
+  const [draggingPiece, setDraggingPiece] = useState<number[] | null>(null);
+  const [mousePos, setMousePos] = useState<{[key: string]: any}>({});
   const [board, setBoard] = useState(
     [
       [bR, bN, bB, bQ, bK, bB, bN, bR],
@@ -86,7 +87,7 @@ function Board({ newMoveByBoard, handlePlayerMove, newBoard, moveCount, setMoveC
 
   
   useEffect(() => {
-    const handleMouseMove = (e) => {
+    const handleMouseMove = (e: {[key: string]: any}) => {
       setMousePos({ x: e.clientX, y: e.clientY })
     };
 
@@ -98,7 +99,7 @@ function Board({ newMoveByBoard, handlePlayerMove, newBoard, moveCount, setMoveC
   }, []);
 
 
-  function movePiece(move: Move) {
+  function movePiece(move: {[key: string]: number[]}) {
     const newBoard = structuredClone(board) 
     newBoard[move.to[0]][move.to[1]] = newBoard[move.from[0]][move.from[1]]
     newBoard[move.from[0]][move.from[1]] = ''
@@ -112,10 +113,9 @@ function Board({ newMoveByBoard, handlePlayerMove, newBoard, moveCount, setMoveC
     setMoveCount(moveCount + 1)
   }
 
-  async function playerMovePiece(from, to) {
-
+  async function playerMovePiece(from: number[], to: number[]) {
     const boardBeforeMove = structuredClone(board)
-
+    
     movePiece({
       from: [from[0], from[1]],
       to: [to[0], to[1]]
@@ -129,12 +129,11 @@ function Board({ newMoveByBoard, handlePlayerMove, newBoard, moveCount, setMoveC
     }
   }
 
-  function boardMovePiece(lichessMove) {
-    console.log(`Board move: ${lichessMove}`)
+  function boardMovePiece(lichessMove: Move) {
     movePiece(convertLichessMoveToMove(lichessMove))
   }
 
-  function convertLichessMoveToMove(lichessMove) {
+  function convertLichessMoveToMove(lichessMove: Move) {
     const letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
     return {
       from: [8 - parseInt(lichessMove[1]), letters.indexOf(lichessMove[0])],
@@ -142,19 +141,18 @@ function Board({ newMoveByBoard, handlePlayerMove, newBoard, moveCount, setMoveC
     }
   }
 
-  function convertMoveToLichessMove(from, to) {
+  function convertMoveToLichessMove(from: number[], to: number[]) {
     const letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
     return letters[from[1]] + (8 - from[0]) + letters[to[1]] + (8 - to[0])
   }
 
-  function handleCellClick(e) {
+  function handleCellClick(e: {[key: string]: any}) {
     if (Date.now() - lastDragStartedAt > 200) {
       return
     }
 
     const clickedCell = [parseInt(e.target.className.split(" ")[0].charAt(0)) - 1, parseInt(e.target.className.split(" ")[0].charAt(1)) - 1]
     if (selectedCell) {
-
       if (clickedCell.join('') === selectedCell.join('')) {
         setSelectedCell(null)
         return
@@ -173,8 +171,9 @@ function Board({ newMoveByBoard, handlePlayerMove, newBoard, moveCount, setMoveC
     }
   }
 
-  function isClickedCellHasWhitePiece(clickedCell) {
-    if (board[clickedCell[0]][clickedCell[1]].toString().split('/').at(-1).split('.')[0].charAt(0) === 'w') {
+  function isClickedCellHasWhitePiece(clickedCell: number[]) {
+    const splitFen: string[] = board[clickedCell[0]][clickedCell[1]].toString().split('/');
+    if (splitFen[splitFen.length - 1].split('.')[0].charAt(0) === 'w') {
       return true
     }
     return false
@@ -192,9 +191,8 @@ function Board({ newMoveByBoard, handlePlayerMove, newBoard, moveCount, setMoveC
   };
 
 
-  function handleDragStart(e) {
-
-    const clickedCell = [parseInt(e.target.className.split(" ")[0].charAt(0)) - 1, parseInt(e.target.className.split(" ")[0].charAt(1)) - 1]
+  function handleDragStart(e: {[key: string]: any}) {
+    const clickedCell: number[] = [parseInt(e.target.className.split(" ")[0].charAt(0)) - 1, parseInt(e.target.className.split(" ")[0].charAt(1)) - 1]
     setLastDragStartedAt(Date.now())
     if (isClickedCellHasWhitePiece(clickedCell)) {
       setDragStartCell(clickedCell)
@@ -202,7 +200,7 @@ function Board({ newMoveByBoard, handlePlayerMove, newBoard, moveCount, setMoveC
     }
   }
 
-  function handleDragEnd(e) {
+  function handleDragEnd(e: {[key: string]: any}) {
     const dropCell = [parseInt(e.target.className.split(" ")[0].charAt(0)) - 1, parseInt(e.target.className.split(" ")[0].charAt(1)) - 1]
     if (dragStartCell && (!isClickedCellHasWhitePiece(dropCell)) && !(dragStartCell[0] == dropCell[0] && dragStartCell[1] == dropCell[1])) {
       playerMovePiece(dragStartCell, dropCell)
@@ -239,11 +237,11 @@ function Board({ newMoveByBoard, handlePlayerMove, newBoard, moveCount, setMoveC
         }}></div>
       )}
 
-      {board.map((row, rowId) => {
-        return row.map((piece, pieceId) => {
+      {board.map((row, rowId: number) => {
+        return row.map((piece, pieceId: number) => {
 
           const modifierClasses = []
-          if (selectedCell && (rowId.toString() === selectedCell[0] && pieceId.toString() === selectedCell[1])) {
+          if (selectedCell && (rowId === selectedCell[0] && pieceId === selectedCell[1])) {
             modifierClasses.push('selected-piece')
           }
 
@@ -288,7 +286,7 @@ function Board({ newMoveByBoard, handlePlayerMove, newBoard, moveCount, setMoveC
 
 function convertFenToBoard(fen : string) {
   fen = replaceNumbersWithSpacesInFen(fen)
-  const result = []
+  const result: string[][] = []
   const pieceRepo :{ [key: string]: string[] } = {
     k: [bK, wK],
     q: [bQ, wQ],
@@ -300,10 +298,12 @@ function convertFenToBoard(fen : string) {
 
   for (const row of fen.split('/')) {
     result.push([])
-    for (const char of row.split('')) {
+    for (const char of row.split('')) { 
+      console.log(result);
       result.at(-1).push(char === ' ' ? '' : [pieceRepo[char.toLowerCase()][char === char.toUpperCase() ? 1 : 0]])
     }
   }
+
   return result
 }
 

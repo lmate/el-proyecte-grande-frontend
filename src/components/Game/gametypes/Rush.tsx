@@ -17,7 +17,7 @@ function Rush({disableClick, changePuzzle, changeMoveByBoard, puzzleResults, get
     isTimerOver: () => boolean;
 }){
 
-    const START_TIMER:number = 5;
+    const START_TIMER:number = 180;
     const MIN_DIFFICULTY:number = 400;
     const DIFFICULTY_INCREMENTOR:number = 50;
 
@@ -55,6 +55,7 @@ function Rush({disableClick, changePuzzle, changeMoveByBoard, puzzleResults, get
         <Timer
          setIsTimerOver={setIsTimerOver}
          START_TIMER={START_TIMER}
+         isRaceTimer ={false}
         />
             <div className="score">
                 {
