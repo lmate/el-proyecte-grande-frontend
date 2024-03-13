@@ -3,7 +3,7 @@ import {createRaceSocketListener} from '../src/components/Game/CreateRace'
 
 const socket = new WebSocket("ws://localhost:8080/ws");   //change it to other ip
 
-const responses: { [key: string]: (val: unknown) => void } = {};
+const responses: { [key: string]: (val: {[key: string]: string[]}) => void } = {};
 
 function sendSocketMessage(
   endpoint: string,
@@ -21,7 +21,7 @@ function sendSocketMessage(
       })
     );
 
-    const requestPromise = new Promise((myResolve) => {
+    const requestPromise = new Promise<{[key: string]: string[]}>((myResolve) => {
       responses[identifier] = myResolve;
     });
 
