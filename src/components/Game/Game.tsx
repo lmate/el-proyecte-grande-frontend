@@ -1,55 +1,50 @@
 import { useEffect, useState } from "react";
-
 import Board from "./Board";
-import checkIcon from "../../assets/check-icon.svg";
 import Casual from "./gametypes/Casual";
 import Rush from "./gametypes/Rush";
 
 import { Cell, Move, Puzzle } from '../../types/boardtypes';
-//import user from "../../types/user.ts";
-import Race from "./Race.tsx";
+import { GameProps } from "../../types/gameprops";
 
 
-
-function Game({ startGamemode, race }) {
-  const [moveCount, setMoveCount] = useState(0);
+function Game({ startGamemode, race, user }: GameProps): JSX.Element {
+  const [moveCount, setMoveCount] = useState<number>(0);
   const [puzzle, setPuzzle] = useState<Puzzle | null>(null);
   const [disableClick, setDisableClick] = useState<boolean>(false);
   const [isShowCompleteIndicator, setIsShowCompleteIndicator] = useState<boolean>(false);
   const [isHomeScreen, setIsHomeScreen] = useState<boolean>(true);
-  const [hint, setHint] = useState<Cell | null>(null);
 
+  const [hint, setHint] = useState<Cell | null >(null);
+  
   const [newMoveByBoard, setNewMoveByBoard] = useState<Move | null>(null);
-
   const [isRush, setIsRush] = useState<boolean>(false);
   const [isRace, setIsRace] = useState<boolean>(false);
   const [isCasual, setIsCasual] = useState<boolean>(false);
-  const [currentMaxDifficulty, setCurrentMaxDifficulty] = useState<number>(550);
-  const [currentMinDifficulty, setCurrentMinDifficulty] = useState<number>(399);
+  const [currentMaxDifficulty, setCurrentMaxDifficulty] = useState<number>(0);
+  setCurrentMaxDifficulty(550);
+  const [currentMinDifficulty, setCurrentMinDifficulty] = useState<number>(0);
+  setCurrentMinDifficulty(399);
   const [puzzleResults, setPuzzleResults] = useState<boolean[]>([]);
   const [isTimerOver, setIsTimerOver] = useState<boolean>(false);
 
   useEffect(() => {
-    if (startGamemode == 'Race') {
-      startRace()
-    } else if (startGamemode == 'Rush') {
-      startRush()
-    } else if (startGamemode == 'Casual') {
-      startCasual()
+    if (startGamemode === 'Race') {
+      startRace();
+    } else if (startGamemode === 'Rush') {
+      startRush();
+    } else if (startGamemode === 'Casual') {
+      startCasual();
     }
-  }, [startGamemode])
+  }, [startGamemode]);
 
-  async function uploadSolvedPuzzle() {
-    await fetch(`/api/user/savePuzzle/${user.username}/${puzzle?.id}`,
-        {
-          method: "PUT"
-        });
-  }
+ /* async function uploadSolvedPuzzle() {
+    if (!user) return;
+    await fetch(`/api/user/savePuzzle/${user.username}/${puzzle?.id}`, {
+      method: "PUT"
+    });
+  } */
 
-  async function handlePlayerMove(
-    move: Move,
-    moveCount: number
-  ): Promise<boolean> {
+  async function handlePlayerMove(move: Move, moveCount: number): Promise<boolean> {
     setDisableClick(true);
     const response = await fetch(`/api/puzzle/valid/${puzzle!.id}/${move}/${moveCount}`);
     const result = await response.text();
@@ -58,9 +53,9 @@ function Game({ startGamemode, race }) {
     if (isRace) {
       if (result === "win") {
         showCompleteIndicator();
-        setPuzzleResults((prev) => [...prev, true]);
+        setPuzzleResults(prev => [...prev, true]);
       } else if (!result) {
-        setPuzzleResults((prev) => [...prev, false]);
+        setPuzzleResults(prev => [...prev, false]);
       } else {
         setNewMoveByBoard(result as Move);
       }
@@ -69,18 +64,19 @@ function Game({ startGamemode, race }) {
       if (result === "win") {
         getRandomPuzzle();
         showCompleteIndicator();
-        setPuzzleResults((prev) => [...prev, true]);
+        setPuzzleResults(prev => [...prev, true]);
         return true;
       } else if (!result) {
-        setPuzzleResults((prev) => [...prev, false]);
+        setPuzzleResults(prev => [...prev, false]);
         return false;
       }
       setNewMoveByBoard(result as Move);
       return true;
     }
   }
-  async function getFilteredPuzzle(){
-    const response = await fetch(`/api/puzzle/new/${user.username}`);
+
+  async function getFilteredPuzzle() {
+    const response = await fetch(`/api/puzzle/new/${user?.username}`);
     const result = await response.json();
     setPuzzle(result);
     setTimeout(() => {
@@ -88,13 +84,12 @@ function Game({ startGamemode, race }) {
     }, 0);
   }
 
-  // Get new puzzle and alert socket when puzzle is done in race
   useEffect(() => {
     if (isRace) {
-      getNextPuzzleForRace()
-      race.handlePuzzleDone(puzzleResults.at(-1))
+      getNextPuzzleForRace();
+      race.handlePuzzleDone(puzzleResults[puzzleResults.length - 1]);
     }
-  }, [puzzleResults])
+  }, [puzzleResults]);
 
   async function getRandomPuzzle() {
     const response = await fetch(`/api/puzzle`);
@@ -165,7 +160,7 @@ function Game({ startGamemode, race }) {
   }
 
   async function startRush() {
-    setPuzzleResults([])
+    setPuzzleResults([]);
     setDisableClick(false);
     setIsRush(true);
     setIsHomeScreen(false);
@@ -174,28 +169,24 @@ function Game({ startGamemode, race }) {
   }
 
   async function startCasual() {
-    setIsCasual(true)
-      user ? await getFilteredPuzzle() : await getPuzzleByRating();
+    setIsCasual(true);
+    if (user) {
+      await getFilteredPuzzle();
+    } else {
+      await getPuzzleByRating();
+    }
     setIsHomeScreen(false);
   }
 
   function startRace() {
-    setIsRace(true)
-    setIsHomeScreen(false)
-    getNextPuzzleForRace()
+    setIsRace(true);
+    setIsHomeScreen(false);
+    getNextPuzzleForRace();
   }
-
-  /*function changeMaxMinDifficulty(max: number, min: number) {
-    setCurrentMaxDifficulty(max);
-    setCurrentMinDifficulty(min);
-    getRandomPuzzle();
-  }*/
-
 
   function returnTimerValue() {
     return isTimerOver;
   }
-
 
   return (
     <div className="Game">
@@ -215,14 +206,13 @@ function Game({ startGamemode, race }) {
             Start playing!
           </button>
           <button className="race-btn" onClick={startRush}>
-            Puzzle Rush!
+            Puzzle Rush
           </button>
         </>
       ) : (
         <>
           {isRush && (
             <Rush
-              disableClick={() => setDisableClick(true)}
               getPuzzle={getPuzzleByRating}
               puzzleResults={puzzleResults}
               changePuzzle={(newPuzzle) => setPuzzle(newPuzzle)}
@@ -233,7 +223,8 @@ function Game({ startGamemode, race }) {
             />
           )}
           {isRace && (
-            <></>
+            <> {/* Put Race component JSX here */}
+            </>
           )}
           {isCasual && (
             <Casual
@@ -250,7 +241,7 @@ function Game({ startGamemode, race }) {
         className="complete-indicator"
         style={{ top: isShowCompleteIndicator ? "5vh" : "-26vh" }}
       >
-        <img src={checkIcon} />
+        <img src="checkIcon" alt="check icon" />
       </div>
     </div>
   );

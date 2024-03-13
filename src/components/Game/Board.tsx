@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from 'react';
 
-import {Cell, Move} from '../../types/boardtypes';
+
+import {Cell, Move } from '../../types/boardtypes';
 
 import bK from '../../assets/pieces/bK.svg';
 import bQ from '../../assets/pieces/bQ.svg';
@@ -28,12 +29,12 @@ import useOurSound from '../../hooks/useOurSound';
 
 
 function Board({ newMoveByBoard, handlePlayerMove, newBoard, moveCount, setMoveCount, hint, isTimerOver } : {
-  newMoveByBoard : () => void;
-  handlePlayerMove: () => Promise<boolean>;
-  newBoard: string;
-  moveCount: number;
+  newMoveByBoard : Move | null;
+  handlePlayerMove: (move: Move, moveCount: number) => Promise<boolean>;
+  newBoard: string | null;
+moveCount: number;
   setMoveCount: (count:number) => void;
-  hint : Cell
+  hint : Cell | null
   isTimerOver: () => boolean;
 }) {
 

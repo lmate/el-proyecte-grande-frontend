@@ -6,10 +6,9 @@ import wrongPuzzle from '../../../assets/puzzle-complete-wrong.svg';
 import Timer from "../Timer";
 
 
-function Rush({disableClick, changePuzzle, changeMoveByBoard, puzzleResults, getPuzzle, setIsHomeScreen, setIsTimerOver, isTimerOver} : {
-    disableClick: () => void;
-    changePuzzle: (difficulty:number) => Puzzle;
-    changeMoveByBoard: (move : Move) => Move;
+function Rush({ changePuzzle, changeMoveByBoard, puzzleResults, getPuzzle, setIsHomeScreen, setIsTimerOver, isTimerOver} : {
+    changePuzzle: (p: Puzzle) => void;
+    changeMoveByBoard: (move : Move) => void;
     puzzleResults: boolean[];
     getPuzzle: () => Promise<void>;
     setIsHomeScreen: (bool:boolean) => void;
@@ -55,7 +54,7 @@ function Rush({disableClick, changePuzzle, changeMoveByBoard, puzzleResults, get
         <Timer
          setIsTimerOver={setIsTimerOver}
          START_TIMER={START_TIMER}
-         isRaceTimer ={false}
+         isRaceTimer = {false}
         />
             <div className="score">
                 {

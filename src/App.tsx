@@ -10,23 +10,29 @@ import Race from "./components/Game/Race.tsx";
 import LeaderBoard from "./components/LeaderBoard.tsx"
 
 import logo from "./assets/logo.svg";
-import user from "./types/user.ts";
-
+import User from "./types/user.ts";
 
 function App() {
-  const [user, setUser] = useState<user>();
+  const [user, setUser] = useState<User | null>(null);
+  const race = {
+    racePuzzleFirst: "",
+    racePuzzleStep: 0,
+    handlePuzzleDone: () => {}
+  }
+
+
   return (
     <>
       <img className="logo" src={logo} />
       <Auth user={user} setUser={setUser} />
-      <Navbar user={user} />
+      <Navbar />
 
       <Routes>
         <Route
           path="/"
           element={
             <>
-              <Game user={user} startGamemode={""}/>
+              <Game startGamemode={""} user={user} race={race}/>
             </>
           }
         ></Route>
