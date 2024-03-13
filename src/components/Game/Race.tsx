@@ -98,7 +98,7 @@ function Race({ user }) {
       setPlayers(CalculateNewPlayers(updatePlayersWithCompleteRacePuzzleUpdater[0], updatePlayersWithCompleteRacePuzzleUpdater[1]))
     }
     function CalculateNewPlayers(userId, success) {
-      let newPlayers = structuredClone(players)
+      const newPlayers = structuredClone(players)
       newPlayers[userId][1].push(success)
       return newPlayers
     }

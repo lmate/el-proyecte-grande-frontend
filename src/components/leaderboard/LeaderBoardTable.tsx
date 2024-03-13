@@ -2,7 +2,7 @@ import LeaderboardUser from "../../types/leaderboardUserDial";
 import User from "../../types/user";
 import LeaderBoardRow from "./LeaderBoardRow";
 
-function LeaderBoardTable({users, currentUser}: {users: LeaderboardUser[], currentUser: User | undefined}){
+function LeaderBoardTable({users, currentUser}: {users: LeaderboardUser[], currentUser: User | null}){
 
     return(
         <table className="leader-board-table">

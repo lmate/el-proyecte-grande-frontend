@@ -1,11 +1,10 @@
 import { Link } from "react-router-dom";
 
 import homeIcon from '../assets/home-icon.svg'
-import profileIcon from '../assets/profile-icon.svg'
 import leaderboardIcon from '../assets/leaderboard-icon.svg'
 import head2headIcon from '../assets/head2head-icon.svg'
 
-function Navbar({ user }){
+function Navbar(){
     return(
         <nav className="Navbar">
             <ul className="menu"> 
@@ -13,12 +12,6 @@ function Navbar({ user }){
                     <Link className="menu-point" to='/'>
                         <img src={homeIcon} />
                         <span>Home</span>
-                    </Link>
-                </li>
-                <li>
-                    <Link className="menu-point" to={user && `/profile/${user.username}`}>
-                        <img src={profileIcon} />
-                        <span>Profile</span>
                     </Link>
                 </li>
                 <li>
