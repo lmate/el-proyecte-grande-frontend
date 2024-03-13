@@ -16,7 +16,7 @@ function Rush({ changePuzzle, changeMoveByBoard, puzzleResults, getPuzzle, setIs
     isTimerOver: () => boolean;
 }){
 
-    const START_TIMER:number = 5;
+    const START_TIMER:number = 180;
     const MIN_DIFFICULTY:number = 400;
     const DIFFICULTY_INCREMENTOR:number = 50;
 

@@ -28,7 +28,7 @@ function Timer({ setIsTimerOver, START_TIMER, isRaceTimer }: { setIsTimerOver: (
     }
 
     return (
-        <div className={isRaceTimer == true ? 'raceTimer' : 'timer'}>
+        <div className={isRaceTimer ? 'raceTimer' : 'timer'}>
             <h1>{formatSeconds(timer)}</h1>
         </div>
     )
