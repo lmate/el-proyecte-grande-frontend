@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 
 import Game from "./components/Game/Game.tsx";
@@ -8,12 +8,32 @@ import Profile from "./components/Profile.tsx";
 import CreateRace from "./components/Game/CreateRace.tsx";
 import Race from "./components/Game/Race.tsx";
 import LeaderBoard from "./components/LeaderBoard.tsx"
-
 import logo from "./assets/logo.svg";
 import User from "./types/user.ts";
 
 function App() {
   const [user, setUser] = useState<User | null>(null);
+  const autoLogin = useCallback(
+    async function () {
+    
+        const response = await fetch("/api/user/login", {
+          method: "GET",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+        });
+        if (response.ok) {
+          setUser(await response.json());
+        }
+    },
+    []
+  );
+
+  useEffect(() => {
+    if (!user) {
+      autoLogin();
+    }
+  }, [user, autoLogin]);
+
   const race = {
     racePuzzleFirst: "",
     racePuzzleStep: 0,
@@ -31,9 +51,7 @@ function App() {
         <Route
           path="/"
           element={
-            <>
               <Game startGamemode={""} user={user} race={race}/>
-            </>
           }
         ></Route>
         <Route

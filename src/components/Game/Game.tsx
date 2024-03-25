@@ -6,6 +6,8 @@ import Rush from "./gametypes/Rush";
 import { Cell, Move, Puzzle } from '../../types/boardtypes';
 import { GameProps } from "../../types/gameprops";
 
+import checkIcon from "../../assets/check-icon.svg"
+
 
 function Game({ startGamemode, race, user }: GameProps): JSX.Element {
   const [moveCount, setMoveCount] = useState<number>(0);
@@ -21,13 +23,14 @@ function Game({ startGamemode, race, user }: GameProps): JSX.Element {
   const [isRace, setIsRace] = useState<boolean>(false);
   const [isCasual, setIsCasual] = useState<boolean>(false);
   const [currentMaxDifficulty, setCurrentMaxDifficulty] = useState<number>(0);
-  setCurrentMaxDifficulty(550);
   const [currentMinDifficulty, setCurrentMinDifficulty] = useState<number>(0);
-  setCurrentMinDifficulty(399);
   const [puzzleResults, setPuzzleResults] = useState<boolean[]>([]);
   const [isTimerOver, setIsTimerOver] = useState<boolean>(false);
-
   useEffect(() => {
+    setCurrentMaxDifficulty(550);
+    setCurrentMinDifficulty(399);
+  },[])
+   useEffect(() => {
     if (startGamemode === 'Race') {
       startRace();
     } else if (startGamemode === 'Rush') {
@@ -36,8 +39,16 @@ function Game({ startGamemode, race, user }: GameProps): JSX.Element {
       startCasual();
     }
   }, [startGamemode]);
+  
+  useEffect(() => {
+    if (isRace) {
+      getNextPuzzleForRace();
+      race.handlePuzzleDone(puzzleResults[puzzleResults.length - 1]);
+    }
+  }, [puzzleResults]); 
 
- /* async function uploadSolvedPuzzle() {
+
+  /* async function uploadSolvedPuzzle() {
     if (!user) return;
     await fetch(`/api/user/savePuzzle/${user.username}/${puzzle?.id}`, {
       method: "PUT"
@@ -84,12 +95,6 @@ function Game({ startGamemode, race, user }: GameProps): JSX.Element {
     }, 0);
   }
 
-  useEffect(() => {
-    if (isRace) {
-      getNextPuzzleForRace();
-      race.handlePuzzleDone(puzzleResults[puzzleResults.length - 1]);
-    }
-  }, [puzzleResults]);
 
   async function getRandomPuzzle() {
     const response = await fetch(`/api/puzzle`);
@@ -241,7 +246,7 @@ function Game({ startGamemode, race, user }: GameProps): JSX.Element {
         className="complete-indicator"
         style={{ top: isShowCompleteIndicator ? "5vh" : "-26vh" }}
       >
-        <img src="checkIcon" alt="check icon" />
+        <img src={checkIcon} alt="check icon" />
       </div>
     </div>
   );

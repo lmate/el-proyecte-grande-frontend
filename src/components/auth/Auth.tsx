@@ -1,10 +1,14 @@
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import defaultProfilePicture from "../../assets/default-profile-picture.webp";
+import User from "../../types/user";
 
 
 
-function Auth({ user, setUser }) {
+function Auth({ user, setUser }  : {
+  user: User |null
+  setUser: (user: User) => void;
+}) {
   const [isShowingModal, setIsShowingModal] = useState(false);
   const [isLogin, setIsLogin] = useState(true);
   const [emailInput, setEmailInput] = useState("");
@@ -12,26 +16,7 @@ function Auth({ user, setUser }) {
   const [passwordInput, setPasswordInput] = useState("");
   const [isSuccess, setIsSuccess] = useState(-1);
 
-  const autoLogin = useCallback(
-    async function () {
-    
-        const response = await fetch("/api/user/login", {
-          method: "GET",
-          credentials: "include",
-          headers: { "Content-Type": "application/json" },
-        });
-        if (response.ok) {
-          setUser(await response.json());
-        }
-    },
-    [setUser]
-  );
 
-  useEffect(() => {
-    if (!user) {
-      autoLogin();
-    }
-  }, [user, autoLogin]);
 
   async function handleLogin() {
     const response = await fetch("/api/user/login", {
@@ -126,7 +111,7 @@ function Auth({ user, setUser }) {
                     placeholder="Username"
                     value={usernameInput}
                     onInput={(e) => {
-                      setUsernameInput(e.target.value);
+                      setUsernameInput((e.target as HTMLTextAreaElement).value);
                     }}
                   />
                   <input
@@ -135,7 +120,7 @@ function Auth({ user, setUser }) {
                     placeholder="Password"
                     value={passwordInput}
                     onInput={(e) => {
-                      setPasswordInput(e.target.value);
+                      setPasswordInput((e.target as HTMLTextAreaElement).value);
                     }}
                   />
                   <input

@@ -418,6 +418,7 @@ body {
   margin-top: -70vh;
   width: 40%;
   text-align: center;
+  z-index: -5;
 }
 
 .raceTimer {

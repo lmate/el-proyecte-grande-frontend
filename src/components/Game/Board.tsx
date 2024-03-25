@@ -121,7 +121,6 @@ moveCount: number;
       from: [from[0], from[1]],
       to: [to[0], to[1]]
     })
-
     const isMoveValid = await handlePlayerMove(convertMoveToLichessMove(from, to), moveCount)
 
     if (!isMoveValid) {
@@ -142,9 +141,9 @@ moveCount: number;
     }
   }
 
-  function convertMoveToLichessMove(from: number[], to: number[]) {
+  function convertMoveToLichessMove(from: number[], to: number[]) : Move {
     const letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
-    return letters[from[1]] + (8 - from[0]) + letters[to[1]] + (8 - to[0])
+    return letters[from[1]] + (8 - from[0]) + letters[to[1]] + (8 - to[0]) as Move
   }
 
   function handleCellClick(e: {[key: string]: any}) {
@@ -301,7 +300,7 @@ function convertFenToBoard(fen : string) {
     result.push([])
     for (const char of row.split('')) { 
       console.log(result);
-      result.at(-1).push(char === ' ' ? '' : [pieceRepo[char.toLowerCase()][char === char.toUpperCase() ? 1 : 0]])
+      result[ result.length -1].push(char === ' ' ? '' : pieceRepo[char.toLowerCase()][char === char.toUpperCase() ? 1 : 0])
     }
   }
 

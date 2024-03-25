@@ -34,20 +34,23 @@ function Race({ user } : {user: User | null}) {
   const [playerList, setPlayerList] = useState<string[][] | null>([])
   const [loadingCounter, setLoadingCounter] = useState(3)
   const [isJoined, setIsJoined] = useState(false)
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [raceStartAt, setRaceStartAt] = useState<string | null>(null)
+  console.log(raceStartAt);
   const [raceLength, setRaceLength] = useState<string | null>(null)
   const [isCountdown, setIsCountdown] = useState(false)
   const [racePuzzleFirst, setRacePuzzleFirst] = useState<string | null>(null)
   const [racePuzzleStep, setRacePuzzleStep] = useState<number | null>(null)
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [userId, setUserId] = useState(user ? user.userId.toString() : Date.now().toString())
+  const [userId, setUserId] = useState<string | null>()
   const [updatePlayersWithCompleteRacePuzzleUpdater, setUpdatePlayersWithCompleteRacePuzzleUpdater] = useState<[string, boolean] | null>()
   const [isTimerOver, setIsTimerOver] = useState(false)
-
+  
   const [players, setPlayers] = useState<{[key: string]: [string, boolean[]]}>()
-
-  useEffect(() => { setInterval(() => { setLoadingCounter(((Date.now() / 1000) % 3) + 1) }, 1000) }, [])
+  useEffect(() =>{
+     setUserId(user ? user.userId.toString() : Date.now().toString());
+  },[user])
+  useEffect(() => {
+    
+    setInterval(() => { setLoadingCounter(((Date.now() / 1000) % 3) + 1) }, 1000) }, [])
 
   useEffect(() => {
     subscribeToSocketListener('error', () => {
