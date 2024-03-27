@@ -431,6 +431,9 @@ body {
 }
 
 .score{
+  position: absolute;
+  top: 13vh;
+  left: 36vw;
   color: white;
 }
 
@@ -554,6 +557,15 @@ z-index: 15;
   color: var(--white);
   font-weight: 700;
   text-align: center;
+}
+
+.anonymous-warning {
+  color: yellow;
+  font-size: large;
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  margin-top: 20vh;
 }
 
 .CreateRace > .start-btn,

@@ -86,14 +86,14 @@ function Game({ startGamemode, race, user }: GameProps): JSX.Element {
     }
   }
 
-  async function getFilteredPuzzle() {
+  /* async function getFilteredPuzzle() {
     const response = await fetch(`/api/puzzle/new/${user?.username}`);
     const result = await response.json();
     setPuzzle(result);
     setTimeout(() => {
       setNewMoveByBoard(result.firstMove);
     }, 0);
-  }
+  } */
 
 
   async function getRandomPuzzle() {
@@ -176,7 +176,7 @@ function Game({ startGamemode, race, user }: GameProps): JSX.Element {
   async function startCasual() {
     setIsCasual(true);
     if (user) {
-      await getFilteredPuzzle();
+      await getPuzzleByRating();
     } else {
       await getPuzzleByRating();
     }

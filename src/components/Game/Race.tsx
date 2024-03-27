@@ -34,8 +34,6 @@ function Race({ user } : {user: User | null}) {
   const [playerList, setPlayerList] = useState<string[][] | null>([])
   const [loadingCounter, setLoadingCounter] = useState(3)
   const [isJoined, setIsJoined] = useState(false)
-  const [raceStartAt, setRaceStartAt] = useState<string | null>(null)
-  console.log(raceStartAt);
   const [raceLength, setRaceLength] = useState<string | null>(null)
   const [isCountdown, setIsCountdown] = useState(false)
   const [racePuzzleFirst, setRacePuzzleFirst] = useState<string | null>(null)
@@ -46,7 +44,7 @@ function Race({ user } : {user: User | null}) {
   
   const [players, setPlayers] = useState<{[key: string]: [string, boolean[]]}>()
   useEffect(() =>{
-     setUserId(user ? user.userId.toString() : Date.now().toString());
+     setUserId(user ? user.userId.toString() : "Anonymous" + Date.now().toString());
   },[user])
   useEffect(() => {
     
@@ -74,8 +72,8 @@ function Race({ user } : {user: User | null}) {
     })
 
     subscribeToSocketListener('startRace', (socketBody) => {
-      setRaceStartAt(socketBody.startAt as string)
-      setRaceLength(socketBody.raceLength as string)
+      //setRaceLength(socketBody.raceLength as string)
+      setRaceLength("1");
       setRacePuzzleFirst(socketBody.first as string)
       setRacePuzzleStep(socketBody.step as number)
       setIsPending(false)
@@ -93,6 +91,13 @@ function Race({ user } : {user: User | null}) {
       getAllPlayers()
 
       window.history.replaceState(null, "PuzzleShowdown", `/race/${raceId}`)
+    })
+
+
+    subscribeToSocketListener("notifyGameOver", () =>{
+      setTimeout(() => {
+        navigate("/");
+      }, 3000)
     })
 
     async function getPlayersInRace() {
@@ -126,9 +131,35 @@ function Race({ user } : {user: User | null}) {
 
   useEffect(() => {
     if (isTimerOver) {
-      console.log('Time is up')
+      sortPlayersAfterRace();
     }
   }, [isTimerOver])
+
+  async function sortPlayersAfterRace(){
+    const solved : number[] = [];
+    const names : string[] = []
+    for (const player in players){
+      const counter : number = players[player][1].filter( (bool: boolean) => bool === true).length;
+      if (player[0][0] !== "A") {
+        solved.push(counter);
+        names.push(player);
+      }
+    }
+    for (let i = 0; i < solved.length - 1; i++){
+      for (let j = 0; j < solved.length - 1; j++){
+        if (solved[j] < solved[j + 1]) {
+          const temp = solved[j];
+          solved[j] = solved[j + 1]
+          solved[j + 1 ] = temp;
+          const tempName = names[j];
+          names[j] = names[j + 1]
+          names[j + 1] = tempName;
+        }
+      }
+    }
+    sendSocketMessage('handleRaceEnd', { raceId: raceId, names : names.join("&") }, false);
+    }
+  
 
   return (
     <div className="RacePage">

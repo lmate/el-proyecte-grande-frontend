@@ -84,7 +84,9 @@ function CreateRace({ user }: {
             <option value="10">10 min</option>
           </select>
           <br />
+          {user ? 
           <input className="create-btn" type="button" value="Create Race!" onClick={handleCreateRace} />
+           : <p className="anonymous-warning">Log in to create a Race!</p>}
         </>
       )}
     </div>

@@ -38,6 +38,7 @@ moveCount: number;
   isTimerOver: () => boolean;
 }) {
 
+
   const [lastDragStartedAt, setLastDragStartedAt] = useState<number>(0)
   const [dragStartCell, setDragStartCell] = useState<number[] | null>(null)
   const [selectedCell, setSelectedCell] = useState<number[] | null>(null)
@@ -152,6 +153,7 @@ moveCount: number;
     }
 
     const clickedCell = [parseInt(e.target.className.split(" ")[0].charAt(0)) - 1, parseInt(e.target.className.split(" ")[0].charAt(1)) - 1]
+   
     if (selectedCell) {
       if (clickedCell.join('') === selectedCell.join('')) {
         setSelectedCell(null)
@@ -299,7 +301,6 @@ function convertFenToBoard(fen : string) {
   for (const row of fen.split('/')) {
     result.push([])
     for (const char of row.split('')) { 
-      console.log(result);
       result[ result.length -1].push(char === ' ' ? '' : pieceRepo[char.toLowerCase()][char === char.toUpperCase() ? 1 : 0])
     }
   }
