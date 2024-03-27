@@ -72,8 +72,7 @@ function Race({ user } : {user: User | null}) {
     })
 
     subscribeToSocketListener('startRace', (socketBody) => {
-      //setRaceLength(socketBody.raceLength as string)
-      setRaceLength("1");
+      setRaceLength(socketBody.raceLength as string)
       setRacePuzzleFirst(socketBody.first as string)
       setRacePuzzleStep(socketBody.step as number)
       setIsPending(false)
