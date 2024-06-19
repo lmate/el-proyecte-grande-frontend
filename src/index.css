@@ -1,31 +1,40 @@
 #root {
   --accent: #4B7399;
   --white: #d9d9d9;
+  --board-size: 80vh;
 }
+
+
 
 body {
   margin: 0px;
   background-color: #141414;
   font-family: "Montserrat", sans-serif;
   user-select: none;
+  overflow: hidden;
 }
 
+::-webkit-scrollbar {
+  width: 0px;
+}
 .logo {
-  width: 25vw;
-  margin-left: calc((100vw - 25vw) / 2);
+  width: 17.5vw;
+  margin-left: 6vh;
+
   margin-top: 5vh;
 }
 
 .Board {
-  height: 72vh;
-  width: 72vh;
+  height: var(--board-size);
+  width: var(--board-size);
   box-shadow: 0px 0px 20px rgb(0, 0, 0);
+  border-radius: 5px;
 }
 
 .Board > .cell {
   float: left;
-  width: calc(72vh / 8);
-  height: calc(72vh / 8);
+  width: calc(var(--board-size) / 8);
+  height: calc(var(--board-size) / 8);
   background-color: #EAE9D2;
 }
 
@@ -35,9 +44,9 @@ body {
 
 .Board > .highlight-cell {
   position: absolute;
-  background-color: rgb(77, 255, 77);
+  background-color: rgb(11, 228, 11);
   pointer-events: none;
-  opacity: .8;
+  opacity: .7;
 }
 
 .Board > .highlight-hint {
@@ -52,15 +61,15 @@ body {
   background-color: transparent;
   pointer-events: none;
   opacity: 1;
-  width: calc(72vh / 8 - 10px);
-  height: calc(72vh / 8 - 10px);
+  width: calc(var(--board-size) / 8 - 10px);
+  height: calc(var(--board-size) / 8 - 10px);
   border: 5px dashed #032b50;
 }
 
 .Board > .piece {
   position: absolute;
-  width: calc(72vh / 8);
-  height: calc(72vh / 8);
+  width: calc(var(--board-size) / 8);
+  height: calc(var(--board-size) / 8);
   pointer-events: none;
 }
 
@@ -82,58 +91,31 @@ body {
 }
 
 .Board > .legend-letter {
-  margin-top: calc(72vh + 1vh);
-  width: calc(72vh / 8);
+  margin-top: calc(var(--board-size) + 1vh);
+  width: calc(var(--board-size) / 8);
   text-align: center;
 }
 
 .Game {
   position: relative;
-  height: 72vh;
-  margin-top: 5.5vh;
-  margin-left: calc((100vw - 72vh) / 2);
+  height: var(--board-size);
+  margin-top: 4vh;
+  margin-left: calc((100vw - var(--board-size)) / 2);
 }
 
 .Game > .disabler {
   width: 100vh;
-  height: 72vh;
+  height: var(--board-size);
   position: absolute;
   top: 0;
 }
-
-.hint-button {
-  position:absolute;
-  margin-left: 75vh;
-  margin-top: -20vh;
-  align-items: center;
-  font-weight: 500;
-  font-size: 15px;
-  padding: 0.7em 1.4em 0.7em 1.1em;
-  color: rgb(255, 255, 255);
-  background: #ad5389;
-  background: linear-gradient(0deg, rgb(20, 95, 41) 0%, rgb(19, 119, 28) 100%);
-  border: none;
-  box-shadow: 0 0.7em 1.5em -0.5em #14a73e98;
-  border-radius: 20em;
-  cursor: pointer;
-  z-index: 0;
-}
-
-.hint{
-  position:absolute;
-  margin-left: 80vh;
-  margin-top:-30vh;
-  font-size: 25px;
-  color:rgb(255,255,255);
-}
-
 .Game > .complete-indicator {
   position: absolute;
   height: 8vh;
   width: 8vh;
   border-radius: 5vh;
   background-color: var(--white);
-  margin-left: calc((72vh - 8vh) / 2);
+  margin-left: calc((var(--board-size) - 8vh) / 2);
   box-shadow: 0px 0px 20px rgb(0, 0, 0);
   transition: top .4s ease-in-out;
 }
@@ -146,67 +128,87 @@ body {
   filter: invert(45%) sepia(58%) saturate(3613%) hue-rotate(121deg) brightness(94%) contrast(95%);
 }
 
-.race-btn{
-  position:absolute;
-  margin-left: 40vh;
-  margin-top: -38vh;
-  align-items: center;
-  font-weight: 500;
-  font-size: 25px;
-  padding: 0.7em 1.4em 0.7em 1.1em;
+.quote {
   color: white;
-  background: #ad5389;
-  background: linear-gradient(0deg, rgba(20,167,62,1) 0%, rgba(102,247,113,1) 100%);
-  border: none;
-  box-shadow: 0 0.7em 1.5em -0.5em #14a73e98;
+  position: absolute;
+  left: 3vh;
+  top: 72.5vh;
+  width: 25vw;
+  font-style: italic;
+  opacity: 0.4;
+}
+
+.quote-name {
+  position: absolute;
+  padding-top: 3vh;
+right: 0;
+color: white;
+
+}
+
+
+.play-btn:hover, .race-btn:hover{
+  transform: scale(1.03);
+}
+
+.play-btn,
+.race-btn,
+.hint-button,
+.next-puzzle-btn,
+.auth-modal > .auth-button,
+.CreateRace > .create-btn,
+.CreateRace > .start-btn,
+.RacePage > .join-btn {
+  position:absolute;
+  margin-left: 7vh;
+  margin-top: -45vh;
+  align-items: center;
+  font-weight: 600;
+  font-size: 20px;
+  padding: 0.5em;
+  width: 15vw;
+  transition: transform 0.15s;
+  color: white;
+  background: var(--accent);
+  border: 3px solid white;
+  box-shadow: 0 0.7em 1.5em -0.5em #24252598;
   letter-spacing: 0.05em;
-  border-radius: 20em;
+  border-radius: 15px;
   cursor: pointer;
   z-index: 1;
 }
-
-.play-btn {
-  position:absolute;
-  margin-left: 2vh;
-  margin-top: -38vh;
-  align-items: center;
-  font-weight: 500;
-  font-size: 25px;
-  padding: 0.7em 1.4em 0.7em 1.1em;
-  color: white;
-  background: #ad5389;
-  background: linear-gradient(0deg, rgba(20,167,62,1) 0%, rgba(102,247,113,1) 100%);
-  border: none;
-  box-shadow: 0 0.7em 1.5em -0.5em #14a73e98;
-  letter-spacing: 0.05em;
-  border-radius: 20em;
-  cursor: pointer;
-  z-index: 1;
+.race-btn{
+  margin-left: 41vh;
 }
 
 .next-puzzle-btn{
-  position:absolute;
-  margin-left: 75vh;
-  margin-top: -8vh;
-  align-items: center;
-  font-weight: 500;
+  margin-left: 81.5vh;
+  margin-top: -10vh;
   font-size: 15px;
-  padding: 0.7em 1.4em 0.7em 1.1em;
-  color: rgb(255, 255, 255);
-  background: #ad5389;
-  background: linear-gradient(0deg, rgb(20, 95, 41) 0%, rgb(19, 119, 28) 100%);
-  border: none;
-  box-shadow: 0 0.7em 1.5em -0.5em #14a73e98;
-  border-radius: 20em;
-  cursor: pointer;
-  z-index: 0;
+  width: 25vh;  
 }
+
+.hint-button {
+  margin-left: 81.5vh;
+  margin-top: -20vh;
+  font-size: 15px;
+  width: 25vh;
+}
+
+.hint{
+  position:absolute;
+  margin-left: 80vh;
+  margin-top:-30vh;
+  font-size: 25px;
+  color:rgb(255,255,255);
+}
+
 
 .blur{
   top:0;
   position:absolute;
-  height: 72vh;
-  width: 72vh;
+  height: var(--board-size);
+  width: var(--board-size);
   box-shadow: 0px 0px 20px rgb(0, 0, 0);
   backdrop-filter: blur(2px);
   filter: brightness(50%);
@@ -216,8 +218,8 @@ body {
   top: 17.5vh;
   left: 32.8vw;
   position:absolute;
-  height: 72vh;
-  width: 72vh;
+  height: var(--board-size);
+  width: var(--board-size);
   box-shadow: 0px 0px 20px rgb(0, 0, 0);
   backdrop-filter: blur(2px);
   filter: brightness(50%);
@@ -230,17 +232,41 @@ body {
   z-index: 2;
 }
 
+.Auth > .auth-modal {
+  position: absolute;
+  padding-top: 2.5vh;
+  padding-bottom: 2.5vh;
+  border: 1.5px solid  rgba(255, 255, 255, 0.4);
+  border-right: none;
+  border-top-left-radius: 8%;
+  border-bottom-left-radius: 8%;
+  transition: left 0.3s;
+  width: 22vw;
+  box-shadow: 0px 0px 10px var(--accent);
+
+}
+
+
+.Auth > .login-img {
+position: absolute;
+left: 16.5vw;
+top: 3.2vh;
+width: 29px;
+height: 29px;
+cursor : pointer;
+}
+
 .Auth > .auth-btn {
   color: var(--white);
   text-decoration: none;
-  font-weight: 500;
-  background-color: var(--accent);
+  font-weight: 800;
+  font-size: 2.3vh;
   padding: .9vw;
   padding-left: 1.7vw;
   padding-right: 1.7vw;
   cursor: pointer;
   border-radius: 3px;
-  margin-left: 14vw;
+  margin-left: 9.5vw;
 }
 
 .Auth > .auth-btn:hover {
@@ -261,16 +287,16 @@ body {
 }
 
 .Auth > .auth-modal > .auth-button {
-  width: 40%;
+  position: relative;
+  width: 50%;
   height: 4.5vh;
   margin-top: 5vh;
-  margin-left: 30%;
-  border: none;
-  border-radius: 3px;
-  background-color: var(--accent);
-  color: var(--white);
+  margin-left: 25%;
   font-size: 2vh;
   cursor: pointer;
+  padding-top: 1.5vh;
+  padding-bottom: 3.5vh;
+  border: 1.5px solid white;
 }
 
 .Auth > .auth-modal > .auth-button:hover {
@@ -299,6 +325,8 @@ body {
   margin-left: 10%;
   margin-top: 4vh;
   padding: .8vh;
+  padding-top: 1vh;
+  padding-bottom: 0.2vh;
   outline: none;
   border: none;
   border-bottom: 3px solid var(--accent);
@@ -309,7 +337,8 @@ body {
 }
 
 .Auth > .auth-modal > .auth-input::placeholder {
-  color: var(--accent);
+  color: white;
+  opacity: 0.4;
 }
 
 .Auth > .router > .user-name {
@@ -414,8 +443,8 @@ body {
 .timer{
   position: absolute;
   color: white;
-  margin-left: 26vw;
-  margin-top: -70vh;
+  margin-left: 30vw;
+  margin-top: -82vh;
   width: 40%;
   text-align: center;
   z-index: -5;
@@ -426,12 +455,20 @@ body {
   color: white;
   width: 40%;
   text-align: center;
-  left: 51vw;
+  left: 54vw;
   top: 16vh;
 }
 
 .score{
+  position: absolute;
+  top: 13vh;
+  left: 40vw;
   color: white;
+}
+
+.score > .rush-img {
+  margin: .25vw;
+  width: 3vw;
 }
 
 .rush-end-dialog{
@@ -482,21 +519,8 @@ z-index: 15;
 }
 
 .CreateRace > .create-btn {
-  width: 15vw;
   margin-left: calc((100vw - 15vw) / 2);
   margin-top: 10vh;
-  align-items: center;
-  font-weight: 600;
-  font-size: 25px;
-  padding: 0.7em 1.4em 0.7em 1.1em;
-  color: white;
-  background: #ad5389;
-  background: linear-gradient(0deg, rgba(20,167,62,1) 0%, rgba(102,247,113,1) 100%);
-  border: none;
-  box-shadow: 0 0.7em 1.5em -0.5em #14a73e98;
-  letter-spacing: 0.05em;
-  border-radius: 20em;
-  cursor: pointer;
 }
 
 .CreateRace > .create-btn:active {
@@ -533,47 +557,45 @@ z-index: 15;
 
 .CreateRace > .playerList,
 .RacePage > .playerList {
-  margin-top: 10vh;
+  margin-top: 5vh;
   margin-left: 20vw;
+  padding-left: 10vw;
 }
 
 .CreateRace > .playerList > .playerListElement,
 .RacePage > .playerList > .playerListElement {
-  width: 20vh;
-  height: 20vh;
-  background-color: var(--accent);
+  height: 15vh;
   border-radius: 20vh;
-  margin-left: 2vw;
+  margin-right: 5vw;
   float: left;
+
 }
 
 .CreateRace > .playerList > .playerListElement > .playerName,
 .RacePage > .playerList > .playerListElement > .playerName {
-  width: 20vh;
   padding-top: 5vh;
   color: var(--white);
   font-weight: 700;
   text-align: center;
+  text-decoration: underline;
+}
+
+.anonymous-warning {
+  color: yellow;
+  font-size: large;
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  margin-top: 20vh;
 }
 
 .CreateRace > .start-btn,
 .RacePage > .join-btn {
+  margin-top:0;
   position: absolute;
   width: 15vw;
   left: calc((100vw - 15vw) / 2);
   top: 85vh;
-  align-items: center;
-  font-weight: 600;
-  font-size: 25px;
-  padding: 0.7em 1.4em 0.7em 1.1em;
-  color: white;
-  background: #ad5389;
-  background: linear-gradient(0deg, rgba(20,167,62,1) 0%, rgba(102,247,113,1) 100%);
-  border: none;
-  box-shadow: 0 0.7em 1.5em -0.5em #14a73e98;
-  letter-spacing: 0.05em;
-  border-radius: 20em;
-  cursor: pointer;
 }
 
 .CreateRace > .start-btn:active,
@@ -595,43 +617,59 @@ z-index: 15;
 
 .RacePage > .board-container {
   position: relative;
-  height: 72vh;
+  height: var(--board-size);
   margin-top: 5.5vh;
-  margin-left: calc((100vw - 72vh) / 2);
+  margin-left: calc((100vw - var(--board-size)) / 2);
 }
 
 .RacePage > .player-results {
   position: absolute;
-  left: 69vw;
-  top: 25vh;
+  height: 60vh;
+  left: 72vw;
+  top: 30vh;
+  overflow: scroll;
 }
 
 .RacePage > .player-results > .score {
   margin-top: 2vh;
 }
 
+.RacePage >  .player-results  > .race-score {
+  margin-left: 0.75vh;
+  margin-bottom:0.75vh;
+  width: 2.5vw;
+}
+
 .RacePage > .player-results > .user-name {
   color: var(--white);
-  font-size: 2vh;
+  font-size: 3vh;
+  font-weight: 700;
+  width: 27.5vw;
+  border-bottom: 1px solid white;
 }
 
 .leaderboard-container{
-  height: 72vh;
-  min-width: 72vh;
+  height:90vh;
+  min-width: calc(var(--board-size) + 300);
   position: relative;
-  margin-top: 5.5vh;
-  margin-left: calc((100vw - 72vh) / 2);
+  margin-top: -10vh;
+  margin-left: calc((100vw - var(--board-size)) / 2);
   color: white;
+  overflow-y: scroll;
 }
 
 .leader-board-table{
-  width: 72vh;
+  width: var(--board-size);
   height: 100%;
+
 }
 
 .user-img-leaderboard{
   border-radius: 2vw;
-  width: 9vh;
+  width: 7vh;
+  height: 7vh;
+  margin-top:5px;
+  margin-bottom: 5px;
 }
 
 .user-dial{
@@ -640,6 +678,7 @@ z-index: 15;
 }
 
 .leader-board-row{
+  
   text-align: center;
 }
 
@@ -648,8 +687,12 @@ z-index: 15;
 }
 
 .leaderboard-container > h1{
-  width: 72vh;
+  width: var(--board-size);
   text-align: center;
+}
+
+.user-dial > .user-name {
+  width: 10vw;
 }
 
 .place-in-leaderboard{

@@ -10,16 +10,13 @@ function LeaderBoard({currentUser}: {currentUser: User | null}){
             const leaderBoardResponse = await fetch('/api/user/leaderboard');
             const leaderBoardData = await leaderBoardResponse.json();
             setLeaderboard(leaderBoardData);
-            console.log(leaderBoardData);
         }
-
         fetchLeaderBoard();
     }, [])
-
-
+    
     return(
         <div className="leaderboard-container">
-            <h1>LeaderBoard</h1>
+            <h1>Leaderboard</h1>
             <LeaderBoardTable users={leaderboard} currentUser={currentUser}/>
         </div>
     )
