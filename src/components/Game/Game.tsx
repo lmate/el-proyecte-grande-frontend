@@ -9,11 +9,6 @@ import { GameProps } from "../../types/gameprops";
 import checkIcon from "../../assets/check-icon.svg"
 
 
-
-
-
-
-
 function Game({ startGamemode, race, user }: GameProps): JSX.Element {
   const [moveCount, setMoveCount] = useState<number>(0);
   const [puzzle, setPuzzle] = useState<Puzzle | null>(null);
@@ -91,14 +86,14 @@ function Game({ startGamemode, race, user }: GameProps): JSX.Element {
     }
   }
 
-  /* async function getFilteredPuzzle() {
+  async function getFilteredPuzzle() {
     const response = await fetch(`/api/puzzle/new/${user?.username}`);
     const result = await response.json();
     setPuzzle(result);
     setTimeout(() => {
       setNewMoveByBoard(result.firstMove);
     }, 0);
-  } */
+  }
 
 
   async function getRandomPuzzle() {
@@ -181,7 +176,7 @@ function Game({ startGamemode, race, user }: GameProps): JSX.Element {
   async function startCasual() {
     setIsCasual(true);
     if (user) {
-      await getPuzzleByRating();
+      await getFilteredPuzzle();
     } else {
       await getPuzzleByRating();
     }
@@ -213,7 +208,7 @@ function Game({ startGamemode, race, user }: GameProps): JSX.Element {
         <>
           <div className="blur"></div>
           <button className="play-btn" onClick={startCasual}>
-            Practice
+            Start playing!
           </button>
           <button className="race-btn" onClick={startRush}>
             Puzzle Rush

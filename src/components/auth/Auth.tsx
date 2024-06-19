@@ -1,8 +1,7 @@
-import { useState, KeyboardEvent } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import defaultProfilePicture from "../../assets/default-profile-picture.webp";
 import User from "../../types/user";
-import loginIcon from "../../assets/login.svg";
 
 
 
@@ -78,17 +77,6 @@ function Auth({ user, setUser }  : {
     }
   }
 
-  function handleKeyDown(event : KeyboardEvent){
-    if (event.key === "Enter"){
-        if(isLogin){
-        handleLogin();
-      } else if (!isLogin){
-        handleSignup();
-      }
-    }
-      
-  }
-
   return (
     <div className="Auth">
       {user ? (
@@ -107,11 +95,10 @@ function Auth({ user, setUser }  : {
               setIsShowingModal(!isShowingModal);
             }}
           >
-            SIGN IN
+            Login
           </p>
-          <img className="login-img" src={loginIcon}/>
-          {(
-            <div style={isShowingModal ? {left:"0vw"} : {left:"30vw" }}
+          {isShowingModal && (
+            <div
               className={`auth-modal ${
                 isSuccess === -1 ? "" : isSuccess == 1 ? "success" : "fail"
               }`}
@@ -135,7 +122,6 @@ function Auth({ user, setUser }  : {
                     onInput={(e) => {
                       setPasswordInput((e.target as HTMLTextAreaElement).value);
                     }}
-                    onKeyDown={handleKeyDown}
                   />
                   <input
                     className="auth-button"
@@ -163,7 +149,6 @@ function Auth({ user, setUser }  : {
                     onChange={(e) => {
                       setEmailInput(e.target.value);
                     }}
-                    onKeyDown={handleKeyDown}
                   />
                   <input
                     className="auth-input"
@@ -173,7 +158,6 @@ function Auth({ user, setUser }  : {
                     onChange={(e) => {
                       setUsernameInput(e.target.value);
                     }}
-                    onKeyDown={handleKeyDown}
                   />
                   <input
                     className="auth-input"
@@ -183,7 +167,6 @@ function Auth({ user, setUser }  : {
                     onChange={(e) => {
                       setPasswordInput(e.target.value);
                     }}
-                    onKeyDown={handleKeyDown}
                   />
                   <input
                     className="auth-button"

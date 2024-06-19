@@ -49,6 +49,7 @@ function Profile({ user }:{user: User | null} ) {
             }
            alt={"Profile picture"}/>
           <p className="userName">{profileData.username}</p>
+          <p className="rating">{profileData.rating}</p>
           <div className="profileStatistic">
             {userStatistics ?
             (
