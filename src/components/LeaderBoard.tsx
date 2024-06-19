@@ -13,8 +13,7 @@ function LeaderBoard({currentUser}: {currentUser: User | null}){
         }
         fetchLeaderBoard();
     }, [])
-
-
+    
     return(
         <div className="leaderboard-container">
             <h1>Leaderboard</h1>
