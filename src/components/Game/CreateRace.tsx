@@ -56,15 +56,24 @@ function CreateRace({ user }: {
     navigate(`/race/${raceId}/joined`)
   }
 
+  function copyToClipboard(stringToCopy : string){
+    navigator.permissions.query({ name: "write-on-clipboard" as PermissionName}).then((result) => {
+      if (result.state == "granted" || result.state == "prompt") {
+        navigator.clipboard.writeText(stringToCopy)
+        alert("Copied to clipboard!");
+      }
+    });
+  }
+
   return (
     <div className="CreateRace">
       {isRaceCreated ? (
         <>
           <p className="link-description">Players join:</p>
-          <img className="copy-btn" src={copyIcon} onClick={() => navigator.clipboard.writeText(`puzzleshowdown.xyz/race/${raceId}`)} />
+          <img className="copy-btn" src={copyIcon} onClick={() => copyToClipboard(`puzzleshowdown.xyz/race/${raceId}`)} />
           <span className="link">{`puzzleshowdown.xyz/race/${raceId}`}</span>
           <p className="link-description">Spectators join:</p>
-          <img className="copy-btn" src={copyIcon} onClick={() => navigator.clipboard.writeText(`puzzleshowdown.xyz/spectate/${spectateId}`)} />
+          <img className="copy-btn" src={copyIcon} onClick={() => copyToClipboard(`puzzleshowdown.xyz/spectate/${spectateId}`)} />
           <span className="link">{`puzzleshowdown.xyz/spectate/${spectateId}`}</span>
           <div className="playerList">
             {playerList && playerList.map((playerName, index) => (

@@ -59,7 +59,7 @@ function Rush({ changePuzzle, changeMoveByBoard, puzzleResults, getPuzzle, setIs
             <div className="score">
                 {
                     puzzleResults.map((result: boolean, index:number ) => (
-                    <img key={index} src={result ? correctPuzzle : wrongPuzzle} />))
+                    <img className="rush-img" key={index} src={result ? correctPuzzle : wrongPuzzle} />))
                 }
             </div>
 

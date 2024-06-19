@@ -9,6 +9,11 @@ import { GameProps } from "../../types/gameprops";
 import checkIcon from "../../assets/check-icon.svg"
 
 
+
+
+
+
+
 function Game({ startGamemode, race, user }: GameProps): JSX.Element {
   const [moveCount, setMoveCount] = useState<number>(0);
   const [puzzle, setPuzzle] = useState<Puzzle | null>(null);
@@ -208,7 +213,7 @@ function Game({ startGamemode, race, user }: GameProps): JSX.Element {
         <>
           <div className="blur"></div>
           <button className="play-btn" onClick={startCasual}>
-            Start playing!
+            Practice
           </button>
           <button className="race-btn" onClick={startRush}>
             Puzzle Rush

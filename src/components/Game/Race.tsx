@@ -100,7 +100,7 @@ function Race({ user } : {user: User | null}) {
     })
 
     async function getPlayersInRace() {
-      const result= await sendSocketMessage('getPlayersInRace', { raceId: raceId }, true) as {[key: string]: string[]} | undefined 
+      const result = await sendSocketMessage('getPlayersInRace', { raceId: raceId }, true) as {[key: string]: string[]} | undefined 
       playerList && result && setPlayerList(playerList.concat(result.players))
     }
     setTimeout(getPlayersInRace, 2000)
@@ -196,10 +196,10 @@ function Race({ user } : {user: User | null}) {
               <>
                 <p key={`${key}${players[key][0]}`} className="user-name">{players[key][0]}</p>
                 {players[key][1].map((result: boolean, index: number) => (
-                  <img key={`img${key}${index}`} src={result ? correctPuzzle : wrongPuzzle} />
+                  <img className="race-score"key={`img${key}${index}`} src={result ? correctPuzzle : wrongPuzzle} />
                 ))}
                 {players[key][1].length == 0 && (
-                  <img key={`imgempty`} src={emptySvg} />
+                  <img className="race-score"key={`imgempty`} src={emptySvg} />
                 )}
               </>
             ))}

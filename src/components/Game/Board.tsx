@@ -27,6 +27,8 @@ import completedSound from '../../assets/sounds/puzzle-done.mp3';
 import moveSound from '../../assets/sounds/move.mp3';
 import useOurSound from '../../hooks/useOurSound';
 
+const BOARD_SIZE = "80vh";
+
 
 function Board({ newMoveByBoard, handlePlayerMove, newBoard, moveCount, setMoveCount, hint, isTimerOver } : {
   newMoveByBoard : Move | null;
@@ -223,19 +225,19 @@ moveCount: number;
 
       {lastMovedFromCell && lastMovedToCell && (
         <>
-          <div className="cell highlight-cell" style={{ left: `calc(${lastMovedFromCell[1]} * (72vh / 8)`, top: `calc(${lastMovedFromCell[0]} * (72vh / 8)` }}></div>
-          <div className="cell highlight-cell" style={{ left: `calc(${lastMovedToCell[1]} * (72vh / 8)`, top: `calc(${lastMovedToCell[0]} * (72vh / 8)` }}></div>
+          <div className="cell highlight-cell" style={{ left: `calc(${lastMovedFromCell[1]} * (${BOARD_SIZE} / 8)`, top: `calc(${lastMovedFromCell[0]} * (${BOARD_SIZE} / 8)` }}></div>
+          <div className="cell highlight-cell" style={{ left: `calc(${lastMovedToCell[1]} * (${BOARD_SIZE} / 8)`, top: `calc(${lastMovedToCell[0]} * (${BOARD_SIZE} / 8)` }}></div>
         </>
       )}
 
       {hint && (
-        <div className="cell highlight-hint" style={{ left: `calc(${hint[1]} * (72vh / 8)`, top: `calc(${hint[0]} * (72vh / 8)` }}></div>
+        <div className="cell highlight-hint" style={{ left: `calc(${hint[1]} * (${BOARD_SIZE} / 8)`, top: `calc(${hint[0]} * (${BOARD_SIZE} / 8)` }}></div>
       )}
 
       {draggingPiece && Date.now() - lastDragStartedAt > 100 && dropHighlightLeft >= 0 && dropHighlightLeft <= 7 && dropHighlightTop >= 0 && dropHighlightTop <= 7 && (
         <div className="cell highlight-drop" style={{
-          left: `calc(${dropHighlightLeft} * (72vh / 8))`,
-          top: `calc(${dropHighlightTop} * (72vh / 8))`
+          left: `calc(${dropHighlightLeft} * (${BOARD_SIZE} / 8))`,
+          top: `calc(${dropHighlightTop} * (${BOARD_SIZE} / 8))`
         }}></div>
       )}
 
@@ -253,7 +255,7 @@ moveCount: number;
               className={`piece ${modifierClasses.join(' ')}`}
               src={piece}
               draggable={false}
-              style={{ zIndex: '5', left: `calc(${mousePos.x}px - ((100vw - 72vh) / 2) - ((72vh / 8) / 2))`, top: `calc(${mousePos.y}px - ((100vh - 72vh) / 2) - 3.5vh - ((72vh / 8) / 2))` }}
+              style={{ zIndex: '5', left: `calc(${mousePos.x}px - ((100vw - ${BOARD_SIZE}) / 2) - ((${BOARD_SIZE} / 8) / 2))`, top: `calc(${mousePos.y}px - ((100vh - ${BOARD_SIZE}) / 2) - 3.5vh - ((${BOARD_SIZE} / 8) / 2))` }}
             ></img>
 
           } else {
@@ -262,7 +264,7 @@ moveCount: number;
               className={`piece ${modifierClasses.join(' ')}`}
               src={piece}
               draggable={false}
-              style={{ left: `calc(${pieceId} * (72vh / 8))`, top: `calc(${rowId} * (72vh / 8))` }}
+              style={{ left: `calc(${pieceId} * (${BOARD_SIZE} / 8))`, top: `calc(${rowId} * (${BOARD_SIZE} / 8))` }}
             ></img>
           }
         })
@@ -272,13 +274,13 @@ moveCount: number;
 
       {[8, 7, 6, 5, 4, 3, 2, 1].map((num, index) => {
         return (
-          <p key={num} className='legend legend-num' style={{ marginTop: `calc(${index} * (72vh / 8)` }}>{num}</p>
+          <p key={num} className='legend legend-num' style={{ marginTop: `calc(${index} * (${BOARD_SIZE} / 8)` }}>{num}</p>
         )
       })}
 
-      {['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'].map((letter, index) => {
+      {['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'].map((letter, index) => {
         return (
-          <p key={letter} className='legend legend-letter' style={{ marginLeft: `calc(${index} * (72vh / 8)` }}>{letter}</p>
+          <p key={letter} className='legend legend-letter' style={{ marginLeft: `calc(${index} * (${BOARD_SIZE} / 8)` }}>{letter}</p>
         )
       })}
 
