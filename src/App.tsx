@@ -7,7 +7,7 @@ import Navbar from "./components/Navbar";
 import Profile from "./components/Profile.tsx";
 import CreateRace from "./components/Game/CreateRace.tsx";
 import Race from "./components/Game/Race.tsx";
-import LeaderBoard from "./components/Leaderboard.tsx"
+import LeaderBoard from "./components/LeaderBoard.tsx"
 import logo from "./assets/logo.svg";
 import User from "./types/user.ts";
 
